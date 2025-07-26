@@ -1079,9 +1079,14 @@ R=R_B+R_{\mu_L},
 $$ {#eq-binocMonocComb}
 generated better fits to our data. In our model fits, we use the monocular response from the left eye (R_{\mu_L}) to add to the binocular channel. Adding parallel monocular channels to the two-stage contrast gain control model significantly improved the fit of our observer data (@fig-bestModels). With the monocular response preserved, the model can now generate SSVEPs at the fundamental frequency and odd-harmonics necessary to capture observer data for stimuli presented in temporal anti-phase under On/Off flicker (see @tbl-R2Table). Thus, monocular responses to binocular stimuli are preserved along the processing pipeline and can be recorded in the SSVEPs of observers.
 
+```{r}
+twoStageWithMonocChannels.params
+```
+
+
 ```{r drawbestModels, fig.width=12, fig.height=6, echo = FALSE}
 #| label: fig-bestModels
-#| fig-cap: "The best models."
+#| fig-cap: "Fits of the two best performing models to our observer data. Both models, that including parallel monocular channels and the full model with the added phase-selective channels perform quite similarly. The two stage contrast gain control model with parallel monocular channels is sufficient to explain the effects in our data. The best fitting parameters for the monocular channels model were: m = 2.68, p = 8.72, q = 2.03, S = 0.25, Z = -0.02. These parameters suggest strong binocular combination at the monocular stage."
 
 par(mfrow = c(2,5), mai = c(.6,.1,.1,.1), omi = c(.1,.5,.5,0), xpd = TRUE)
 #\xLimit <- c(1,6)
@@ -1195,15 +1200,15 @@ While the whole model outperformed the others, the simpler models are nested var
 : Results of the F test for nested models. The full model - two-stage contrast gain control model with phase selective and parallel monocular channels - outperformed all but the two-stage model with parallel monocular channels at an $\alpha$ level of .05. {#tbl-fTable}
 
 
-| Parameter | Value |
-|:----------|:-----:|
-| m         | `r round(twoStageWithMonocChannels.params$par[1],2)` |
-| p         | `r round(twoStageWithMonocChannels.params$par[2],2)` |
-| q         | `r round(twoStageWithMonocChannels.params$par[3],2)` |
-| S         | `r round(twoStageWithMonocChannels.params$par[4],2)` |
-| Z         | `r round(twoStageWithMonocChannels.params$par[5],2)` |
+<!-- | Parameter | Value | -->
+<!-- |:----------|:-----:| -->
+<!-- | m         | `r round(twoStageWithMonocChannels.params$par[1],2)` | -->
+<!-- | p         | `r round(twoStageWithMonocChannels.params$par[2],2)` | -->
+<!-- | q         | `r round(twoStageWithMonocChannels.params$par[3],2)` | -->
+<!-- | S         | `r round(twoStageWithMonocChannels.params$par[4],2)` | -->
+<!-- | Z         | `r round(twoStageWithMonocChannels.params$par[5],2)` | -->
 
-: Fitted parameters of the best model (Two-Stage Model with Parallel Monocular channels) {#tbl-modelParameters}
+<!-- : Fitted parameters of the best model (Two-Stage Model with Parallel Monocular channels) {#tbl-modelParameters} -->
 
 # Discussion
 
