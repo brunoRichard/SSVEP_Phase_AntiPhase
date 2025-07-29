@@ -1,4 +1,5 @@
 % Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
@@ -6,21 +7,23 @@
 \documentclass[
   12pt,
 ]{article}
-
+\usepackage{xcolor}
+\usepackage[left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry}
 \usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\ifPDFTeX\else  
-    % xetex/luatex font selection
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -38,23 +41,32 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{xcolor}
-\usepackage[left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry}
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 % Make \paragraph and \subparagraph free-standing
+\makeatletter
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
   \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
+\makeatother
 
 
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -66,17 +78,21 @@
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
+
+
 % definitions for citeproc citations
 \NewDocumentCommand\citeproctext{}{}
 \NewDocumentCommand\citeproc{mm}{%
@@ -110,6 +126,18 @@
 \newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
 
 \usepackage{indentfirst}
 \setlength{\parindent}{15pt}
@@ -161,13 +189,9 @@
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
 \usepackage{bookmark}
-
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
   pdftitle={Neural responses to binocular in-phase and anti-phase stimuli},
   pdfauthor={Bruno Richard; Daniel H. Baker},
@@ -177,6 +201,7 @@
   citecolor={Blue},
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
+
 
 \title{Neural responses to binocular in-phase and anti-phase stimuli}
 
@@ -224,6 +249,7 @@ findings suggest that explaining neural responses to binocular stimuli
 with different phase relationships requires parallel monocular and
 phase-selective channels.
 \end{abstract}
+
 
 \section{Introduction}\label{introduction}
 
@@ -435,7 +461,7 @@ for subsequent offline analysis using R.
 
 \centering{
 
-\includegraphics{Figures/MethodsFigure.png}
+\pandocbounded{\includegraphics[keepaspectratio]{Figures/MethodsFigure.png}}
 
 }
 
@@ -549,7 +575,7 @@ central tendency in skewed distributions.
 
 \centering{
 
-\includegraphics{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRData-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRData-1.pdf}}
 
 }
 
@@ -597,7 +623,7 @@ Legge, 1984; Maehara and Goryo, 2005; Meese et al., 2006).
 
 \centering{
 
-\includegraphics{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRComparison-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRComparison-1.pdf}}
 
 }
 
@@ -642,6 +668,26 @@ Georgeson et al., 2016; Moulden, 1980).
 
 \subsection{Modelling}\label{modelling}
 
+\begin{verbatim}
+[1] 1.470462e+01 1.877269e+00 1.074643e+00 2.165540e+00 3.129315e-05
+[6] 4.826576e+04
+\end{verbatim}
+
+\begin{verbatim}
+[1] 5.420589e+00 1.858136e+01 1.613340e+01 4.056932e-01 2.441596e-16
+[6] 2.237027e-07
+\end{verbatim}
+
+\begin{verbatim}
+[1] 5.472487e+00 8.101427e+00 5.689012e+00 8.047721e-01 3.168555e-08
+[6] 1.922932e+06
+\end{verbatim}
+
+\begin{verbatim}
+[1] 2.744407e+00 6.453379e+00 5.334008e-01 1.962311e-01 4.066537e-01
+[6] 1.167926e+08
+\end{verbatim}
+
 The perception of stimulus contrast across eyes is well-explained by
 psychophysical models that process input contrast in two sequential
 contrast gain control stages interposed by binocular summation (Baker et
@@ -664,7 +710,7 @@ pathways (Figure~\ref{fig-modelDiagram}).
 
 \centering{
 
-\includegraphics[width=0.7\textwidth,height=\textheight]{Figures/FullModel.png}
+\includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{Figures/FullModel.png}
 
 }
 
@@ -731,20 +777,21 @@ Table~\ref{tbl-R2Table}. For On/Off flicker, the linear summation model
 only generates responses at the fundamental frequency (3Hz) that grossly
 overestimate observer SNRs. This is expected as this model lacks the
 rectification and non-linearities required to generate responses at the
-harmonics (Wade and Baker, 2025). In a linear sum, stimuli presented
-under On/Off flicker in temporal anti-phase cancel each other, and thus
-the model generates no response. The model does generate responses at
-the fundamental and harmonics of the counterphase flicker condition
-(Figure~\ref{fig-badModels1}B), but this is attributable to the input's
-rectification
-(Equation~\ref{eq-stimInput3L}, Equation~\ref{eq-stimInput3R}) and not
+harmonics (Regan and Regan, 1988; Wade and Baker, 2025). In a linear
+sum, stimuli presented under On/Off flicker in temporal anti-phase
+cancel each other, and thus the model generates no response. The model
+does generate responses at the fundamental and harmonics of the
+counterphase flicker condition (Figure~\ref{fig-badModels1}B), but this
+is attributable to the input's rectification (the half-wave
+rectification applied to the input;
+Equation~\ref{eq-stimInput3L}, Equation~\ref{eq-stimInput3R}) and not
 the model architecture.
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.6104}}
-  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1299}}
-  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1299}}
-  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1299}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.6104}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1299}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1299}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1299}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Model
@@ -770,40 +817,55 @@ AIC
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
-\endlastfoot
-Linear sum & - & 3.234 & 281.99 \\
-Linear sum, with Rectification & 0.648 & 1.278 & 187.76 \\
-Two-Stage, no interocular interactions & 0.587 & 1.385 & 200.44 \\
-Two-Stage, with interocular interactions & 0.698 & 1.184 & 183.47 \\
-Two-Stage with parallel monocular channels & 0.900 & 0.681 & 123.81 \\
-Two-Stage with phase-selective channels \& monocular channels & 0.908 &
-0.654 & 121.40 \\
+\tabularnewline
 \caption{Goodness-of-fit metrics for all models developed in this study.
 Errors in predictions for the linear sum model were too large to
 calculate \(R^2\). RMSE is the Root Mean Square error and AIC is the
 Aikaike Information Criterion.}\label{tbl-R2Table}\tabularnewline
+\endlastfoot
+Linear sum & - & 3.234 & 281.99 \\
+Linear sum, with Rectification & 0.575 & 1.405 & 197.95 \\
+Two-Stage, no interocular interactions & 0.822 & 0.908 & 154.86 \\
+Two-Stage, with interocular interactions & 0.81 & 0.94 & 158.62 \\
+Two-Stage with parallel monocular channels & 0.894 & 0.703 & 127.2 \\
+Two-Stage with phase-selective channels \& monocular channels & 0.899 &
+0.684 & 124.28 \\
 \end{longtable}
 
-Adding a rectification to the inputs and normalization aids in capturing
-responses at harmonic frequencies,
-\begin{equation}\phantomsection\label{eq-firstBinocSum}{
-R_B = \frac{(c_L+c_R)^p}{Z+(c_L+c_R)^q}.
-}\end{equation} In this slightly improved iteration of a linear
-summation model, the binocular response of the model is defined as the
-sum of monocular inputs raised to the power \(p\), normalized by the sum
-of monocular inputs raised to the power \(q\). The parameter Z prevents
-division by zero. The model slightly improves the fits to human SNRs as
-it can now generate responses at the harmonics (see
-Figure~\ref{fig-badModels1} and Table~\ref{tbl-R2Table}). It struggles,
-however, at capturing SNR values for the fundamental frequency (3Hz) and
-is, as with the linear summation model, incapable of describing SNRs to
-stimuli presented with On/Off flicker in temporal anti-phase.
+Responses of neurons to contrast in the visual system are well-modeled
+by a saturating non-linearity: as contrast increases, the magnitude of
+responses saturates (the increase in response per unit contrast
+decreases at higher contrast values; Heeger (1992)). The saturating
+non-linearity can be modeled in different ways, but generally contains a
+divisive suppression and an exponentiation of the excitatory and
+inhibitory inputs. The inclusion of suppression can aid the model in
+better capturing the magnitude of responses in our observers while
+exponents introduces the non-linearities required to generate responses
+at the harmonic frequencies. Thus, the next increment in our model
+complexity defines the binocular response as the contrast gain control
+equation \begin{equation}\phantomsection\label{eq-firstBinocSum}{
+R_B = \frac{(c_L+c_R)^p}{Z+(c_L+c_R)^q},
+}\end{equation} where the binocular response of the model (\(R_B\)) is
+defined as the sum of monocular inputs (\(c_L\) and \(c_R\)) raised to
+the power \(p\) normalized by the sum of monocular inputs raised to the
+power \(q\) and where (\(p\) \textgreater{} \(q\)). The parameter Z
+prevents division by zero. The model can now generate responses at the
+harmonic frequencies for stimuli presented in temporal phase under
+On/Off flicker (see Figure~\ref{fig-badModels1} and
+Table~\ref{tbl-R2Table}). While this model iteration improves on the
+fits, it nevertheless struggles to fit SNR values at the fundamental
+frequency (3Hz) and is, as with the linear summation model, incapable of
+generating responses to stimuli presented with On/Off flicker in
+temporal anti-phase; the linear sum of stimuli presented in temporal
+anti-phase will always return zero. The model, therefore, still lacks
+the necessary architecture to adequately define neural responses to our
+stimuli.
 
 \begin{figure}
 
 \centering{
 
-\includegraphics{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-badModels1-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-badModels1-1.pdf}}
 
 }
 
@@ -818,56 +880,62 @@ the box.}
 \subsubsection{The Two-Stage Contrast Gain Control
 Model}\label{the-two-stage-contrast-gain-control-model}
 
-The simple models described above could not accurately represent our
-study's SSVEPs. They overestimated SNRs at the fundamental frequency and
-failed to generate responses for stimuli presented in temporal
-anti-phase with On/Off flicker. We can account for the magnitude of
-responses by adding a monocular stage, with its rectification and
-normalization, for the left eye,
+The simple models described above could not accurately represent the
+observer SSVEPs we recorded. They overestimated SNRs at the fundamental
+frequency and failed to generate responses for stimuli presented in
+temporal anti-phase with On/Off flicker. A potential refinement to the
+model is add a monocular transducer prior to binocular combination Baker
+et al. (2018). The architecture of this model now begins with a
+monocular stage
 \begin{equation}\phantomsection\label{eq-firstStageofTwoNoInter}{
-r_L = \frac{c_L^m}{S + c_L},
-}\end{equation} with the same equation written for the right eye. The
-two rectified and normalized monocular responses are then fed to the
-binocular stage (Meese et al., 2006; Meese and Baker, 2011),
+r_L = \frac{c_L^m}{S + c_L}, \qquad r_R = \frac{c_R^m}{S + c_R}
+}\end{equation} where a non-linearity (\(m\)) is applied to the
+monocular inputs (\(c_L\) and \(c_R\)) in addition to self-suppression.
+The outputs of the monocular stage are then fed into a binocular stage
+that undergoes a second contrast gain control,
 \begin{equation}\phantomsection\label{eq-binocComb}{
 R_{B} = \frac{(r_L+r_R)^p}{Z+(r_L+r_R)^q}.
-}\end{equation} In this variant, \(m\) is the monocular stage's
-excitatory component and determines the extent of summation at detection
-threshold. The monocular input also undergoes self-suppression before
-being fed into the binocular stage. Unlike the original two-stage
-contrast gain control model, this iteration does not include an
-inter-ocular suppression term, which impacts the model's performance
-(see Table~\ref{tbl-R2Table}). The suppression at the monocular stage is
-not large enough to reduce responses at the fundamental frequency
-(Figure~\ref{fig-betterModels}). While it does generate responses for
-stimuli presented in temporal anti-phase, as the rectification prevents
-their sum from cancelling, they are too small in magnitude to capture
-observer SNRs.
-
-Strengthening the normalization of the monocular stage by adding an
-interocular suppression term,
+}\end{equation} In this model variant, \(m\) is the monocular excitatory
+component and determines the extent of summation at detection threshold,
+moderated by the suppressive term. In the second stage, \(p > q\) as
+with Equation~\ref{eq-firstBinocSum}, which is necessary to capture the
+facilitative effects of dichoptic masking (Meese et al., 2006). We can
+strengthen the normalization of the monocular input by adding
+interocular suppression and replacing
+Equation~\ref{eq-firstStageofTwoNoInter} (the first stage) with
 \begin{equation}\phantomsection\label{eq-firstStageofTwo}{
-r_{L} = \frac{c_L^m}{S + c_L + c_R},
-}\end{equation} improves the fits at the fundamental frequency by
-reducing the SNR magnitude of the model (see
-Figure~\ref{fig-betterModels}) and generates larger responses for
-stimuli presented in temporal anti-phase (see Table~\ref{tbl-R2Table}).
-As in the original two-stage contrast gain control model, while the
-excitatory component of the monocular stage may be large, the
-suppression received at both the monocular stage and at the subsequent
-binocular stage keeps responses low, better representing human SNRs
-(Baker et al., 2018; Meese et al., 2006). This model does struggle to
-fit SNRs at the fundamental frequency and odd-harmonics (3F, 5F) for
-stimuli presented in temporal anti-phase under On/Off stimulation. As
-discussed above, these responses are likely driven by monocular signals.
-The two-stage contrast gain control model does not preserve the
-monocular response after the first stage.
+r_{L} = \frac{c_L^m}{S + c_L + c_R}, \qquad r_R = \frac{c_R^m}{S + c_R + c_L}.
+}\end{equation} This model iteration is identical to the two-stage
+contrast gain control model defined by Meese et al. (2006).
+
+The fits of both model variants, with and without interocular
+suppression, are shown in Figure~\ref{fig-betterModels}. The difference
+in their quality is negligible (see Table~\ref{tbl-R2Table}) as both fit
+most experimental conditions well. The addition of the monocular
+transducer enables the model to fit observer SNRs at the fundamental
+frequency for stimuli presented in temporal phase under On/Off flicker
+and importantly, it now generates responses for stimuli presented in
+temporal anti-phase. The transduced monocular inputs no longer cancel
+each other at the binocular stage. While the model can generate
+responses to temporal anti-phase stimuli, it only does so at the
+even-harmonics (2F-6Hz, 4F-12Hz, and 6F-18Hz) of the SSVEP spectrum.
+This is to be expected as the model can only generate binocular
+responses; it does not preserve monocular responses beyond the first
+stage. As the two rectified sine waves are in anti-phase, their sum will
+generate a new waveform with frequencies at twice the frequency of the
+original (6Hz) and its integer harmonics (2F-12Hz and 3F-18Hz; see
+Figure~\ref{fig-sumDiagram} \textbf{maybe in the appendix?}). The
+responses at the fundamental frequency (3Hz) and its odd integer
+harmonics (3F - 9Hz, 5F - 15Hz) of our observers cannot be explained by
+an architecture with a purely binocular output. Next we explore how the
+addition of parallel monocular channels may aid in explaining observer
+responses to stimuli presented in temporal anti-phase.
 
 \begin{figure}
 
 \centering{
 
-\includegraphics{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-betterModels-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-betterModels-1.pdf}}
 
 }
 
@@ -879,8 +947,8 @@ by the thicker line within the box.}
 
 \end{figure}%
 
-\subsubsection{Phase-Selective and Parallel Monocular
-Channels}\label{phase-selective-and-parallel-monocular-channels}
+\subsubsection{Parallel Monocular and Phase-Selective
+Channels}\label{parallel-monocular-and-phase-selective-channels}
 
 To preserve the monocular responses until the output of the model, we
 add parallel monocular channels as was suggested by Georgeson et al.
@@ -933,7 +1001,7 @@ SSVEPs of observers.
 
 \centering{
 
-\includegraphics{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-bestModels-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-bestModels-1.pdf}}
 
 }
 
@@ -976,18 +1044,19 @@ to be large (\textgreater{} 20) to select the phase channel, either
 positive or negative, that generated the largest response. The addition
 of phase-selectivity to our model improved the fits slightly as the
 overall \(R^2\) was increased. The Aikaike Information Criterion (AIC)
-of the phase selective model (AIC = 121.4) is slightly smaller than that
-of the two-stage contrast gain control model with parallel monocular
-channels (AIC = 123.81). While the effects of spatial phase on observer
-SSVEPs are small, accounting for its impact on our model by adding
-phase-selective channels offers a better description of our results.
+of the phase selective model (AIC = 124.28) is slightly smaller than
+that of the two-stage contrast gain control model with parallel
+monocular channels (AIC = 127.2). While the effects of spatial phase on
+observer SSVEPs are small, accounting for its impact on our model by
+adding phase-selective channels offers a better description of our
+results.
 
 While the whole model outperformed the others, the simpler models are
 nested variants and thus difficult to compare using \(R^2\) and AIC
 values alone. We use an F test for nested models to determine if the
 difference in the quality of fits between our smaller models and the
 full model is statistically significant. The full results of the F tests
-are reported in Table~\ref{tbl-fTable}. We do not find a statistically
+are reported in \textbf{?@tbl-fTable}. We do not find a statistically
 significant difference between the fits of the two-stage contrast gain
 control with parallel monocular channels and the full model,
 \(F(1,47) = 4.00, p = .051\). While the full model does improve model
@@ -995,67 +1064,36 @@ fits, its contributions to explaining our findings are not sufficiently
 large to pass the F test for nested models, at an \(\alpha\) level of
 .05.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.4845}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1031}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1031}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1031}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1031}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1031}}@{}}
+\begin{longtable}[]{@{}lc@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-df
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-SS
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-MS
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-F
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-p
-\end{minipage} \\
-\midrule\noalign{}
-\endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-df
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-SS
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-MS
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-F
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-p
-\end{minipage} \\
+Parameter & Value \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Linear sum & 6 & 541.54 & 90.26 & 183.61 & \textless.001 \\
-Linear sum, with Rectification & 3 & 65.12 & 21.71 & 44.16 &
-\textless.001 \\
-Two-Stage, no interocular interactions & 1 & 80.52 & 80.52 & 163.8 &
-\textless.001 \\
-Two-Stage, with interocular interactions & 1 & 52.58 & 52.58 & 106.95 &
-\textless.001 \\
-Two-Stage with parallel monocular channels & 1 & 1.97 & 1.97 & 4 &
-0.051 \\
-\caption{Results of the F test for nested models. The full model -
-two-stage contrast gain control model with phase selective and parallel
-monocular channels - outperformed all but the two-stage model with
-parallel monocular channels at an \(\alpha\) level of
-.05.}\label{tbl-fTable}\tabularnewline
+m & 5.47 \\
+p & 8.1 \\
+q & 5.69 \\
+S & 0.8 \\
+Z & 0 \\
 \end{longtable}
 
 \section{Discussion}\label{discussion}
 
-\section*{References}\label{references}
-\addcontentsline{toc}{section}{References}
+\section{References}\label{references}
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{Figures/SumDiagram.png}}
+
+}
+
+\caption{\label{fig-sumDiagram}A diagram that shows the effect of
+summing a rectified wave.}
+
+\end{figure}%
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
@@ -1148,6 +1186,11 @@ slope in the fovea and parafovea and the local amplitude distributions
 of natural scene imagery. J Vis 6, 696--711.
 \url{https://doi.org/10.1167/6.7.3}
 
+\bibitem[\citeproctext]{ref-Heeger1992}
+Heeger, D.J., 1992. Normalization of cell responses in cat striate
+cortex. Vis Neurosci 9, 181--97.
+\url{https://doi.org/10.1017/s0952523800009640}
+
 \bibitem[\citeproctext]{ref-Legge1984a}
 Legge, G.E., 1984. Binocular contrast summation--i. Detection and
 discrimination. Vision Res 24, 373--83.
@@ -1184,6 +1227,11 @@ Moulden, B., 1980. After-effects and the integration of patterns of
 neural activity within a channel. Philos Trans R Soc Lond B Biol Sci
 290, 39--55. \url{https://doi.org/10.1098/rstb.1980.0081}
 
+\bibitem[\citeproctext]{ref-regan1988}
+Regan, M., Regan, D., 1988. A frequency domain technique for
+characterizing nonlinearities in biological systems. Journal of
+theoretical biology 133, 293--317.
+
 \bibitem[\citeproctext]{ref-Richardetal2018}
 Richard, B., Chadnova, E., Baker, D.H., 2018. Binocular vision
 adaptively suppresses delayed monocular signals. Neuroimage 172,
@@ -1216,6 +1264,7 @@ States of America 100, 14499--14503.
 \url{https://doi.org/10.1073/pnas.2333622100}
 
 \end{CSLReferences}
+
 
 
 

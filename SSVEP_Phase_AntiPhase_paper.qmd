@@ -181,11 +181,11 @@ for (i in 1:size[2]){
   } else {
     yLimit <- c(0,10)
   }
-  plot(x = NULL, y = NULL, xlim = c(0,200), ylim = yLimit, axes = FALSE, ann = FALSE)
-  axis(1, at = pretty(c(0,200)), lwd = 2, labels = FALSE, tck = -.01)
+  plot(x = NULL, y = NULL, xlim = c(0,210), ylim = yLimit, axes = FALSE, ann = FALSE)
+  axis(1, at = c(0,3,6,9,12,15,18,21)*10, lwd = 2, labels = FALSE, tck = -.01)
   axis(2, at = pretty(yLimit), lwd = 2, labels = FALSE, tck = -.01)
   if (i >= 5){
-    mtext(pretty(c(0,200))/10, 1, at = pretty(c(0,200)), line = .4, cex = .9)
+    mtext(c(0,3,6,9,12,15,18,21), 1, at = c(0,3,6,9,12,15,18,21)*10, line = .4, cex = .9)
     mtext("Frequency (Hz)", 1, font = 2, line = 1.75, cex = .9)
   }
   
@@ -205,11 +205,11 @@ for (i in 1:size[2]){
   }
   mtext(theConditions[i], 3, line = 0.4, cex = .8, adj = 0.5, padj = 0)
   
-  if (i  > 5){
-    text((c(3,6,9,12,15,18)*10)+2,10,paste0(c(3,6,9,12,15,18), "Hz"), adj = 0, cex = .8)
-  } else {
-    text((c(3,6,9,12,15,18)*10)+2,6,paste0(c(3,6,9,12,15,18), "Hz"), adj = 0, cex = .8)
-  }
+  # if (i  > 5){
+  #   text((c(3,6,9,12,15,18)*10)+2,10,paste0(c(3,6,9,12,15,18), "Hz"), adj = 0, cex = .8)
+  # } else {
+  #   text((c(3,6,9,12,15,18)*10)+2,6,paste0(c(3,6,9,12,15,18), "Hz"), adj = 0, cex = .8)
+  # }
 }
 ```
 
@@ -327,8 +327,6 @@ p <- 6.42
 q <- 5.20
 Z <- .013
 scale <- 8
-
-w <- 30
 ```
 
 ```{r getModelErrorFunction, echo = FALSE}
@@ -433,9 +431,9 @@ linearModel <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
 }
 
 linearModelRectification <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
-  p <- abs(params[1])
-  q <- abs(params[2])
-  S <- params[3]
+  p <- exp(params[1])
+  q <- exp(params[2])
+  S <- exp(params[3])
   scale <- params[4]
   
   RB <- (CL.Plus + CR.Plus + CL.Minus + CR.Minus)**p / (S + (CL.Plus + CR.Plus + CL.Minus + CR.Minus)**q)
@@ -457,9 +455,8 @@ linearModelRectification <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minu
 params <- scale
 linearSum.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData,model = "linearSum",  method = "Brent", lower = -10, upper = 10)
 
-params <- c(p,q,Z,scale)
+params <- c(log(c(p,q,Z)), scale)
 linearRectificaton.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "linearModelRectification", control = list(maxit = 5000))
-
 ```
 
 ```{r evalBadModels, echo = FALSE}
@@ -529,11 +526,11 @@ SNRAll[,,2] <- SNR
 
 ```{r definebettermodels, echo = FALSE}
 twoStageNoMonocularInteractions <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
-  m <- abs(params[1])
-  p <- abs(params[2])
-  q <- abs(params[3])
-  S <- params[4]
-  Z <- params[5]
+  m <- exp(params[1])
+  p <- exp(params[2])
+  q <- exp(params[3])
+  S <- exp(params[4])
+  Z <- exp(params[5])
   scale <- params[6]
   
   LeftEye <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus))
@@ -554,11 +551,11 @@ twoStageNoMonocularInteractions <- function(params, CL.Plus, CL.Minus, CR.Plus, 
 }
 
 twoStageWithMonocularInteractions <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
-  m <- abs(params[1])
-  p <- abs(params[2])
-  q <- abs(params[3])
-  S <- params[4]
-  Z <- params[5]
+  m <- exp(params[1])
+  p <- exp(params[2])
+  q <- exp(params[3])
+  S <- exp(params[4])
+  Z <- exp(params[5])
   scale <- params[6]
   
   LeftEye <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus + CR.Plus + CR.Minus))
@@ -580,11 +577,14 @@ twoStageWithMonocularInteractions <- function(params, CL.Plus, CL.Minus, CR.Plus
 ```
 
 ```{r fitbettermodels, echo = FALSE}
-params <- c(m,p,q,S,Z, scale)
+params <- c(log(c(m,p,q,S,Z)), scale)
 twoStageNoMonoc.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageNoMonocularInteractions", control = list(maxit = 5000))
 
-params <- c(m,p,q,S,Z, scale)
+params <- c(log(c(m,p,q,S,Z)), scale)
 twoStageWithMonoc.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageWithMonocularInteractions", control = list(maxit = 5000))
+
+exp(twoStageNoMonoc.params$par)
+exp(twoStageWithMonoc.params$par)
 ```
 
 ```{r evalBetterModels, echo = FALSE}
@@ -645,11 +645,11 @@ SNRAll[,,4] <- SNR
 
 ```{r definebestmodels, echo =  FALSE}
 twoStageWithMonocularChannels <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
-  m <- abs(params[1])
-  p <- abs(params[2])
-  q <- abs(params[3])
-  S <- params[4]
-  Z <- params[5]
+  m <- exp(params[1])
+  p <- exp(params[2])
+  q <- exp(params[3])
+  S <- exp(params[4])
+  Z <- exp(params[5])
   scale <- params[6]
   
   LeftEye <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus + CR.Plus + CR.Minus))
@@ -713,13 +713,12 @@ twoStagePhaseOnlyNoMonoc <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minu
 }
 
 twoStageWithMonocularChannelsPhase <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
-  m <- abs(params[1])
-  p <- abs(params[2])
-  q <- abs(params[3])
-  S <- params[4]
-  Z <- params[5]
-  w <- abs(params[6])
-  scale <- params[7]
+  m <- exp(params[1])
+  p <- exp(params[2])
+  q <- exp(params[3])
+  S <- exp(params[4])
+  Z <- exp(params[5])
+  scale <- params[6]
   
   LeftEye.Plus <- (CL.Plus)**m / (S+(CL.Plus+ CR.Plus))
   LeftEye.Minus <- (CL.Minus)**m / (S+(CL.Minus + CR.Minus))
@@ -746,7 +745,7 @@ twoStageWithMonocularChannelsPhase <- function(params, CL.Plus, CL.Minus, CR.Plu
   combinedSignal.Plus <- (RCGCSum.Plus + LeftEyeStage2.Plus)
   combinedSignal.Minus <- (RCGCSum.Minus + LeftEyeStage2.Minus)
   
-  combinedSignal <- (combinedSignal.Plus**w + combinedSignal.Minus**w)**(1/w)
+  combinedSignal <- combinedSignal.Plus + combinedSignal.Minus
   combinedSignal <- combinedSignal + scale
   
   # Add 1/f
@@ -763,14 +762,17 @@ twoStageWithMonocularChannelsPhase <- function(params, CL.Plus, CL.Minus, CR.Plu
 ```
 
 ```{r fitBestModels, echo = FALSE}
-params <- c(m,p,q,S,Z,scale)
+params <- c(log(c(m,p,q,S,Z)), scale)
 twoStageWithMonocChannels.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageWithMonocularChannels", control = list(maxit = 5000))
 
-params <- c(m,p,q,S,Z, w,scale)
-twoStagePhaseOnlyNoMonoc.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStagePhaseOnlyNoMonoc", control = list(maxit = 5000))
+# params <- c(m,p,q,S,Z, w,scale)
+# twoStagePhaseOnlyNoMonoc.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStagePhaseOnlyNoMonoc", control = list(maxit = 5000))
 
-params <- c(m,p,q,S,Z,w, scale)
+params <- c(log(c(m,p,q,S,Z)), scale)
 twoStageWithMonocChannelsPhase.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageWithMonocularChannelsPhase", control = list(maxit = 5000))
+
+exp(twoStageWithMonocChannels.params$par)
+exp(twoStageWithMonocChannelsPhase.params$par)
 ```
 
 ```{r evalbestModels, echo = FALSE}
@@ -802,31 +804,31 @@ SNRAll[,,5] <- SNR
 
 ######################
 
-SNR <- array(NA, dim = c(length(theFs), dim(CL.Plus)[2]))
-modelResponse <- matrix(NA, nrow = 1001, ncol = 9)
-for (i in 1:9){
-  modelResponse[,i] <- twoStagePhaseOnlyNoMonoc(twoStagePhaseOnlyNoMonoc.params$par, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
-  
-  for (f in 1:length(theFs)){
-    IDX <- ((theFs[f]-5):(theFs[f]+5))
-    IDX <- IDX[IDX != theFs[f]]
-    SNR[f,i] <- abs(modelResponse[theFs[f],i])/mean(abs(modelResponse[IDX,i]))
-  }
-}
-
-ssError <- sum((SNR - theHData)**2)
-ssTotal <- sum((theHData - mean(theHData))**2)
-
-k[6] <- length(twoStagePhaseOnlyNoMonoc.params$par)
-n[6] <- length(theHData)
-mse <- ssError/length(theHData)
-
-R2[6] <- 1-(ssError/ssTotal)
-rmsE[6] <- sqrt(ssError/length(SNR))
-AIC[6] <- 2*k[6] + n[6]*log(mse) + n[6]*log(2*pi) + n[6]
-SSE[6] <- ssError
-
-SNRAll[,,6] <- SNR
+# SNR <- array(NA, dim = c(length(theFs), dim(CL.Plus)[2]))
+# modelResponse <- matrix(NA, nrow = 1001, ncol = 9)
+# for (i in 1:9){
+#   modelResponse[,i] <- twoStagePhaseOnlyNoMonoc(twoStagePhaseOnlyNoMonoc.params$par, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
+#   
+#   for (f in 1:length(theFs)){
+#     IDX <- ((theFs[f]-5):(theFs[f]+5))
+#     IDX <- IDX[IDX != theFs[f]]
+#     SNR[f,i] <- abs(modelResponse[theFs[f],i])/mean(abs(modelResponse[IDX,i]))
+#   }
+# }
+# 
+# ssError <- sum((SNR - theHData)**2)
+# ssTotal <- sum((theHData - mean(theHData))**2)
+# 
+# k[6] <- length(twoStagePhaseOnlyNoMonoc.params$par)
+# n[6] <- length(theHData)
+# mse <- ssError/length(theHData)
+# 
+# R2[6] <- 1-(ssError/ssTotal)
+# rmsE[6] <- sqrt(ssError/length(SNR))
+# AIC[6] <- 2*k[6] + n[6]*log(mse) + n[6]*log(2*pi) + n[6]
+# SSE[6] <- ssError
+# 
+# SNRAll[,,6] <- SNR
 
 ######################
 
@@ -884,7 +886,7 @@ As a first step in defining the necessary architecture to capture our results, w
 $$
 R_B = c_L+c_R,
 $$ {#eq-linearSumModel}
-the binocular response ($R_B$) is the sum of the monocular inputs. The fits of the linear summation model are shown in @fig-badModels1 and its performance metrics in @tbl-R2Table. For On/Off flicker, the linear summation model only generates responses at the fundamental frequency (3Hz) that grossly overestimate observer SNRs. This is expected as this model lacks the rectification and non-linearities required to generate responses at the harmonics [@WadeBaker2025]. In a linear sum, stimuli presented under On/Off flicker in temporal anti-phase cancel each other, and thus the model generates no response. The model does generate responses at the fundamental and harmonics of the counterphase flicker condition ([@fig-badModels1]B), but this is attributable to the input's rectification ([@eq-stimInput3L;@eq-stimInput3R]) and not the model architecture.
+the binocular response ($R_B$) is the sum of the monocular inputs. The fits of the linear summation model are shown in @fig-badModels1 and its performance metrics in @tbl-R2Table. For On/Off flicker, the linear summation model only generates responses at the fundamental frequency (3Hz) that grossly overestimate observer SNRs. This is expected as this model lacks the rectification and non-linearities required to generate responses at the harmonics [@WadeBaker2025;@regan1988]. In a linear sum, stimuli presented under On/Off flicker in temporal anti-phase cancel each other, and thus the model generates no response. The model does generate responses at the fundamental and harmonics of the counterphase flicker condition ([@fig-badModels1]B), but this is attributable to the input's rectification (the half-wave rectification applied to the input; [@eq-stimInput3L;@eq-stimInput3R]) and not the model architecture.
 
 | Model | $R^2$ | RMSE | AIC | 
 |:----------------------------------------------|:--------:|:--------:|:--------:|
@@ -897,11 +899,11 @@ the binocular response ($R_B$) is the sum of the monocular inputs. The fits of t
 
 : Goodness-of-fit metrics for all models developed in this study. Errors in predictions for the linear sum model were too large to calculate $R^2$. RMSE is the Root Mean Square error and AIC is the Aikaike Information Criterion. {#tbl-R2Table}
 
-Adding a rectification to the inputs and normalization aids in capturing responses at harmonic frequencies,
+Responses of neurons to contrast in the visual system are well-modeled by a saturating non-linearity: as contrast increases, the magnitude of responses saturates (the increase in response per unit contrast decreases at higher contrast values; @Heeger1992). The saturating non-linearity can be modeled in different ways, but generally contains a divisive suppression and an exponentiation of the excitatory and inhibitory inputs. The inclusion of suppression can aid the model in better capturing the magnitude of responses in our observers while exponents introduces the non-linearities required to generate responses at the harmonic frequencies. Thus, the next increment in our model complexity defines the binocular response as the contrast gain control equation
 $$
-R_B = \frac{(c_L+c_R)^p}{Z+(c_L+c_R)^q}.
+R_B = \frac{(c_L+c_R)^p}{Z+(c_L+c_R)^q},
 $$ {#eq-firstBinocSum} 
-In this slightly improved iteration of a linear summation model, the binocular response of the model is defined as the sum of monocular inputs raised to the power $p$, normalized by the sum of monocular inputs raised to the power $q$. The parameter Z prevents division by zero. The model slightly improves the fits to human SNRs as it can now generate responses at the harmonics (see @fig-badModels1 and @tbl-R2Table). It struggles, however, at capturing SNR values for the fundamental frequency (3Hz) and is, as with the linear summation model, incapable of describing SNRs to stimuli presented with On/Off flicker in temporal anti-phase.
+where the binocular response of the model ($R_B$) is defined as the sum of monocular inputs ($c_L$ and $c_R$) raised to the power $p$ normalized by the sum of monocular inputs raised to the power $q$ and where ($p$ > $q$). The parameter Z prevents division by zero. The model can now generate responses at the harmonic frequencies for stimuli presented in temporal phase under On/Off flicker (see @fig-badModels1 and @tbl-R2Table). While this model iteration improves on the fits, it nevertheless struggles to fit SNR values at the fundamental frequency (3Hz) and is, as with the linear summation model, incapable of generating responses to stimuli presented with On/Off flicker in temporal anti-phase; the linear sum of stimuli presented in temporal anti-phase will always return zero. The model, therefore, still lacks the necessary architecture to adequately define neural responses to our stimuli. 
 
 ```{r drawtheBadModels, fig.width=12, fig.height=6, echo = FALSE}
 #| label: fig-badModels1
@@ -980,21 +982,107 @@ for (i in 6:9){
 
 ### The Two-Stage Contrast Gain Control Model
 
-The simple models described above could not accurately represent our study's SSVEPs. They overestimated SNRs at the fundamental frequency and failed to generate responses for stimuli presented in temporal anti-phase with On/Off flicker. We can account for the magnitude of responses by adding a monocular stage, with its rectification and normalization, for the left eye,
+The simple models described above could not accurately represent the observer SSVEPs we recorded. They overestimated SNRs at the fundamental frequency and failed to generate responses for stimuli presented in temporal anti-phase with On/Off flicker. A potential refinement to the model is add a monocular transducer prior to binocular combination [@Meese2006, @Baker2018]. The architecture of this model now begins with a monocular stage
 $$
-r_L = \frac{c_L^m}{S + c_L},
+r_L = \frac{c_L^m}{S + c_L}, \qquad r_R = \frac{c_R^m}{S + c_R}
 $$ {#eq-firstStageofTwoNoInter} 
-with the same equation written for the right eye. The two rectified and normalized monocular responses are then fed to the binocular stage [@Meese2006; @MeeseBaker2011],
+where a non-linearity ($m$) is applied to the monocular inputs ($c_L$ and $c_R$) in addition to self-suppression. The outputs of the monocular stage are then fed into a binocular stage that undergoes a second contrast gain control,
 $$
 R_{B} = \frac{(r_L+r_R)^p}{Z+(r_L+r_R)^q}.
 $$ {#eq-binocComb} 
-In this variant, $m$ is the monocular stage's excitatory component and determines the extent of summation at detection threshold. The monocular input also undergoes self-suppression before being fed into the binocular stage. Unlike the original two-stage contrast gain control model, this iteration does not include an inter-ocular suppression term, which impacts the model's performance (see @tbl-R2Table). The suppression at the monocular stage is not large enough to reduce responses at the fundamental frequency (@fig-betterModels). While it does generate responses for stimuli presented in temporal anti-phase, as the rectification prevents their sum from cancelling, they are too small in magnitude to capture observer SNRs. 
-
-Strengthening the normalization of the monocular stage by adding an interocular suppression term,
+In this model variant, $m$ is the monocular excitatory component and determines the extent of summation at detection threshold, moderated by the suppressive term. In the second stage, $p > q$ as with @eq-firstBinocSum, which is necessary to capture the facilitative effects of dichoptic masking [@Meese2006]. We can strengthen the normalization of the monocular input by adding interocular suppression and replacing @eq-firstStageofTwoNoInter (the first stage) with 
 $$
-r_{L} = \frac{c_L^m}{S + c_L + c_R},
+r_{L} = \frac{c_L^m}{S + c_L + c_R}, \qquad r_R = \frac{c_R^m}{S + c_R + c_L}.
 $$ {#eq-firstStageofTwo} 
-improves the fits at the fundamental frequency by reducing the SNR magnitude of the model (see @fig-betterModels) and generates larger responses for stimuli presented in temporal anti-phase (see @tbl-R2Table). As in the original two-stage contrast gain control model, while the excitatory component of the monocular stage may be large, the suppression received at both the monocular stage and at the subsequent binocular stage keeps responses low, better representing human SNRs [@Baker2018; @Meese2006]. This model does struggle to fit SNRs at the fundamental frequency and odd-harmonics (3F, 5F) for stimuli presented in temporal anti-phase under On/Off stimulation. As discussed above, these responses are likely driven by monocular signals. The two-stage contrast gain control model does not preserve the monocular response after the first stage. 
+This model iteration is identical to the two-stage contrast gain control model defined by @Meese2006. 
+
+The fits of both model variants, with and without interocular suppression, are shown in @fig-betterModels. The difference in their quality is negligible (see @tbl-R2Table) as both fit most experimental conditions well. The addition of the monocular transducer enables the model to fit observer SNRs at the fundamental frequency for stimuli presented in temporal phase under On/Off flicker and importantly, it now generates responses for stimuli presented in temporal anti-phase. The transduced monocular inputs no longer cancel each other at the binocular stage. While the model can generate responses to temporal anti-phase stimuli, it only does so at the even-harmonics (2F-6Hz, 4F-12Hz, and 6F-18Hz) of the SSVEP spectrum. This is to be expected as the model can only generate binocular responses; it does not preserve monocular responses beyond the first stage. As the two rectified sine waves are in anti-phase, their sum will generate a new waveform with frequencies at twice the frequency of the original (6Hz) and its integer harmonics (2F-12Hz and 3F-18Hz; see @fig-sumDiagram \textbf{maybe in the appendix?}). The responses at the fundamental frequency (3Hz) and its odd integer harmonics (3F - 9Hz, 5F - 15Hz) of our observers cannot be explained by an architecture with a purely binocular output. Next we explore how the addition of parallel monocular channels may aid in explaining observer responses to stimuli presented in temporal anti-phase. 
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE, eval = FALSE}
+png("~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Figures/SineWave1.png", width = 8, height = 4, res= 300, units = "in", bg = "transparent")
+X <- seq(0,1,length.out = 1000)
+sine1 <- (cos(2*pi*3*X)+1)/2
+sine2 <- (-cos(2*pi*3*X)+1)/2
+plot(x = NULL, y = NULL, xlim = c(0,1), ylim = c(0,1), axes = FALSE, ann = FALSE)
+lines(X, sine1, col = posterColours[1], lwd = 2)
+lines(X, sine2, col = posterColours[2], lwd = 2)
+
+legend("topleft", legend = c(bquote("c"[L]), bquote("c"[R])), lwd = 2, col = posterColours[1:2], bg = rgb(1,1,1,.7), box.lwd = 0)
+
+axis(1, at = seq(0,1,length.out = 5), tck = -.015, lwd = 2, labels = FALSE)
+axis(2, at = seq(0,1,length.out = 5), tck = -.015, lwd = 2, labels = FALSE)
+
+mtext(seq(0,1,length.out = 5), 1, at = seq(0,1,length.out = 5), line =.4)
+mtext("Time (seconds)", 1, font = 2, line = 1.75)
+mtext(seq(0,1,length.out = 5), 2, at = seq(0,1,length.out = 5), line = .4, las = 1)
+mtext("Relative Contrast", 2, font = 2, line = 2.5)
+invisible(dev.off())
+
+png("~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Figures/linearSum.png", width = 4, height = 4, res= 300, units = "in", bg = "transparent")
+
+plot(x = NULL, y = NULL, xlim = c(0,1), ylim = c(0,1), axes = FALSE, ann = FALSE)
+lines(X, sine1+sine2, col = posterColours[1], lwd = 2)
+
+axis(1, at = seq(0,1,length.out = 5), tck = -.015, lwd = 2, labels = FALSE)
+axis(2, at = seq(0,1,length.out = 5), tck = -.015, lwd = 2, labels = FALSE)
+
+mtext(seq(0,1,length.out = 5), 1, at = seq(0,1,length.out = 5), line =.4)
+mtext("Time (seconds)", 1, font = 2, line = 1.75)
+mtext(seq(0,1,length.out = 5), 2, at = seq(0,1,length.out = 5), line = .4, las = 1)
+mtext("Relative Contrast", 2, font = 2, line = 2.5)
+invisible(dev.off())
+
+png("~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Figures/recSum.png", width = 4, height = 4, res= 300, units = "in", bg = "transparent")
+rec1 <- (sine1**1.3)/(1+sine1)
+rec2 <- (sine2**1.3)/(1+sine2)
+plot(x = NULL, y = NULL, xlim = c(0,1), ylim = c(0,1), axes = FALSE, ann = FALSE)
+lines(X, rec1+rec2, col = posterColours[1], lwd = 2)
+axis(1, at = seq(0,1,length.out = 5), tck = -.015, lwd = 2, labels = FALSE)
+axis(2, at = seq(0,1,length.out = 5), tck = -.015, lwd = 2, labels = FALSE)
+
+mtext(seq(0,1,length.out = 5), 1, at = seq(0,1,length.out = 5), line =.4)
+mtext("Time (seconds)", 1, font = 2, line = 1.75)
+mtext(seq(0,1,length.out = 5), 2, at = seq(0,1,length.out = 5), line = .4, las = 1)
+mtext("Relative Contrast", 2, font = 2, line = 2.5)
+invisible(dev.off())
+
+ampLinSum <- abs(fft(sine1+sine2))
+ampRecSum <- abs(fft(rec1+rec2))
+
+png("~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Figures/linearSumFFT.png", width = 4, height = 4, res= 300, units = "in", bg = "transparent")
+plot(x = NULL, y = NULL, xlim = c(0,21), ylim = c(0,12), axes = FALSE, ann = FALSE)
+lines(c(6,6), c(0,ampLinSum[7]), lwd = 2, col = posterColours[3])
+lines(c(12,12), c(0,ampLinSum[13]), lwd = 2, col = posterColours[3])
+lines(c(18,18), c(0,ampLinSum[19]), lwd = 2, col = posterColours[3])
+
+points(c(6,12,18),ampLinSum[c(6,12,18)+1], pch = 19, cex = 2, col = posterColours[3])
+axis(1, at = seq(0,21,3), tck = -.015, lwd = 2, labels = FALSE)
+axis(2, at =  pretty(c(0,12)), tck = -.015, lwd = 2, labels = FALSE)
+
+mtext(seq(0,21,3), 1, at = seq(0,21,3), line =.4)
+mtext("Frequency (Hz)", 1, font = 2, line = 1.75)
+mtext(pretty(c(0,12)), 2, at = pretty(c(0,12)), line = .4, las = 1)
+mtext("Amplitude", 2, font = 2, line = 2.5)
+invisible(dev.off())
+
+png("~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Figures/recSumFFT.png", width = 4, height = 4, res= 300, units = "in", bg = "transparent")
+plot(x = NULL, y = NULL, xlim = c(0,21), ylim = c(0,12), axes = FALSE, ann = FALSE)
+lines(c(6,6), c(0,ampRecSum[7]), lwd = 2, col = posterColours[3])
+lines(c(12,12), c(0,ampRecSum[13]), lwd = 2, col = posterColours[3])
+lines(c(18,18), c(0,ampRecSum[19]), lwd = 2, col = posterColours[3])
+
+points(c(6,12,18),ampRecSum[c(6,12,18)+1], pch = 19, cex = 2, col = posterColours[3])
+axis(1, at = seq(0,21,3), tck = -.015, lwd = 2, labels = FALSE)
+axis(2, at =  pretty(c(0,12)), tck = -.015, lwd = 2, labels = FALSE)
+
+mtext(seq(0,21,3), 1, at = seq(0,21,3), line =.4)
+mtext("Frequency (Hz)", 1, font = 2, line = 1.75)
+mtext(pretty(c(0,12)), 2, at = pretty(c(0,12)), line = .4, las = 1)
+mtext("Amplitude", 2, font = 2, line = 2.5)
+invisible(dev.off())
+
+```
+
 
 ```{r drawsecondbestModels, fig.width = 12, fig.height = 6, echo = FALSE}
 #| label: fig-betterModels
@@ -1072,7 +1160,7 @@ for (i in 6:9){
 }
 ```
 
-### Phase-Selective and Parallel Monocular Channels
+### Parallel Monocular and Phase-Selective Channels
 
 To preserve the monocular responses until the output of the model, we add parallel monocular channels as was suggested by @Georgeson2016. These channels are fully monocular and therefore have no interocular suppression term,
 $$
@@ -1177,44 +1265,48 @@ $$ {#eq-finalSum}
 We introduce the new parameter $w$, which is expected to be large (> 20) to select the phase channel, either positive or negative, that generated the largest response. The addition of phase-selectivity to our model improved the fits slightly as the overall $R^2$ was increased. The Aikaike Information Criterion (AIC) of the phase selective model (AIC = `r round(AIC[7],2)`) is slightly smaller than that of the two-stage contrast gain control model with parallel monocular channels (AIC = `r round(AIC[5],2)`). While the effects of spatial phase on observer SSVEPs are small, accounting for its impact on our model by adding phase-selective channels offers a better description of our results. 
 
 ```{r, echo = FALSE}
-p <- k[7]-k[c(1:5)]
-df2 <- n[7]-k[7]
-
-F <- NULL
-pValue <- NULL
-for (i in 1:5){
-  F[i]  <- ((SSE[i]-SSE[7])/p[i])/(SSE[7]/(n[7]-k[7]))
-  df1 <- p[i]
-  
-  pValue[i] <- pf(F[i], df1, df2, lower.tail = FALSE)
-}
+# p <- k[7]-k[c(1:5)]
+# df2 <- n[7]-k[7]
+# 
+# F <- NULL
+# pValue <- NULL
+# for (i in 1:5){
+#   F[i]  <- ((SSE[i]-SSE[7])/p[i])/(SSE[7]/(n[7]-k[7]))
+#   df1 <- p[i]
+#   
+#   pValue[i] <- pf(F[i], df1, df2, lower.tail = FALSE)
+# }
 
 # round(pValue,3)
 ```
 
 While the whole model outperformed the others, the simpler models are nested variants and thus difficult to compare using $R^2$ and AIC values alone. We use an F test for nested models to determine if the difference in the quality of fits between our smaller models and the full model is statistically significant. The full results of the F tests are reported in @tbl-fTable. We do not find a statistically significant difference between the fits of the two-stage contrast gain control with parallel monocular channels and the full model, $F(1,47) = 4.00, p = .051$. While the full model does improve model fits, its contributions to explaining our findings are not sufficiently large to pass the F test for nested models, at an $\alpha$ level of .05.
 
-| Model | df | SS | MS | F | p |
-|:----------------------------------------------|:--------:|:--------:|:--------:|:--------:|:--------:|
-| Linear sum | `r p[1]` | `r round(SSE[1]-SSE[7],2)` | `r round((SSE[1]-SSE[7])/p[1],2)` | `r round(F[1],2)` | \<.001 |
-| Linear sum, with Rectification | `r p[2]` | `r round(SSE[2]-SSE[7],2)` | `r round((SSE[2]-SSE[7])/p[2],2)` | `r round(F[2],2)` | \<.001 |
-| Two-Stage, no interocular interactions | `r p[3]` | `r round(SSE[3]-SSE[7],2)` | `r round((SSE[3]-SSE[7])/p[3],2)` | `r round(F[3],2)` | \<.001 |
-| Two-Stage, with interocular interactions | `r p[4]` | `r round(SSE[4]-SSE[7],2)` | `r round((SSE[4]-SSE[7])/p[4],2)` | `r round(F[4],2)` | \<.001 |
-| Two-Stage with parallel monocular channels | `r p[5]` | `r round(SSE[5]-SSE[7],2)` | `r round((SSE[5]-SSE[7])/p[5],2)` | `r round(F[5],2)` | `r round(pValue[5],3)` |
+<!-- | Model | df | SS | MS | F | p | -->
+<!-- |:----------------------------------------------|:--------:|:--------:|:--------:|:--------:|:--------:| -->
+<!-- | Linear sum | `r p[1]` | `r round(SSE[1]-SSE[7],2)` | `r round((SSE[1]-SSE[7])/p[1],2)` | `r round(F[1],2)` | \<.001 | -->
+<!-- | Linear sum, with Rectification | `r p[2]` | `r round(SSE[2]-SSE[7],2)` | `r round((SSE[2]-SSE[7])/p[2],2)` | `r round(F[2],2)` | \<.001 | -->
+<!-- | Two-Stage, no interocular interactions | `r p[3]` | `r round(SSE[3]-SSE[7],2)` | `r round((SSE[3]-SSE[7])/p[3],2)` | `r round(F[3],2)` | \<.001 | -->
+<!-- | Two-Stage, with interocular interactions | `r p[4]` | `r round(SSE[4]-SSE[7],2)` | `r round((SSE[4]-SSE[7])/p[4],2)` | `r round(F[4],2)` | \<.001 | -->
+<!-- | Two-Stage with parallel monocular channels | `r p[5]` | `r round(SSE[5]-SSE[7],2)` | `r round((SSE[5]-SSE[7])/p[5],2)` | `r round(F[5],2)` | `r round(pValue[5],3)` | -->
 
-: Results of the F test for nested models. The full model - two-stage contrast gain control model with phase selective and parallel monocular channels - outperformed all but the two-stage model with parallel monocular channels at an $\alpha$ level of .05. {#tbl-fTable}
+<!-- : Results of the F test for nested models. The full model - two-stage contrast gain control model with phase selective and parallel monocular channels - outperformed all but the two-stage model with parallel monocular channels at an $\alpha$ level of .05. {#tbl-fTable} -->
 
 
-<!-- | Parameter | Value | -->
-<!-- |:----------|:-----:| -->
-<!-- | m         | `r round(twoStageWithMonocChannels.params$par[1],2)` | -->
-<!-- | p         | `r round(twoStageWithMonocChannels.params$par[2],2)` | -->
-<!-- | q         | `r round(twoStageWithMonocChannels.params$par[3],2)` | -->
-<!-- | S         | `r round(twoStageWithMonocChannels.params$par[4],2)` | -->
-<!-- | Z         | `r round(twoStageWithMonocChannels.params$par[5],2)` | -->
+| Parameter | Value |
+|:----------|:-----:|
+| m         | `r round(exp(twoStageWithMonocChannels.params$par[1]),2)` |
+| p         | `r round(exp(twoStageWithMonocChannels.params$par[2]),2)` |
+| q         | `r round(exp(twoStageWithMonocChannels.params$par[3]),2)` |
+| S         | `r round(exp(twoStageWithMonocChannels.params$par[4]),2)` |
+| Z         | `r round(exp(twoStageWithMonocChannels.params$par[5]),2)` |
 
 <!-- : Fitted parameters of the best model (Two-Stage Model with Parallel Monocular channels) {#tbl-modelParameters} -->
 
 # Discussion
 
 # References
+
+![A diagram that shows the effect of summing a rectified wave.](Figures/SumDiagram.png){#fig-sumDiagram}
+
+
