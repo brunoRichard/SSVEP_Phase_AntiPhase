@@ -771,8 +771,8 @@ twoStageWithMonocChannels.params <- optim(params, theErrorFunction, CL.Plus = CL
 params <- c(log(c(m,p,q,S,Z)), scale)
 twoStageWithMonocChannelsPhase.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageWithMonocularChannelsPhase", control = list(maxit = 5000))
 
-exp(twoStageWithMonocChannels.params$par)
-exp(twoStageWithMonocChannelsPhase.params$par)
+# exp(twoStageWithMonocChannels.params$par)
+# exp(twoStageWithMonocChannelsPhase.params$par)
 ```
 
 ```{r evalbestModels, echo = FALSE}
@@ -996,8 +996,6 @@ r_{L} = \frac{c_L^m}{S + c_L + c_R}, \qquad r_R = \frac{c_R^m}{S + c_R + c_L}.
 $$ {#eq-firstStageofTwo} 
 This model iteration is identical to the two-stage contrast gain control model defined by @Meese2006. 
 
-The fits of both model variants, with and without interocular suppression, are shown in @fig-betterModels. The difference in their quality is negligible (see @tbl-R2Table) as both fit most experimental conditions well. The addition of the monocular transducer enables the model to fit observer SNRs at the fundamental frequency for stimuli presented in temporal phase under On/Off flicker and importantly, it now generates responses for stimuli presented in temporal anti-phase. The transduced monocular inputs no longer cancel each other at the binocular stage. While the model can generate responses to temporal anti-phase stimuli, it only does so at the even-harmonics (2F-6Hz, 4F-12Hz, and 6F-18Hz) of the SSVEP spectrum. This is to be expected as the model can only generate binocular responses; it does not preserve monocular responses beyond the first stage. As the two rectified sine waves are in anti-phase, their sum will generate a new waveform with frequencies at twice the frequency of the original (6Hz) and its integer harmonics (2F-12Hz and 3F-18Hz; see @fig-sumDiagram \textbf{maybe in the appendix?}). The responses at the fundamental frequency (3Hz) and its odd integer harmonics (3F - 9Hz, 5F - 15Hz) of our observers cannot be explained by an architecture with a purely binocular output. Next we explore how the addition of parallel monocular channels may aid in explaining observer responses to stimuli presented in temporal anti-phase. 
-
 ```{r, echo = FALSE, message=FALSE, warning=FALSE, eval = FALSE}
 png("~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Figures/SineWave1.png", width = 8, height = 4, res= 300, units = "in", bg = "transparent")
 X <- seq(0,1,length.out = 1000)
@@ -1083,7 +1081,6 @@ invisible(dev.off())
 
 ```
 
-
 ```{r drawsecondbestModels, fig.width = 12, fig.height = 6, echo = FALSE}
 #| label: fig-betterModels
 #| fig-cap: "Fits of the two-stage contrast gain control model without (green) and with (red) interocular suppression. Boxplots behind model responses show the distribution of observer SNRs. Model SNRs were fit to the median SNR of observers, which is represented by the thicker line within the box."
@@ -1160,7 +1157,11 @@ for (i in 6:9){
 }
 ```
 
-### Parallel Monocular and Phase-Selective Channels
+The fits of both model variants, with and without interocular suppression, are shown in @fig-betterModels. The difference in their quality is negligible (see @tbl-R2Table) as both fit most experimental conditions well. The addition of the monocular transducer enables the model to fit observer SNRs at the fundamental frequency for stimuli presented in temporal phase under On/Off flicker and importantly, it now generates responses for stimuli presented in temporal anti-phase. The transduced monocular inputs no longer cancel each other at the binocular stage. While the model can generate responses to temporal anti-phase stimuli, it only does so at the even-harmonics (2F-6Hz, 4F-12Hz, and 6F-18Hz) of the SSVEP spectrum. This is to be expected as the model can only generate binocular responses; it does not preserve monocular responses beyond the first stage. As the two rectified sine waves are in anti-phase, their sum will generate a new waveform with frequencies at twice the frequency of the original (6Hz) and its integer harmonics (2F-12Hz and 3F-18Hz; see @fig-sumDiagram \textbf{maybe in the appendix?}). The responses at the fundamental frequency (3Hz) and its odd integer harmonics (3F - 9Hz, 5F - 15Hz) of our observers cannot be explained by an architecture with a purely binocular output. Next, we explore methods of preserving the monocular signal in an effort to explain observer responses to stimuli presented in temporal anti-phase. 
+
+![A diagram that shows the effect of summing a rectified wave.](Figures/SumDiagram.png){#fig-sumDiagram width="50%"}
+
+### Parallel Monocular
 
 To preserve the monocular responses until the output of the model, we add parallel monocular channels as was suggested by @Georgeson2016. These channels are fully monocular and therefore have no interocular suppression term,
 $$
@@ -1178,7 +1179,7 @@ generated better fits to our data. In our model fits, we use the monocular respo
 
 ```{r drawbestModels, fig.width=12, fig.height=6, echo = FALSE}
 #| label: fig-bestModels
-#| fig-cap: "Fits of the two best performing models to our observer data. Both models, that including parallel monocular channels and the full model with the added phase-selective channels perform quite similarly. The two stage contrast gain control model with parallel monocular channels is sufficient to explain the effects in our data. The best fitting parameters for the monocular channels model were: m = 2.68, p = 8.72, q = 2.03, S = 0.25, Z = -0.02. These parameters suggest strong binocular combination at the monocular stage."
+#| fig-cap: "Fits of the two best performing models to our observer data. Both models, that including parallel monocular channels and the full model with the added phase-selective channels perform quite similarly."
 
 par(mfrow = c(2,5), mai = c(.6,.1,.1,.1), omi = c(.1,.5,.5,0), xpd = TRUE)
 #\xLimit <- c(1,6)
@@ -1255,6 +1256,8 @@ for (i in 6:9){
 }
 ```
 
+#### Phase-Selective Channels
+
 Our results do not show a strong effect of stimulus spatial phase on observer SSVEPs. Still, it is important to determine whether adding phase-selective channels to the two-stage contrast gain control model highlights a subtle impact of phase-selective responses. We add phase-selective channels to the binocular and monocular channels of the two-stage contrast gain control model. Phase-selectivity required replicating the equations from both stages to have binocular and monocular channels selective for either positive or negative phase (see @fig-modelDiagram). The phase-selective channels in this model are completely independent; they do not interact with each other. This model iteration, which we refer to as the full model, replicates the two-stage contrast gain control model developed by @Georgeson2016. 
 
 As we encountered above with the addition of monocular channels, the addition of phase-selectivity means that we now have two final signals following the combination of the binocular and monocular channels (@eq-binocMonocComb), a positive phase and a negative phase signal. To generate the final model SSVEP, we use a MAX rule implemented as a Minkowski sum, as was done in @Georgeson2016,
@@ -1280,33 +1283,31 @@ We introduce the new parameter $w$, which is expected to be large (> 20) to sele
 # round(pValue,3)
 ```
 
-While the whole model outperformed the others, the simpler models are nested variants and thus difficult to compare using $R^2$ and AIC values alone. We use an F test for nested models to determine if the difference in the quality of fits between our smaller models and the full model is statistically significant. The full results of the F tests are reported in @tbl-fTable. We do not find a statistically significant difference between the fits of the two-stage contrast gain control with parallel monocular channels and the full model, $F(1,47) = 4.00, p = .051$. While the full model does improve model fits, its contributions to explaining our findings are not sufficiently large to pass the F test for nested models, at an $\alpha$ level of .05.
+<!-- While the whole model outperformed the others, the simpler models are nested variants and thus difficult to compare using $R^2$ and AIC values alone. We use an F test for nested models to determine if the difference in the quality of fits between our smaller models and the full model is statistically significant. The full results of the F tests are reported in @tbl-fTable. We do not find a statistically significant difference between the fits of the two-stage contrast gain control with parallel monocular channels and the full model, $F(1,47) = 4.00, p = .051$. While the full model does improve model fits, its contributions to explaining our findings are not sufficiently large to pass the F test for nested models, at an $\alpha$ level of .05. -->
 
 <!-- | Model | df | SS | MS | F | p | -->
 <!-- |:----------------------------------------------|:--------:|:--------:|:--------:|:--------:|:--------:| -->
 <!-- | Linear sum | `r p[1]` | `r round(SSE[1]-SSE[7],2)` | `r round((SSE[1]-SSE[7])/p[1],2)` | `r round(F[1],2)` | \<.001 | -->
 <!-- | Linear sum, with Rectification | `r p[2]` | `r round(SSE[2]-SSE[7],2)` | `r round((SSE[2]-SSE[7])/p[2],2)` | `r round(F[2],2)` | \<.001 | -->
 <!-- | Two-Stage, no interocular interactions | `r p[3]` | `r round(SSE[3]-SSE[7],2)` | `r round((SSE[3]-SSE[7])/p[3],2)` | `r round(F[3],2)` | \<.001 | -->
-<!-- | Two-Stage, with interocular interactions | `r p[4]` | `r round(SSE[4]-SSE[7],2)` | `r round((SSE[4]-SSE[7])/p[4],2)` | `r round(F[4],2)` | \<.001 | -->
+<!-- | Two-Stage, with intero cular interactions | `r p[4]` | `r round(SSE[4]-SSE[7],2)` | `r round((SSE[4]-SSE[7])/p[4],2)` | `r round(F[4],2)` | \<.001 | -->
 <!-- | Two-Stage with parallel monocular channels | `r p[5]` | `r round(SSE[5]-SSE[7],2)` | `r round((SSE[5]-SSE[7])/p[5],2)` | `r round(F[5],2)` | `r round(pValue[5],3)` | -->
 
 <!-- : Results of the F test for nested models. The full model - two-stage contrast gain control model with phase selective and parallel monocular channels - outperformed all but the two-stage model with parallel monocular channels at an $\alpha$ level of .05. {#tbl-fTable} -->
 
+| Parameter | Monocular Channels Value | Full Model Value |
+|:----------|:-----:|:-----:|
+| m         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[1]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[1]),2))` |
+| p         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[2]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[2]),2))` |
+| q         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[3]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[3]),2))` |
+| S         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[4]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[4]),2))` |
+| Z         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[5]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[5]),2))` |
 
-| Parameter | Value |
-|:----------|:-----:|
-| m         | `r round(exp(twoStageWithMonocChannels.params$par[1]),2)` |
-| p         | `r round(exp(twoStageWithMonocChannels.params$par[2]),2)` |
-| q         | `r round(exp(twoStageWithMonocChannels.params$par[3]),2)` |
-| S         | `r round(exp(twoStageWithMonocChannels.params$par[4]),2)` |
-| Z         | `r round(exp(twoStageWithMonocChannels.params$par[5]),2)` |
-
-<!-- : Fitted parameters of the best model (Two-Stage Model with Parallel Monocular channels) {#tbl-modelParameters} -->
+: Parameters of the two best models (Two-Stage Model with Parallel Monocular channels) {#tbl-modelParameters}
 
 # Discussion
 
 # References
 
-![A diagram that shows the effect of summing a rectified wave.](Figures/SumDiagram.png){#fig-sumDiagram}
 
 
