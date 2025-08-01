@@ -916,15 +916,15 @@ by the thicker line within the box.}
 
 The fits of both model variants, with and without interocular
 suppression, are shown in Figure~\ref{fig-betterModels}. The difference
-in their quality is negligible (see Table~\ref{tbl-R2Table}) as both fit
-most experimental conditions well. The addition of the monocular
-transducer enables the model to fit observer SNRs at the fundamental
-frequency for stimuli presented in temporal phase under On/Off flicker
-and importantly, it now generates responses for stimuli presented in
-temporal anti-phase. The transduced monocular inputs no longer cancel
-each other at the binocular stage. While the model can generate
-responses to temporal anti-phase stimuli, it only does so at the
-even-harmonics (2F-6Hz, 4F-12Hz, and 6F-18Hz) of the SSVEP spectrum.
+in their quality is negligible (see Table~\ref{tbl-R2Table}) as both
+describe most experimental conditions well. The addition of the
+monocular transducer enables the model to fit observer SNRs at the
+fundamental frequency for stimuli presented in temporal phase under
+On/Off flicker and importantly, it now generates responses for stimuli
+presented in temporal anti-phase. The transduced monocular inputs no
+longer cancel each other at the binocular stage. While the model can
+generate responses to temporal anti-phase stimuli, it only does so at
+the even-harmonics (2F-6Hz, 4F-12Hz, and 6F-18Hz) of the SSVEP spectrum.
 This is to be expected as the model can only generate binocular
 responses; it does not preserve monocular responses beyond the first
 stage. As the two rectified sine waves are in anti-phase, their sum will
@@ -950,7 +950,8 @@ summing a rectified wave.}
 
 \end{figure}%
 
-\subsubsection{Parallel Monocular}\label{parallel-monocular}
+\subsubsection{Parallel Monocular and Phase-Selective
+Channels}\label{parallel-monocular-and-phase-selective-channels}
 
 To preserve the monocular responses until the output of the model, we
 add parallel monocular channels as was suggested by Georgeson et al.
@@ -1013,8 +1014,6 @@ channels and the full model with the added phase-selective channels
 perform quite similarly.}
 
 \end{figure}%
-
-\paragraph{Phase-Selective Channels}\label{phase-selective-channels}
 
 Our results do not show a strong effect of stimulus spatial phase on
 observer SSVEPs. Still, it is important to determine whether adding
