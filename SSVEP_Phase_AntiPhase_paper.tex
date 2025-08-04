@@ -1074,6 +1074,27 @@ Z & 0.00 & 0.41 \\
 \section{Variants of the parallel monocular channels
 model}\label{variants-of-the-parallel-monocular-channels-model}
 
+The code in this temporary section explores how different methods of
+combining the monocular and binocular signals impacts the fits to our
+data. The ``original'' binocular plus left eye alone is used as a
+reference model and explains 89.4\% of the variance. Adding the left and
+right eye signals to the binocular inputs drops the model performance to
+82.4\% (similar to the two-stage model without monocular channels). This
+performance drop can be explained by the right and left eye signals
+cancelling themselves out when presented under temporal anti-phase,
+removing the monocular responses (3Hz,9Hz,15Hz) from the model output.
+Using a Minkowski sum in an effort to preserve the monocular signals
+does not improve fits. Summing the Fourier amplitudes does improve fits
+but is not really a plausible model. Finally, using the difference
+signal between the left and right eye brings performance back to the
+same level as the ``original'' model that only uses the left eye output.
+
+The fits of the two best performing models are, however, very different
+for the temporal anti-phase stimuli. The difference model generates
+responses that are quite similar to the temporal in-phase stimuli and
+overestimates the SNRs for monocular frequencies but fits the binocular
+frequencies better (particularly for spatial and temporal anti-phase).
+
 \begin{longtable}[]{@{}lc@{}}
 \toprule\noalign{}
 Model & R2 \\
@@ -1086,11 +1107,12 @@ Bin + Left + Right & 0.824 \\
 Bin\^{}w + Left\^{}w + Right\^{}w & 0.829 \\
 fft(Bin) + fft(Left) + fft(Right) & 0.862 \\
 Bin + (Left-Right) & 0.894 \\
+Bin + Left + Left & 0.902 \\
 \end{longtable}
 
 Fits of the Bin + Left model and the Bin + (Left-Right Model)
 
-\pandocbounded{\includegraphics[keepaspectratio]{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/unnamed-chunk-12-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/unnamed-chunk-13-1.pdf}}
 
 \section{Discussion}\label{discussion}
 
