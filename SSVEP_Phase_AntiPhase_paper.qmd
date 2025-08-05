@@ -122,6 +122,8 @@ R_B = \frac{C_L^m}{S+C_L+C_R} + \frac{C_R^m}{S+C_R+C_L}.
 $$ {#eq-intoMath2}
 When both eyes are stimulated, the suppressive terms on the denominators offset the enhanced excitatory signals, nullifying the binocular advantage.
 
+\textbf{Differencing Mechanisms?}
+
 A similar pattern of results is observed in neural measurements of binocular summation. In fMRI recordings, neural responses are significantly larger for binocular than monocular responses when stimulus contrast is low [@MoradiHeeger2009]. At higher contrasts, observers no longer show the binocular advantage. These findings were well-explained by a model including interocular suppression and binocular contrast normalization, an identical mechanism to that used to explain behavioural data. The equivalency in binocular summation between psychophysics and neuroimaging findings means that both data types can be used to constrain binocular summation models. We, for example, have previously demonstrated that a popular model of binocular summation could be easily adapted to capture Steady-State Visually Evoked Potentials (SSVEPs) to monocular and binocular stimuli when one eye was occluded by a neutral density filter [@Richardetal2018]. Placing a neutral density filter in front of one eye darkens its input, reducing the amplitude and altering the phase of SSVEPs to stimuli presented to the filtered eye. Steady-State response amplitudes and phases to stimuli presented through different neutral density filter strengths were well described by a model that first used a biophysically plausible temporal filter on the input stimuli, followed by self and interocular suppression, and finally, binocular contrast normalization. This model also captures psychophysically measured binocular summation in the same group of observers. A comprehensive description of the processes involved in binocular summation should be able to explain behavioural and neuroimaging findings under various experimental conditions of binocular summation.
 
 Many studies have worked towards the development of a comprehensive description of the process of binocular summation in human vision using a variety of psychophysical and neuroimaging data [@Legge1984a; @Richardetal2018; @BakerMeeseHess2008; @MaeharaGoryo2005; @DingSperling2006; @DingKleinLevi2013; @BakerMeeseSummers2007; @Lygoetal2020]. Developing these models is not an insignificant challenge; they must account for multiple components of early vision, including identifying relevant signals, defining how these signals might interact, what non-linearities are present, and most importantly, how they are combined. One such model that has proven very informative and capable of describing binocular summation under various experimental conditions is the two-stage contrast gain control model developed by @Meese2006. The model captured detection and discrimination thresholds for monocular and binocular stimuli in addition to dichoptic stimuli, whereby the stimuli presented to both eyes are not identical, in a two-stage process. First, the input is rectified by an excitatory non-linearity ($m \approx 1.3$) and normalized by self and interocular suppression (see @eq-intoMath2). The binocular (e.g., combined) input undergoes a second contrast normalization before the decision stage, 
@@ -582,9 +584,6 @@ twoStageNoMonoc.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.
 
 params <- c(log(c(m,p,q,S,Z)), scale)
 twoStageWithMonoc.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageWithMonocularInteractions", control = list(maxit = 5000))
-
-exp(twoStageNoMonoc.params$par)
-exp(twoStageWithMonoc.params$par)
 ```
 
 ```{r evalBetterModels, echo = FALSE}
@@ -662,7 +661,7 @@ twoStageWithMonocularChannels <- function(params, CL.Plus, CL.Minus, CR.Plus, CR
   LeftEyeStage2 <- LeftEyeMonoc**p/(Z + LeftEyeMonoc**q)
   RightEyeStage2 <- RightEyeMonoc**p/(Z + RightEyeMonoc**q)
   
-  combinedSignal <- (RCGCSum + LeftEyeStage2)+scale
+  combinedSignal <- (RCGCSum + LeftEyeStage2 + LeftEyeStage2)+scale
   
   # Add Noise
   fftSignal <- fft(combinedSignal)/length(combinedSignal)
@@ -742,8 +741,8 @@ twoStageWithMonocularChannelsPhase <- function(params, CL.Plus, CL.Minus, CR.Plu
   RightEyeStage2.Plus <- RightEyeMonoc.Plus**p/(Z + RightEyeMonoc.Plus**q)
   RightEyeStage2.Minus <- RightEyeMonoc.Minus**p/(Z + RightEyeMonoc.Minus**q)
   
-  combinedSignal.Plus <- (RCGCSum.Plus + LeftEyeStage2.Plus)
-  combinedSignal.Minus <- (RCGCSum.Minus + LeftEyeStage2.Minus)
+  combinedSignal.Plus <- (RCGCSum.Plus + LeftEyeStage2.Plus + LeftEyeStage2.Plus)
+  combinedSignal.Minus <- (RCGCSum.Minus + LeftEyeStage2.Minus + LeftEyeStage2.Minus)
   
   combinedSignal <- combinedSignal.Plus + combinedSignal.Minus
   combinedSignal <- combinedSignal + scale
@@ -860,7 +859,7 @@ SNRAll[,,7] <- SNR
 
 The perception of stimulus contrast across eyes is well-explained by psychophysical models that process input contrast in two sequential contrast gain control stages interposed by binocular summation [@Meese2006; @BakerMeese2007; @BakerMeeseGeorgeson2007; @BakerMeeseHess2008; @BakerMeeseSummers2007]. This simple, yet powerful, family of models not only captures behavioural data well, but can also explain neural responses to binocular and dichoptic stimuli [@BakerWade2017; @Richardetal2018; @Lygoetal2020]. Our SSVEP results show the expected pattern of binocular combination for stimuli presented at high contrast (i.e., ocularity invariance) but also intriguing effects that are likely explainable by the most recent extension of the two-stage contrast gain control model, as defined in @Georgeson2016. To explore the architecture required to describe our effects adequately, we progressively increase the complexity of binocular combination beginning with a wrong model (i.e., linear combination) and building up to a multi-channel model with monocular, binocular and phase-selective pathways (@fig-modelDiagram). 
 
-![The multi-channel variant of the two-stage contrast gain control model. This diagram shows the channels for the left eye. Contributions from the right eye ($c^+_R$ and $r^+_R$) to the binocular channels are shown in small boxes. Unlike the model defined by @Georgeson2016, responses from the parallel monocular channels are added to those of the binocular channels before signal selection for phase-selective channels. This change accounts for methodological differences when fitting neuroimaging data. To fit the final response of the model, $R$, was Fast Fourier Transformed, and a pink noise spectrum was added to allow for a comparable calculation of model SNRs as is done with human data.](Figures/FullModel.png){#fig-modelDiagram width="70%"}
+![The multi-channel variant of the two-stage contrast gain control model. This diagram shows the channels for the left eye. Contributions from the right eye ($c^+_R$ and $r^+_R$) to the binocular channels are shown in small boxes. Unlike the model defined by @Georgeson2016, responses from the parallel monocular channels are added to those of the binocular channels before signal selection for phase-selective channels. This change accounts for methodological differences when fitting neuroimaging data. To fit the final response of the model, $R$, was Fast Fourier Transformed, and a pink noise spectrum was added to allow for a comparable calculation of model SNRs as is done with human data.](Figures/FullModel.png){#fig-modelDiagram width="80%"}
 
 The architecture of the models explored differs, but all received the same input and had their final outputs processed identically. The input to all models was a 3 Hz sine wave, adjusted to accurately represent the various experimental conditions of this study (see @fig-methodFigures). For example, stimuli presented with On/Off flicker in temporal anti-phase had the left eye input generated by the following equation, 
 $$
@@ -897,7 +896,7 @@ the binocular response ($R_B$) is the sum of the monocular inputs. The fits of t
 | Two-Stage with parallel monocular channels | `r sprintf("%.3f",round(R2[5],3))` | `r round(rmsE[5],3)` | `r round(AIC[5],2)` |
 | Two-Stage with phase-selective channels & monocular channels | `r round(R2[7],3)` | `r round(rmsE[7],3)` | `r sprintf("%.2f",round(AIC[7],2))` |
 
-: Goodness-of-fit metrics for all models developed in this study. Errors in predictions for the linear sum model were too large to calculate $R^2$. RMSE is the Root Mean Square error and AIC is the Aikaike Information Criterion. {#tbl-R2Table}
+: Goodness-of-fit metrics for all models compared in this study. Errors in predictions for the linear sum model were too large to calculate $R^2$. RMSE is the Root Mean Square error and AIC is the Aikaike Information Criterion. {#tbl-R2Table}
 
 Responses of neurons to contrast in the visual system are well-modeled by a saturating non-linearity: as contrast increases, the magnitude of responses saturates (the increase in response per unit contrast decreases at higher contrast values; @Heeger1992). The saturating non-linearity can be modeled in different ways, but generally contains a divisive suppression and an exponentiation of the excitatory and inhibitory inputs. The inclusion of suppression can aid the model in better capturing the magnitude of responses in our observers while exponents introduces the non-linearities required to generate responses at the harmonic frequencies. Thus, the next increment in our model complexity defines the binocular response as the contrast gain control equation
 $$
@@ -1163,19 +1162,23 @@ The fits of both model variants, with and without interocular suppression, are s
 
 ### Parallel Monocular and Phase-Selective Channels
 
-To preserve the monocular responses until the output of the model, we add parallel monocular channels as was suggested by @Georgeson2016. These channels are fully monocular and therefore have no interocular suppression term,
+Observer SNRs for stimuli presented in temporal anti-phase contain a binocular and monocular response to stimuli. To preserve the monocular response in the modelling, we add parallel monocular channels to the two-stage contrast gain control model, similar to @Georgeson2016. These channels are fully monocular and do not include interocular suppression,
 $$
-\mu_L = \frac{C_L^m}{S + C_L}, \qquad  \mu_R = \frac{C_R^m}{S + C_R},
+\mu_L = \frac{C_L^m}{S + C_L}, \qquad  \mu_R = \frac{C_R^m}{S + C_R}.
 $$ {#eq-monocFirstStage} 
-where $\mu_L$ is the output of the first stage of the monocular channel for the left eye, and $\mu_R$ is that of the right eye. The excitatory exponent $m$ is identical to that in the channels that include binocular interaction (@eq-firstStageofTwo). The output of the monocular channel undergoes a second rectification and normalization, identical to that of the binocular channel,
+In this equation, $\mu_L$ is the output of the first stage of the monocular channel for the left eye, and $\mu_R$ is that of the right eye. The excitatory exponent $m$ is identical to that in the channels that include binocular interaction (see @eq-firstStageofTwo). The output of the monocular channels undergoes a second contrast gain control stage identical to that of the binocular channel,
 $$
-R_{\mu_L} = \frac{\mu_L^p}{Z + \mu_L^q}, \qquad  R_{\mu_R} = \frac{\mu_R^p}{Z + \mu_R^q},
+R_{\mu_L} = \frac{\mu_L^p}{Z + \mu_L^q}, \qquad  R_{\mu_R} = \frac{\mu_R^p}{Z + \mu_R^q}.
 $$ {#eq-monocSecondStage} 
-where $R_{\mu_L}$ and $R_{\mu_R}$ represent the final responses of the left and right monocular channels. The parameters $m$, $p$, $q$, $S$ and $Z$ are identical to those of the binocular channel and thus no additional free parameters are required to define the parallel monocular channels. The addition of these channels poses an interesting problem regarding cue selection. The final stage of this model has three channel responses: monocular left ($R_L$), monocular right ($R_R$), and binocular ($R_B$). In behavioural variants of this model [@Georgeson2016], cue selection is implemented as a MAX rule, as a Minkowski sum with a very large ($\approx 30$) exponent. This method of signal combination was not appropriate for our data, because in SSVEP paradigms the recorded signal measured at the scalp is the pooled activity of all responsive neurons. In the model, the binocular response is always larger than the monocular response and thus dominates in the final signal, preventing a model with MAX pooling from capturing the fundamental and odd-harmonics responses for anti-phase stimuli. Instead, we found that a linear combination of the binocular signal and the monocular signals,
+$R_{\mu_L}$ and $R_{\mu_R}$ represent the final responses of the left and right monocular channels. No additional free parameters are included in the model with parallel monocular channels; the parameters $m$, $p$, $q$, $S$ and $Z$ used to define the monocular channel responses are identical to those of the binocular channels.
+
+The addition of monocular channels poses an interesting problem in generating the SSVEPs from the model. The final stage of this model has three channel responses: monocular left ($R_L$), monocular right ($R_R$), and binocular ($R_B$). In behavioural variants of this model [@Georgeson2016], cue selection is implemented as a MAX rule, as a Minkowski sum with a very large ($\approx 30$) exponent. This method of signal combination was not appropriate for SSVEP data, as the signal we record is pool of neural responses at the scalp better defined by a linear combination of the binocular and monocular signals,
 $$  
-R=R_B+R_{\mu_L}+R_{\mu_R},
+R_\text{model}=R_B+R_{\mu_L}+R_{\mu_R}.
 $$ {#eq-binocMonocComb}
-generated better fits to our data. In our model fits, we use the monocular response from the left eye ($R_{\mu_L}$) to add to the binocular channel. [Not sure I understand this bit - why not add both monocular channels?] Adding parallel monocular channels to the two-stage contrast gain control model significantly improved the fit of our observer data (@fig-bestModels). With the monocular response preserved, the model can now generate SSVEPs at the fundamental frequency and odd-harmonics necessary to capture observer data for stimuli presented in temporal anti-phase under On/Off flicker (see @tbl-R2Table). Thus, monocular responses to binocular stimuli are preserved along the processing pipeline and can be recorded in the SSVEPs of observers.
+
+
+ In our model fits, we use the monocular response from the left eye ($R_{\mu_L}$) to add to the binocular channel. [Not sure I understand this bit - why not add both monocular channels?] Adding parallel monocular channels to the two-stage contrast gain control model significantly improved the fit of our observer data (@fig-bestModels). With the monocular response preserved, the model can now generate SSVEPs at the fundamental frequency and odd-harmonics necessary to capture observer data for stimuli presented in temporal anti-phase under On/Off flicker (see @tbl-R2Table). Thus, monocular responses to binocular stimuli are preserved along the processing pipeline and can be recorded in the SSVEPs of observers.
 
 ```{r drawbestModels, fig.width=12, fig.height=6, echo = FALSE}
 #| label: fig-bestModels
@@ -1215,7 +1218,7 @@ for (i in 1:5){
   if (i == 1){
     mtext(pretty(yLimit), 2, at = pretty(yLimit), line = .4, las = 1, cex = .9)
     mtext("SNR", 2, font = 2, line = 2)
-    mtext("On/Off Flicker", 3, font = 2, adj = 0, at = 0, line = 2)
+    mtext("A) On/Off Flicker", 3, font = 2, adj = 0, at = 0, line = 2)
     
     legend("topleft",legend = c("Monocular Channels", "Full Model"),
            bty = "n", pch = 21, pt.bg = categoricalPalette[c(6,8)], col = "black", lwd = 1, pt.cex = 2)
@@ -1251,19 +1254,18 @@ for (i in 6:9){
   if (i == 6){
     mtext(pretty(yLimit), 2, at = pretty(yLimit), line = .4, las = 1, cex = .9)
     mtext("SNR", 2, font = 2, line = 2)
-    mtext("Counterphase Flicker ", 3, font = 2, adj = 0, at = 0, line = 2.5)
+    mtext("B) Counterphase Flicker ", 3, font = 2, adj = 0, at = 0, line = 2.5)
   }
 }
 ```
 
-Our results do not show a strong effect of stimulus spatial phase on observer SSVEPs. Still, it is important to determine whether adding phase-selective channels to the two-stage contrast gain control model highlights a subtle impact of phase-selective responses. We add phase-selective channels to the binocular and monocular channels of the two-stage contrast gain control model. Phase-selectivity required replicating the equations from both stages to have binocular and monocular channels selective for either positive or negative phase (see @fig-modelDiagram). The phase-selective channels in this model are completely independent; they do not interact with each other. This model iteration, which we refer to as the full model, replicates the two-stage contrast gain control model developed by @Georgeson2016. 
+Our results do not show a strong effect of stimulus spatial phase on observer SSVEP. Nevertheless, the addition of spatial phase selectivity may improve our ability to describe observer SSVEPs. We added phase-selectivity to the binocular and monocular channels in the two-stage contrast gain control model, which required replicating the equations from both stages to have binocular and monocular channels selective for either positive or negative phase (see @fig-modelDiagram). The input sine waves (in temporal phase or anti-phase) are then fed into the positive or negative phase channels, which simulates the spatial phase of the gratings presented to observers. Just as the parallel monocular channels, the phase-selective channels in this model are completely independent. This model iteration, which we refer to as the full model, is a replication of the two-stage contrast gain control model developed by @Georgeson2016. 
 
-As we encountered above with the addition of monocular channels, the addition of phase-selectivity means that we now have two final signals following the combination of the binocular and monocular channels (@eq-binocMonocComb), a positive phase and a negative phase signal. To generate the final model SSVEP, we use a MAX rule implemented as a Minkowski sum, as was done in @Georgeson2016,
-
+As with the addition of monocular channels, the addition of phase-selectivity means that we now have six final signals to contend with: a binocular and two monocular channels selective for positive spatial phase and a binocular and two monocular channels selective for negative spatial phase. As with combining monocular and binocular signals, the responses of positive and negative channels were summed to generate the final response of the model ($R_\text{model}$),
 $$
-R_\text{MAX} = [(R^+)^w+(R^-)^w]^{\frac{1}{w}}.
+R_\text{model} = [R^+_B+R^+_{\mu_L}+R^+_{\mu_R}] + [R^-_B+R^-_{\mu_L}+R^-_{\mu_R}].
 $$ {#eq-finalSum} 
-We introduce the new parameter $w$, which is expected to be large (> 20) to select the phase channel, either positive or negative, that generated the largest response. The addition of phase-selectivity to our model improved the fits slightly as the overall $R^2$ was increased. The Aikaike Information Criterion (AIC) of the phase selective model (AIC = `r round(AIC[7],2)`) is slightly smaller than that of the two-stage contrast gain control model with parallel monocular channels (AIC = `r round(AIC[5],2)`). While the effects of spatial phase on observer SSVEPs are small, accounting for its impact on our model by adding phase-selective channels offers a better description of our results. 
+The inclusion of phase-selective channels in the model has a small beneficial effect on the fits to the data. The $R^2$ value increased slightly from models without phase-selectivity without any additional free parameters (see @tbl-R2Table). The improvement seen from the inclusion of phase-selectivity in the two-stage contrast gain control model does improve model fits suggest that while the effect of spatial phase is small, it nonetheless does impact observer SSVEPs. 
 
 ```{r, echo = FALSE}
 # p <- k[7]-k[c(1:5)]
@@ -1780,6 +1782,18 @@ for (i in 1:9){
 ```
 
 # Discussion
+
+The computational architecture of binocular combination, under the two-stage contrast gain control model framework, has been carefully evaluated on psychophysical data [@Georgeson2016; @BakerMeese2007; @Meese2006], yet its ability to explain neural data has only been explored on a limited set of stimulus conditions [@Lygoetal2020; @Richardetal2018]. In this study, we investigated the effects of stimulus spatial and temporal phase on observer SSVEPs and explored the ability of the two-stage contrast gain control model - and its variants - to capture these effects. We found that presenting stimuli in temporal anti-phase reduced the magnitude of responses at the fundamental frequency (3Hz) in comparison to its temporal phase counterpart but was not abolished. This finding suggests that even under binocular vieweing purely monocular signals can be measured at the scalp with SSVEPs. 
+
+We found that monocular signals remain and can be recorded and while statistically we don't see an effect of spatial phase adding it to the model does increase the fits (slightly). 
+
+The best performing model explored here was the two-stage contrast gain control model with parallel monocular and phase-selective channels. 
+
+
+The current architecture of the two-stage contrast gain control model has been rigorously evaluated on psychophysical data, providing a solid foundation for our understanding of binocular combination [@Georgeson2016; @BakerMeese2007; @Meese2006]. While previous studies have utilized the two-stage contrast gain control model on neuroimaging data [@Lygoetal2020; @Richardetal2018], they only included experimental conditions where the phases of the sinusoidal gratings presented to each eye were identical. To accurately assess the current architecture of the two-stage contrast gain control model, neuroimaging data for binocular presentation of stimuli in opposite phase polarity are required. Here, we recorded SSVEPs to monocular and binocular stimuli with different spatial and temporal phase relationships to obtain the data needed to evaluate the two-stage contrast gain control model. By progressively increasing the complexity of the model, we demonstrate that many mechanisms of binocular combination, such as monocular non-linearities, interocular interactions, and parallel monocular channels, are required to explain neural responses to our set of experimental conditions. Thus, the two-stage contrast gain control model remains a powerful and flexible descriptor of the architecture of binocular combination for data collected across many experimental conditions and modalities.
+
+
+No differencing channels included in the model. 
 
 # References
 
