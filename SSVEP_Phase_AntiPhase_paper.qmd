@@ -462,7 +462,7 @@ linearRectificaton.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, 
 ```
 
 ```{r evalBadModels, echo = FALSE}
-SNRAll <- array(NA, dim = c(length(theFs), dim(CL.Plus)[2],7))
+SNRAll <- array(NA, dim = c(length(theFs), dim(CL.Plus)[2],6))
 
 R2 <- NULL
 rmsE <- NULL
@@ -661,17 +661,19 @@ twoStageWithMonocularChannels <- function(params, CL.Plus, CL.Minus, CR.Plus, CR
   LeftEyeStage2 <- LeftEyeMonoc**p/(Z + LeftEyeMonoc**q)
   RightEyeStage2 <- RightEyeMonoc**p/(Z + RightEyeMonoc**q)
   
-  combinedSignal <- (RCGCSum + LeftEyeStage2 + LeftEyeStage2)+scale
+  ## Signal Combination
+  combinedSignal <- abs(fft(RCGCSum)/length(RCGCSum)) + abs(fft(LeftEyeStage2)/length(LeftEyeStage2)) + abs(fft(RightEyeStage2)/length(RightEyeStage2))
+  combinedSignal.scaled <- combinedSignal + scale                   
   
   # Add Noise
-  fftSignal <- fft(combinedSignal)/length(combinedSignal)
-  fftSignal.Amp <- abs(fftSignal)
-  fftSignal.Amp[1] <- 0
+  # fftSignal <- fft(combinedSignal)/length(combinedSignal)
+  # fftSignal.Amp <- abs(fftSignal)
+  # fftSignal.Amp[1] <- 0
   
   # Make Pink Noise
   pinkNoise <- 1/(1:(length(RCGCSum)/2))**1
   pinkNoise <- c(0,pinkNoise,rev(pinkNoise))
-  pinkAmp <- fftSignal.Amp + pinkNoise
+  pinkAmp <- combinedSignal.scaled + pinkNoise
   return(pinkAmp)
 }
 
@@ -741,21 +743,24 @@ twoStageWithMonocularChannelsPhase <- function(params, CL.Plus, CL.Minus, CR.Plu
   RightEyeStage2.Plus <- RightEyeMonoc.Plus**p/(Z + RightEyeMonoc.Plus**q)
   RightEyeStage2.Minus <- RightEyeMonoc.Minus**p/(Z + RightEyeMonoc.Minus**q)
   
-  combinedSignal.Plus <- (RCGCSum.Plus + LeftEyeStage2.Plus + LeftEyeStage2.Plus)
-  combinedSignal.Minus <- (RCGCSum.Minus + LeftEyeStage2.Minus + LeftEyeStage2.Minus)
+  ##### Signal combination
+
+  binocChannel <- RCGCSum.Plus + RCGCSum.Minus
+  monocLChannel <- LeftEyeStage2.Plus + LeftEyeStage2.Minus
+  monocRChannel <- RightEyeStage2.Plus + RightEyeStage2.Minus
   
-  combinedSignal <- combinedSignal.Plus + combinedSignal.Minus
-  combinedSignal <- combinedSignal + scale
+  combinedSignal <- abs(fft(binocChannel)/length(binocChannel)) + abs(fft(monocLChannel)/length(monocLChannel)) + abs(fft(monocRChannel)/length(monocRChannel))
+  combinedSignal.scaled <- combinedSignal + scale
   
   # Add 1/f
-  fftSignal <- fft(combinedSignal)/length(combinedSignal)
-  fftSignal.Amp <- abs(fftSignal)
-  fftSignal.Amp[1] <- 0
+  # fftSignal <- fft(combinedSignal)/length(combinedSignal)
+  # fftSignal.Amp <- abs(fftSignal)
+  # fftSignal.Amp[1] <- 0
   
   # Make Pink Noise
   pinkNoise <- 1/(1:(length(RCGCSum.Plus)/2))**1
   pinkNoise <- c(0,pinkNoise,rev(pinkNoise))
-  pinkAmp <- fftSignal.Amp + pinkNoise
+  pinkAmp <- combinedSignal.scaled + pinkNoise
   return(pinkAmp)
 }
 ```
@@ -769,9 +774,6 @@ twoStageWithMonocChannels.params <- optim(params, theErrorFunction, CL.Plus = CL
 
 params <- c(log(c(m,p,q,S,Z)), scale)
 twoStageWithMonocChannelsPhase.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageWithMonocularChannelsPhase", control = list(maxit = 5000))
-
-# exp(twoStageWithMonocChannels.params$par)
-# exp(twoStageWithMonocChannelsPhase.params$par)
 ```
 
 ```{r evalbestModels, echo = FALSE}
@@ -846,15 +848,15 @@ for (i in 1:9){
 ssError <- sum((SNR - theHData)**2)
 ssTotal <- sum((theHData - mean(theHData))**2)
 
-k[7] <- length(twoStageWithMonocChannelsPhase.params$par)
-n[7] <- length(theHData)
+k[6] <- length(twoStageWithMonocChannelsPhase.params$par)
+n[6] <- length(theHData)
 mse <- ssError/length(theHData)
 
-R2[7] <- 1-(ssError/ssTotal)
-rmsE[7] <- sqrt(ssError/length(SNR))
-AIC[7] <- 2*k[7] + n[7]*log(mse) + n[7]*log(2*pi) + n[7]
-SSE[7] <- ssError
-SNRAll[,,7] <- SNR
+R2[6] <- 1-(ssError/ssTotal)
+rmsE[6] <- sqrt(ssError/length(SNR))
+AIC[6] <- 2*k[6] + n[6]*log(mse) + n[6]*log(2*pi) + n[6]
+SSE[6] <- ssError
+SNRAll[,,6] <- SNR
 ```
 
 The perception of stimulus contrast across eyes is well-explained by psychophysical models that process input contrast in two sequential contrast gain control stages interposed by binocular summation [@Meese2006; @BakerMeese2007; @BakerMeeseGeorgeson2007; @BakerMeeseHess2008; @BakerMeeseSummers2007]. This simple, yet powerful, family of models not only captures behavioural data well, but can also explain neural responses to binocular and dichoptic stimuli [@BakerWade2017; @Richardetal2018; @Lygoetal2020]. Our SSVEP results show the expected pattern of binocular combination for stimuli presented at high contrast (i.e., ocularity invariance) but also intriguing effects that are likely explainable by the most recent extension of the two-stage contrast gain control model, as defined in @Georgeson2016. To explore the architecture required to describe our effects adequately, we progressively increase the complexity of binocular combination beginning with a wrong model (i.e., linear combination) and building up to a multi-channel model with monocular, binocular and phase-selective pathways (@fig-modelDiagram). 
@@ -894,7 +896,7 @@ the binocular response ($R_B$) is the sum of the monocular inputs. The fits of t
 | Two-Stage, no interocular interactions | `r round(R2[3],3)` | `r round(rmsE[3],3)` | `r round(AIC[3],2)` |
 | Two-Stage, with interocular interactions | `r round(R2[4],3)` | `r round(rmsE[4],3)` | `r round(AIC[4],2)` |
 | Two-Stage with parallel monocular channels | `r sprintf("%.3f",round(R2[5],3))` | `r round(rmsE[5],3)` | `r round(AIC[5],2)` |
-| Two-Stage with phase-selective channels & monocular channels | `r round(R2[7],3)` | `r round(rmsE[7],3)` | `r sprintf("%.2f",round(AIC[7],2))` |
+| Two-Stage with phase-selective channels & monocular channels | `r round(R2[6],3)` | `r round(rmsE[6],3)` | `r sprintf("%.2f",round(AIC[6],2))` |
 
 : Goodness-of-fit metrics for all models compared in this study. Errors in predictions for the linear sum model were too large to calculate $R^2$. RMSE is the Root Mean Square error and AIC is the Aikaike Information Criterion. {#tbl-R2Table}
 
@@ -1156,9 +1158,7 @@ for (i in 6:9){
 }
 ```
 
-The fits of both model variants, with and without interocular suppression, are shown in @fig-betterModels. The difference in their quality is negligible (see @tbl-R2Table) as both describe most experimental conditions well. The addition of the monocular transducer enables the model to fit observer SNRs at the fundamental frequency for stimuli presented in temporal phase under On/Off flicker and importantly, it now generates responses for stimuli presented in temporal anti-phase. The transduced monocular inputs no longer cancel each other at the binocular stage. While the model can generate responses to temporal anti-phase stimuli, it only does so at the even-harmonics (2F-6Hz, 4F-12Hz, and 6F-18Hz) of the SSVEP spectrum. This is to be expected as the model can only generate binocular responses; it does not preserve monocular responses beyond the first stage. As the two rectified sine waves are in anti-phase, their sum will generate a new waveform with frequencies at twice the frequency of the original (6Hz) and its integer harmonics (2F-12Hz and 3F-18Hz; see @fig-sumDiagram \textbf{maybe in the appendix?}). The responses at the fundamental frequency (3Hz) and its odd integer harmonics (3F - 9Hz, 5F - 15Hz) of our observers cannot be explained by an architecture with a purely binocular output. Next, we explore methods of preserving the monocular signal in an effort to explain observer responses to stimuli presented in temporal anti-phase. 
-
-![A diagram that shows the effect of summing a rectified wave.](Figures/SumDiagram.png){#fig-sumDiagram width="50%"}
+The fits of both model variants, with and without interocular suppression, are shown in @fig-betterModels. The difference in their quality is negligible (see @tbl-R2Table) as both describe most experimental conditions well. The addition of the monocular transducer enables the model to fit observer SNRs at the fundamental frequency for stimuli presented in temporal phase under On/Off flicker and importantly, it now generates responses for stimuli presented in temporal anti-phase. The transduced monocular inputs no longer cancel each other at the binocular stage. While the model can generate responses to temporal anti-phase stimuli, it only does so at the even-harmonics (2F-6Hz, 4F-12Hz, and 6F-18Hz) of the SSVEP spectrum. This is to be expected as the model can only generate binocular responses; it does not preserve monocular signals beyond the first stage. As the two rectified sine waves are in anti-phase, their sum will generate a new waveform with frequencies at twice the frequency of the original (6Hz) and its integer harmonics (2F-12Hz and 3F-18Hz). The responses we recorded at the fundamental frequency (3Hz) and its odd integer harmonics (3F - 9Hz, 5F - 15Hz) cannot be explained by ab architecture with a purely binocular output. Next, we explore methods of preserving the monocular signal in an effort to explain observer responses to stimuli presented in temporal anti-phase. 
 
 ### Parallel Monocular and Phase-Selective Channels
 
@@ -1172,13 +1172,14 @@ R_{\mu_L} = \frac{\mu_L^p}{Z + \mu_L^q}, \qquad  R_{\mu_R} = \frac{\mu_R^p}{Z + 
 $$ {#eq-monocSecondStage} 
 $R_{\mu_L}$ and $R_{\mu_R}$ represent the final responses of the left and right monocular channels. No additional free parameters are included in the model with parallel monocular channels; the parameters $m$, $p$, $q$, $S$ and $Z$ used to define the monocular channel responses are identical to those of the binocular channels.
 
-The addition of monocular channels poses an interesting problem in generating the SSVEPs from the model. The final stage of this model has three channel responses: monocular left ($R_L$), monocular right ($R_R$), and binocular ($R_B$). In behavioural variants of this model [@Georgeson2016], cue selection is implemented as a MAX rule, as a Minkowski sum with a very large ($\approx 30$) exponent. This method of signal combination was not appropriate for SSVEP data, as the signal we record is pool of neural responses at the scalp better defined by a linear combination of the binocular and monocular signals,
-$$  
-R_\text{model}=R_B+R_{\mu_L}+R_{\mu_R}.
-$$ {#eq-binocMonocComb}
+The addition of parallel monocular channels poses an interesting problem in our modelling as we now contend with three cues from which to generate model SSVEPs: monocular left ($R_L$), monocular right ($R_R$), and binocular ($R_B$). Psychophysically, cue selection is a MAX rule implemented as a Minkowski sum with a very large ($\approx 30$) exponent [@Georgeson2016]. This method is inappropriate when modelling neural data, as our recording from the scalp represent an amalgamation of all channel cues generated by the stimuli. Signal combination in our model is defined as the linear sum of the Fourier amplitude spectra of all three channel outputs. This method of signal combination allows for an estimate of the pooled SSVEP signals from observers while preventing the cancellation of responses when temporal anti-phase signals are summed. 
 
+The addition of parallel monocular channels to the two-stage contrast gain control model improved the fits significantly (@fig-bestModels). 
 
- In our model fits, we use the monocular response from the left eye ($R_{\mu_L}$) to add to the binocular channel. [Not sure I understand this bit - why not add both monocular channels?] Adding parallel monocular channels to the two-stage contrast gain control model significantly improved the fit of our observer data (@fig-bestModels). With the monocular response preserved, the model can now generate SSVEPs at the fundamental frequency and odd-harmonics necessary to capture observer data for stimuli presented in temporal anti-phase under On/Off flicker (see @tbl-R2Table). Thus, monocular responses to binocular stimuli are preserved along the processing pipeline and can be recorded in the SSVEPs of observers.
+Thus, monocular responses to binocular stimuli are preserved along the processing pipeline and can be recorded in the SSVEPs of observers.
+
+Crucially, preserving the monocular response at the output stage enables the model to generate SSVEPs at the fundamental and odd-harmonic frequencies for stimuli presented in temporal anti-phase, capturing the responses no other model could capture and increase explained variance (@tbl-R2Table). 
+
 
 ```{r drawbestModels, fig.width=12, fig.height=6, echo = FALSE}
 #| label: fig-bestModels
@@ -1201,11 +1202,11 @@ for (i in 1:5){
   
   lines(1:6, SNRAll[,i,5], lwd = 2,col = categoricalPalette[6])
   # lines(1:6, SNRAll[,i,6], lwd = 2,col = categoricalPalette[7])
-  lines(1:6, SNRAll[,i,7], lwd = 2,col = categoricalPalette[8])
+  lines(1:6, SNRAll[,i,6], lwd = 2,col = categoricalPalette[8])
   
   points(1:6, SNRAll[,i,5], pch = 21,bg = categoricalPalette[6], col = "black", cex = 2.5)
   # points(1:6, SNRAll[,i,6], pch = 21,bg = categoricalPalette[7], col = "black", cex = 2.5)
-  points(1:6, SNRAll[,i,7], pch = 21,bg = categoricalPalette[8], col = "black", cex = 2.5)
+  points(1:6, SNRAll[,i,6], pch = 21,bg = categoricalPalette[8], col = "black", cex = 2.5)
   
   axis(1, at = pretty(xLimit), tck = -.01, lwd = 2, labels = FALSE)
   axis(2, at = pretty(yLimit), tck = -.01, lwd = 2, labels = FALSE)
@@ -1239,11 +1240,11 @@ for (i in 6:9){
   
   lines(1:6, SNRAll[,i,5], lwd = 2,col = categoricalPalette[6])
   # lines(1:6, SNRAll[,i,6], lwd = 2,col = categoricalPalette[7])
-  lines(1:6, SNRAll[,i,7], lwd = 2,col = categoricalPalette[8])
+  lines(1:6, SNRAll[,i,6], lwd = 2,col = categoricalPalette[8])
   
   points(1:6, SNRAll[,i,5], pch = 21,bg = categoricalPalette[6], col = "black", cex = 2.5)
   # points(1:6, SNRAll[,i,6], pch = 21,bg = categoricalPalette[7], col = "black", cex = 2.5)
-  points(1:6, SNRAll[,i,7], pch = 21,bg = categoricalPalette[8], col = "black", cex = 2.5)
+  points(1:6, SNRAll[,i,6], pch = 21,bg = categoricalPalette[8], col = "black", cex = 2.5)
   
   axis(1, at = pretty(xLimit), tck = -.01, lwd = 2, labels = FALSE)
   axis(2, at = pretty(yLimit), tck = -.01, lwd = 2, labels = FALSE)
@@ -1259,541 +1260,58 @@ for (i in 6:9){
 }
 ```
 
-Our results do not show a strong effect of stimulus spatial phase on observer SSVEP. Nevertheless, the addition of spatial phase selectivity may improve our ability to describe observer SSVEPs. We added phase-selectivity to the binocular and monocular channels in the two-stage contrast gain control model, which required replicating the equations from both stages to have binocular and monocular channels selective for either positive or negative phase (see @fig-modelDiagram). The input sine waves (in temporal phase or anti-phase) are then fed into the positive or negative phase channels, which simulates the spatial phase of the gratings presented to observers. Just as the parallel monocular channels, the phase-selective channels in this model are completely independent. This model iteration, which we refer to as the full model, is a replication of the two-stage contrast gain control model developed by @Georgeson2016. 
+Our results do not show a strong effect of stimulus spatial phase on observer SSVEPs, nevertheless, we thought it prudent to verify if the addition of phase-selective channels could further improve fits to our data. We added phase-selectivity to the binocular and monocular channels in the two-stage contrast gain control model, which required replicating the equations from both stages to have binocular and monocular channels selective for either positive or negative phase (see @fig-modelDiagram). The input sine waves (in temporal phase or anti-phase) are then fed into the positive or negative phase channels, which simulates the spatial phase of the gratings presented to observers. Just as the parallel monocular channels, the phase-selective channels in this model are completely independent. This model iteration, which we refer to as the full model, is a replication of the two-stage contrast gain control model developed by @Georgeson2016. 
 
-As with the addition of monocular channels, the addition of phase-selectivity means that we now have six final signals to contend with: a binocular and two monocular channels selective for positive spatial phase and a binocular and two monocular channels selective for negative spatial phase. As with combining monocular and binocular signals, the responses of positive and negative channels were summed to generate the final response of the model ($R_\text{model}$),
-$$
-R_\text{model} = [R^+_B+R^+_{\mu_L}+R^+_{\mu_R}] + [R^-_B+R^-_{\mu_L}+R^-_{\mu_R}].
-$$ {#eq-finalSum} 
-The inclusion of phase-selective channels in the model has a small beneficial effect on the fits to the data. The $R^2$ value increased slightly from models without phase-selectivity without any additional free parameters (see @tbl-R2Table). The improvement seen from the inclusion of phase-selectivity in the two-stage contrast gain control model does improve model fits suggest that while the effect of spatial phase is small, it nonetheless does impact observer SSVEPs. 
+As with the addition of monocular channels, the addition of phase-selectivity means that we now have six final signals to contend with: a binocular and two monocular channels selective for positive spatial phase and a binocular and two monocular channels selective for negative spatial phase. The Fourier amplitude of the positive and negative phase-selective channels were summed prior to the linear combination of the binocular and monocular channels. The final response of the model ($R_\text{model}$) is therefore
+<!-- $$ -->
+<!-- \begin{align} -->
+<!-- R_\text{model} = \Big[|fft(R^+_B)| + |fft(R^-_B)|\Big] + \\ -->
+<!-- \Big[|fft(R^+_{\mu_L})| + |fft(R^-_{\mu_L})|\Big] + \\ -->
+<!-- \Big[|fft(R^+_{\mu_R})| + |fft(R^-_{\mu_R})|\Big] -->
+<!-- \end{align} -->
+<!-- $$ {#eq-finalSum}  -->
 
-```{r, echo = FALSE}
-# p <- k[7]-k[c(1:5)]
-# df2 <- n[7]-k[7]
-# 
-# F <- NULL
-# pValue <- NULL
-# for (i in 1:5){
-#   F[i]  <- ((SSE[i]-SSE[7])/p[i])/(SSE[7]/(n[7]-k[7]))
-#   df1 <- p[i]
-#   
-#   pValue[i] <- pf(F[i], df1, df2, lower.tail = FALSE)
-# }
-
-# round(pValue,3)
-```
-
-<!-- While the whole model outperformed the others, the simpler models are nested variants and thus difficult to compare using $R^2$ and AIC values alone. We use an F test for nested models to determine if the difference in the quality of fits between our smaller models and the full model is statistically significant. The full results of the F tests are reported in @tbl-fTable. We do not find a statistically significant difference between the fits of the two-stage contrast gain control with parallel monocular channels and the full model, $F(1,47) = 4.00, p = .051$. While the full model does improve model fits, its contributions to explaining our findings are not sufficiently large to pass the F test for nested models, at an $\alpha$ level of .05. -->
-
-<!-- | Model | df | SS | MS | F | p | -->
-<!-- |:----------------------------------------------|:--------:|:--------:|:--------:|:--------:|:--------:| -->
-<!-- | Linear sum | `r p[1]` | `r round(SSE[1]-SSE[7],2)` | `r round((SSE[1]-SSE[7])/p[1],2)` | `r round(F[1],2)` | \<.001 | -->
-<!-- | Linear sum, with Rectification | `r p[2]` | `r round(SSE[2]-SSE[7],2)` | `r round((SSE[2]-SSE[7])/p[2],2)` | `r round(F[2],2)` | \<.001 | -->
-<!-- | Two-Stage, no interocular interactions | `r p[3]` | `r round(SSE[3]-SSE[7],2)` | `r round((SSE[3]-SSE[7])/p[3],2)` | `r round(F[3],2)` | \<.001 | -->
-<!-- | Two-Stage, with intero cular interactions | `r p[4]` | `r round(SSE[4]-SSE[7],2)` | `r round((SSE[4]-SSE[7])/p[4],2)` | `r round(F[4],2)` | \<.001 | -->
-<!-- | Two-Stage with parallel monocular channels | `r p[5]` | `r round(SSE[5]-SSE[7],2)` | `r round((SSE[5]-SSE[7])/p[5],2)` | `r round(F[5],2)` | `r round(pValue[5],3)` | -->
+The inclusion of phase-selective channels in the model did not improve model fits. The $R^2$ value calculated across the 6 frequencies and 9 experimental conditions was no different, if not a little lower, than that of the model with parallel monocular channels (see @tbl-R2Table). While spatial phase significantly impacts psychophysical measurements of binocular summation [@BakerMeese2007; @Simmons2005; @Bacon1976], the evidence that it affects SSVEPs of binocular combination is lacking. The largest aspect of our data to explain was the monocular signal to temporal anti-phase stimuli, which can explained very well without phase-selective channels. 
 
 <!-- : Results of the F test for nested models. The full model - two-stage contrast gain control model with phase selective and parallel monocular channels - outperformed all but the two-stage model with parallel monocular channels at an $\alpha$ level of .05. {#tbl-fTable} -->
 
-| Parameter | Monocular Channels Value | Full Model Value |
-|:----------|:-----:|:-----:|
-| m         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[1]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[1]),2))` |
-| p         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[2]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[2]),2))` |
-| q         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[3]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[3]),2))` |
-| S         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[4]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[4]),2))` |
-| Z         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[5]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[5]),2))` |
+<!-- | Parameter | Monocular Channels Value | Full Model Value | -->
+<!-- |:----------|:-----:|:-----:| -->
+<!-- | m         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[1]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[1]),2))` | -->
+<!-- | p         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[2]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[2]),2))` | -->
+<!-- | q         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[3]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[3]),2))` | -->
+<!-- | S         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[4]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[4]),2))` | -->
+<!-- | Z         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[5]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[5]),2))` | -->
 
-: Parameters of the two best models (Two-Stage Model with Parallel Monocular channels) {#tbl-modelParameters}
-
-# Variants of the parallel monocular channels model
-
-The code in this temporary section explores how different methods of combining the monocular and binocular signals impacts the fits to our data. The "original" binocular plus left eye alone is used as a reference model and explains 89.4\% of the variance. Adding the left and right eye signals to the binocular inputs drops the model performance to 82.4\% (similar to the two-stage model without monocular channels). This performance drop can be explained by the right and left eye signals cancelling themselves out when presented under temporal anti-phase, removing the monocular responses (3Hz,9Hz,15Hz) from the model output. Using a Minkowski sum in an effort to preserve the monocular signals does not improve fits. Summing the Fourier amplitudes does improve fits but is not really a plausible model. Finally, using the difference signal between the left and right eye brings performance back to the same level as the "original" model that only uses the left eye output.
-
-The fits of the two best performing models are, however, very different for the temporal anti-phase stimuli. The difference model generates responses that are quite similar to the temporal in-phase stimuli and overestimates the SNRs for monocular frequencies but fits the binocular frequencies better (particularly for spatial and temporal anti-phase). 
-
-```{r, Variants of the Monocular Channels Model, echo = FALSE}
-
-twoStageWithMonocularChannels <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
-  m <- exp(params[1])
-  p <- exp(params[2])
-  q <- exp(params[3])
-  S <- exp(params[4])
-  Z <- exp(params[5])
-  scale <- params[6]
-  
-  LeftEye <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus + CR.Plus + CR.Minus))
-  RightEye <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus + CL.Plus + CL.Minus))
-  RCGCSum <- ((LeftEye + RightEye)**p / (Z + (LeftEye + RightEye)**q))+scale
-  
-  LeftEyeMonoc <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus))
-  RightEyeMonoc <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus)) 
-  
-  LeftEyeStage2 <- LeftEyeMonoc**p/(Z + LeftEyeMonoc**q)
-  RightEyeStage2 <- RightEyeMonoc**p/(Z + RightEyeMonoc**q)
-  
-  combinedSignal <- (RCGCSum + LeftEyeStage2)+scale
-  
-  # Add Noise
-  fftSignal <- fft(combinedSignal)/length(combinedSignal)
-  fftSignal.Amp <- abs(fftSignal)
-  fftSignal.Amp[1] <- 0
-  
-  # Make Pink Noise
-  pinkNoise <- 1/(1:(length(RCGCSum)/2))**1
-  pinkNoise <- c(0,pinkNoise,rev(pinkNoise))
-  pinkAmp <- fftSignal.Amp + pinkNoise
-  return(pinkAmp)
-}
-
-twoStageWithMonocularChannels_SUMALL <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
-  m <- exp(params[1])
-  p <- exp(params[2])
-  q <- exp(params[3])
-  S <- exp(params[4])
-  Z <- exp(params[5])
-  scale <- params[6]
-  
-  LeftEye <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus + CR.Plus + CR.Minus))
-  RightEye <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus + CL.Plus + CL.Minus))
-  RCGCSum <- ((LeftEye + RightEye)**p / (Z + (LeftEye + RightEye)**q))+scale
-  
-  LeftEyeMonoc <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus))
-  RightEyeMonoc <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus)) 
-  
-  LeftEyeStage2 <- LeftEyeMonoc**p/(Z + LeftEyeMonoc**q)
-  RightEyeStage2 <- RightEyeMonoc**p/(Z + RightEyeMonoc**q)
-  
-  combinedSignal <- (RCGCSum + LeftEyeStage2 + RightEyeStage2)+scale
-  
-  # Add Noise
-  fftSignal <- fft(combinedSignal)/length(combinedSignal)
-  fftSignal.Amp <- abs(fftSignal)
-  fftSignal.Amp[1] <- 0
-  
-  # Make Pink Noise
-  pinkNoise <- 1/(1:(length(RCGCSum)/2))**1
-  pinkNoise <- c(0,pinkNoise,rev(pinkNoise))
-  pinkAmp <- fftSignal.Amp + pinkNoise
-  return(pinkAmp)
-}
-
-twoStageWithMonocularChannels_RectandSum <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
-  m <- exp(params[1])
-  p <- exp(params[2])
-  q <- exp(params[3])
-  S <- exp(params[4])
-  Z <- exp(params[5])
-  w <- exp(params[6])
-  scale <- params[7]
-  
-  
-  LeftEye <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus + CR.Plus + CR.Minus))
-  RightEye <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus + CL.Plus + CL.Minus))
-  RCGCSum <- ((LeftEye + RightEye)**p / (Z + (LeftEye + RightEye)**q))+scale
-  
-  LeftEyeMonoc <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus))
-  RightEyeMonoc <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus)) 
-  
-  LeftEyeStage2 <- LeftEyeMonoc**p/(Z + LeftEyeMonoc**q)
-  RightEyeStage2 <- RightEyeMonoc**p/(Z + RightEyeMonoc**q)
-  
-  combinedSignal <- ((RCGCSum**w + LeftEyeStage2**w + RightEyeStage2**w)**(1/w))+scale
-  
-  # Add Noise
-  fftSignal <- fft(combinedSignal)/length(combinedSignal)
-  fftSignal.Amp <- abs(fftSignal)
-  fftSignal.Amp[1] <- 0
-  
-  # Make Pink Noise
-  pinkNoise <- 1/(1:(length(RCGCSum)/2))**1
-  pinkNoise <- c(0,pinkNoise,rev(pinkNoise))
-  pinkAmp <- fftSignal.Amp + pinkNoise
-  return(pinkAmp)
-}
-
-twoStageWithMonocularChannels_CombineFFT <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
-  m <- exp(params[1])
-  p <- exp(params[2])
-  q <- exp(params[3])
-  S <- exp(params[4])
-  Z <- exp(params[5])
-  scale <- params[6]
-  
-  
-  LeftEye <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus + CR.Plus + CR.Minus))
-  RightEye <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus + CL.Plus + CL.Minus))
-  RCGCSum <- ((LeftEye + RightEye)**p / (Z + (LeftEye + RightEye)**q))+scale
-  
-  LeftEyeMonoc <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus))
-  RightEyeMonoc <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus)) 
-  
-  LeftEyeStage2 <- LeftEyeMonoc**p/(Z + LeftEyeMonoc**q)
-  RightEyeStage2 <- RightEyeMonoc**p/(Z + RightEyeMonoc**q)
-  
-  fftSignal.Binoc <- fft(RCGCSum)/length(RCGCSum)
-  fftSignal.MonocL <- fft(LeftEyeStage2)/length(LeftEyeStage2)
-  fftSignal.MonocR <- fft(RightEyeStage2)/length(RightEyeStage2)
-  
-  # combinedSignal <- ((RCGCSum**w + LeftEyeStage2**w + RightEyeStage2**w)**(1/w))+scale
-  
-  fftSignal.AmpBinoc <- abs(fftSignal.Binoc)
-  fftSignal.AmpBinoc[1] <- 0
-  fftSignal.AmpMonocL <- abs(fftSignal.MonocL)
-  fftSignal.AmpMonocL[1] <- 0  
-  fftSignal.AmpMonocR <- abs(fftSignal.MonocR)
-  fftSignal.AmpMonocR[1] <- 0
-  
-  # Make Pink Noise
-  pinkNoise <- 1/(1:(length(RCGCSum)/2))**1
-  pinkNoise <- c(0,pinkNoise,rev(pinkNoise))
-  pinkAmp <- fftSignal.AmpBinoc + fftSignal.AmpMonocL + fftSignal.AmpMonocR + pinkNoise
-  return(pinkAmp)
-}
-
-twoStageMonocDifference <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
-  m <- exp(params[1])
-  p <- exp(params[2])
-  q <- exp(params[3])
-  S <- exp(params[4])
-  Z <- exp(params[5])
-  scale <- params[6]
-  
-  LeftEye <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus + CR.Plus + CR.Minus))
-  RightEye <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus + CL.Plus + CL.Minus))
-  RCGCSum <- ((LeftEye + RightEye)**p / (Z + (LeftEye + RightEye)**q))+scale
-  
-  LeftEyeMonoc <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus))
-  RightEyeMonoc <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus)) 
-  
-  LeftEyeStage2 <- LeftEyeMonoc**p/(Z + LeftEyeMonoc**q)
-  RightEyeStage2 <- RightEyeMonoc**p/(Z + RightEyeMonoc**q)
-  
-  combinedSignal <- (RCGCSum + (LeftEyeStage2 - RightEyeStage2))+scale
-  
-  # Add Noise
-  fftSignal <- fft(combinedSignal)/length(combinedSignal)
-  fftSignal.Amp <- abs(fftSignal)
-  fftSignal.Amp[1] <- 0
-  
-  # Make Pink Noise
-  pinkNoise <- 1/(1:(length(RCGCSum)/2))**1
-  pinkNoise <- c(0,pinkNoise,rev(pinkNoise))
-  pinkAmp <- fftSignal.Amp + pinkNoise
-  return(pinkAmp)
-}
-
-twoStagePhaseShifted <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
-  m <- exp(params[1])
-  p <- exp(params[2])
-  q <- exp(params[3])
-  S <- exp(params[4])
-  Z <- exp(params[5])
-  scale <- params[6]
-  
-  LeftEye <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus + CR.Plus + CR.Minus))
-  RightEye <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus + CL.Plus + CL.Minus))
-  RCGCSum <- ((LeftEye + RightEye)**p / (Z + (LeftEye + RightEye)**q))+scale
-  
-  LeftEyeMonoc <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus))
-  RightEyeMonoc <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus)) 
-  
-  LeftEyeStage2 <- LeftEyeMonoc**p/(Z + LeftEyeMonoc**q)
-  RightEyeStage2 <- RightEyeMonoc**p/(Z + RightEyeMonoc**q)
-  
-  combinedSignal <- (RCGCSum + LeftEyeStage2 + LeftEyeStage2)+scale
-  
-  # Add Noise
-  fftSignal <- fft(combinedSignal)/length(combinedSignal)
-  fftSignal.Amp <- abs(fftSignal)
-  fftSignal.Amp[1] <- 0
-  
-  # Make Pink Noise
-  pinkNoise <- 1/(1:(length(RCGCSum)/2))**1
-  pinkNoise <- c(0,pinkNoise,rev(pinkNoise))
-  pinkAmp <- fftSignal.Amp + pinkNoise
-  return(pinkAmp)
-}
-
-```
-
-```{r, echo = FALSE}
-theErrorFunction_MonocModels <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus, humanData, model){
-  theFs <- c(31,61,91,121,151,181)
-  SNR <- array(NA, dim = c(length(theFs), dim(CL.Plus)[2]))
-  
-  for (i in 1:dim(CR.Minus)[2]){
-    if (model == "twoStageWithMonocularChannels"){
-      modelResponse <- twoStageWithMonocularChannels(params, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
-    } else if (model == "twoStageWithMonocularChannels_SUMALL"){
-      modelResponse <- twoStageWithMonocularChannels_SUMALL(params, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
-    } else if (model == "twoStageWithMonocularChannels_RectandSum"){
-      modelResponse <- twoStageWithMonocularChannels_RectandSum(params, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
-    } else if (model == "twoStageWithMonocularChannels_CombineFFT"){
-      modelResponse <- twoStageWithMonocularChannels_CombineFFT(params, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
-    } else if (model == "twoStageMonocDifference"){
-      modelResponse <- twoStageMonocDifference(params, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
-    } else if (model == "twoStagePhaseShifted"){
-      modelResponse <- twoStagePhaseShifted(params, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
-    }
-    
-    for (f in 1:length(theFs)){
-      IDX <- ((theFs[f]-5):(theFs[f]+5))
-      IDX <- IDX[IDX != theFs[f]]
-      SNR[f,i] <- abs(modelResponse[theFs[f]])/mean(abs(modelResponse[IDX]))
-    }
-  }
-  
-  err <- base::sum((SNR-humanData)**2)
-  return(err)
-}
-```
-
-```{r, echo = FALSE}
-m <- 1.31
-S <-1
-
-p <- 6.42
-q <- 5.20
-Z <- .013
-scale <- 8
-w <- 3
-```
-
-
-```{r eval variants of the monoc model, echo = FALSE}
-params <- c(log(c(m,p,q,S,Z)),scale)
-twoStageWithMonocChannels.params <- optim(params, theErrorFunction_MonocModels, gr = NULL, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageWithMonocularChannels", control = list(maxit = 5000))
-
-params <- c(log(c(m,p,q,S,Z)),scale)
-twoStageWithMonocularChannels_SUMALL.params <- optim(params, theErrorFunction_MonocModels, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageWithMonocularChannels_SUMALL", control = list(maxit = 5000))
-
-params <- c(log(c(m,p,q,S,Z,w)), scale)
-twoStageWithMonocularChannels_RectandSum.params <- optim(params, theErrorFunction_MonocModels, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageWithMonocularChannels_RectandSum", control = list(maxit = 5000))
-
-params <- c(log(c(m,p,q,S,Z)), scale)
-twoStageWithMonocularChannels_CombineFFT.params <- optim(params, theErrorFunction_MonocModels, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageWithMonocularChannels_CombineFFT", control = list(maxit = 5000))
-
-params <- c(log(c(m,p,q,S,Z)), scale)
-twoStageMonocDifference.params <- optim(params, theErrorFunction_MonocModels, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageMonocDifference", control = list(maxit = 5000))
-
-params <- c(log(c(m,p,q,S,Z)), scale)
-twoStagePhaseShifted.params <- optim(params, theErrorFunction_MonocModels, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStagePhaseShifted", control = list(maxit = 5000))
-```
-
-```{r, echo = FALSE}
-R2 <- NULL
-SNRAll <- array(NA, dim = c(length(theFs), dim(CL.Plus)[2],6))
-```
-
-```{r, echo = FALSE}
-modelResponse <- matrix(NA, nrow = 1001, ncol = 9)
-for (i in 1:9){
-  modelResponse[,i] <- twoStageWithMonocularChannels(twoStageWithMonocChannels.params$par, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
-  
-  for (f in 1:length(theFs)){
-    IDX <- ((theFs[f]-5):(theFs[f]+5))
-    IDX <- IDX[IDX != theFs[f]]
-    SNR[f,i] <- abs(modelResponse[theFs[f],i])/mean(abs(modelResponse[IDX,i]))
-  }
-}
-
-ssError <- sum((SNR - theHData)**2)
-ssTotal <- sum((theHData - mean(theHData))**2)
-
-k <- length(twoStageWithMonocChannelsPhase.params$par)
-n <- length(theHData)
-mse <- ssError/length(theHData)
-
-R2[1] <- 1-(ssError/ssTotal)
-rmsE[1] <- sqrt(ssError/length(SNR))
-AIC[1] <- 2*k + n*log(mse) + n*log(2*pi) + n
-SSE[1] <- ssError
-
-SNRAll[,,1] <- SNR
-
-```
-
-```{r,echo = FALSE}
-modelResponse <- matrix(NA, nrow = 1001, ncol = 9)
-for (i in 1:9){
-  modelResponse[,i] <- twoStageWithMonocularChannels_SUMALL(twoStageWithMonocularChannels_SUMALL.params$par, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
-  
-  for (f in 1:length(theFs)){
-    IDX <- ((theFs[f]-5):(theFs[f]+5))
-    IDX <- IDX[IDX != theFs[f]]
-    SNR[f,i] <- abs(modelResponse[theFs[f],i])/mean(abs(modelResponse[IDX,i]))
-  }
-}
-
-ssError <- sum((SNR - theHData)**2)
-ssTotal <- sum((theHData - mean(theHData))**2)
-
-k <- length(twoStageWithMonocChannelsPhase.params$par)
-n <- length(theHData)
-mse <- ssError/length(theHData)
-
-R2[2] <- 1-(ssError/ssTotal)
-
-SNRAll[,,2] <- SNR
-```
-
-
-```{r,echo = FALSE}
-modelResponse <- matrix(NA, nrow = 1001, ncol = 9)
-for (i in 1:9){
-  modelResponse[,i] <- twoStageWithMonocularChannels_RectandSum(twoStageWithMonocularChannels_RectandSum.params$par, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
-  
-  for (f in 1:length(theFs)){
-    IDX <- ((theFs[f]-5):(theFs[f]+5))
-    IDX <- IDX[IDX != theFs[f]]
-    SNR[f,i] <- abs(modelResponse[theFs[f],i])/mean(abs(modelResponse[IDX,i]))
-  }
-}
-
-ssError <- sum((SNR - theHData)**2)
-ssTotal <- sum((theHData - mean(theHData))**2)
-
-k <- length(twoStageWithMonocChannelsPhase.params$par)
-n <- length(theHData)
-mse <- ssError/length(theHData)
-
-R2[3] <- 1-(ssError/ssTotal)
-
-SNRAll[,,3] <- SNR
-```
-
-```{r,echo = FALSE}
-modelResponse <- matrix(NA, nrow = 1001, ncol = 9)
-for (i in 1:9){
-  modelResponse[,i] <- twoStageWithMonocularChannels_CombineFFT(twoStageWithMonocularChannels_CombineFFT.params$par, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
-  
-  for (f in 1:length(theFs)){
-    IDX <- ((theFs[f]-5):(theFs[f]+5))
-    IDX <- IDX[IDX != theFs[f]]
-    SNR[f,i] <- abs(modelResponse[theFs[f],i])/mean(abs(modelResponse[IDX,i]))
-  }
-}
-
-ssError <- sum((SNR - theHData)**2)
-ssTotal <- sum((theHData - mean(theHData))**2)
-
-k <- length(twoStageWithMonocChannelsPhase.params$par)
-n <- length(theHData)
-mse <- ssError/length(theHData)
-
-R2[4] <- 1-(ssError/ssTotal)
-
-SNRAll[,,4] <- SNR
-```
-
-```{r,echo = FALSE}
-modelResponse <- matrix(NA, nrow = 1001, ncol = 9)
-for (i in 1:9){
-  modelResponse[,i] <- twoStageMonocDifference(twoStageMonocDifference.params$par, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
-  
-  for (f in 1:length(theFs)){
-    IDX <- ((theFs[f]-5):(theFs[f]+5))
-    IDX <- IDX[IDX != theFs[f]]
-    SNR[f,i] <- abs(modelResponse[theFs[f],i])/mean(abs(modelResponse[IDX,i]))
-  }
-}
-
-ssError <- sum((SNR - theHData)**2)
-ssTotal <- sum((theHData - mean(theHData))**2)
-
-k <- length(twoStageWithMonocChannelsPhase.params$par)
-n <- length(theHData)
-mse <- ssError/length(theHData)
-
-R2[5] <- 1-(ssError/ssTotal)
-rmsE[5] <- sqrt(ssError/length(SNR))
-AIC[5] <- 2*k + n*log(mse) + n*log(2*pi) + n
-SSE[5] <- ssError
-
-
-
-SNRAll[,,5] <- SNR
-```
-
-```{r, echo = FALSE}
-modelResponse <- matrix(NA, nrow = 1001, ncol = 9)
-for (i in 1:9){
-  modelResponse[,i] <- twoStagePhaseShifted(twoStagePhaseShifted.params$par, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
-  
-  for (f in 1:length(theFs)){
-    IDX <- ((theFs[f]-5):(theFs[f]+5))
-    IDX <- IDX[IDX != theFs[f]]
-    SNR[f,i] <- abs(modelResponse[theFs[f],i])/mean(abs(modelResponse[IDX,i]))
-  }
-}
-
-ssError <- sum((SNR - theHData)**2)
-ssTotal <- sum((theHData - mean(theHData))**2)
-
-k <- length(twoStageWithMonocChannelsPhase.params$par)
-n <- length(theHData)
-mse <- ssError/length(theHData)
-
-R2[6] <- 1-(ssError/ssTotal)
-
-SNRAll[,,6] <- SNR
-```
-
-
-| Model | R2 |
-|:----------|:-----:|
-| Bin + Left | `r round(R2[1],3)` |
-| Bin + Left + Right | `r round(R2[2],3)` | 
-| Bin^w + Left^w + Right^w | `r round(R2[3],3)` | 
-| fft(Bin) + fft(Left) + fft(Right) | `r round(R2[4],3)` | 
-| Bin + (Left-Right) | `r round(R2[5],3)` | 
-| Bin + Left + Left | `r round(R2[6],3)` | 
-
-
-Fits of the Bin + Left model and the Bin + (Left-Right Model)
-
-```{r, fig.width=12, fig.height=6, echo = FALSE}
-par(mfrow = c(2,5), mai = c(.6,.1,.1,.1), omi = c(.1,.5,.5,0), xpd = TRUE)
-for (i in 1:9){
-  plot(x = NULL, y = NULL, xlim =c(1,6), ylim = c(0,10),axes = FALSE, ann = FALSE)
-  if (i == 1 | i == 6){
-    axis(2, at = pretty(c(0,10)), lwd = 2, tck = -.01, labels = FALSE)
-    mtext(pretty(c(0,10)),2,at = pretty(c(0,10)), las = 1, line = .4)
-    mtext("SNR", 2, font = 2, line = 2)
-  }
-  
-  if (i >= 5){
-        mtext(c(3,6,9,12,15,18),1,at = pretty(c(1,6)), las = 1, line = .4)
-  }
-  axis(1, at = pretty(c(1,6)), lwd = 2, tck = -.01, labels = FALSE)
-  points(1:6,theHData[,i],pch = 19, col = "gray", cex = 2)
-  lines(1:6, SNRAll[,i,1], col = "blue", lwd= 2)
-  lines(1:6, SNRAll[,i,5], col = "green", lwd = 2)
-  lines(1:6, SNRAll[,i,6], col = "red", lwd = 2)
-
-  mtext(theConditions[i], 3, line = 0.4, cex = .8, adj = 0, padj = 0, font = 2)
-  
-  if (i == 1){
-    legend("topleft", legend = c("Bin + Left", "Bin + (Left-Right)", "Bin + Left + Left"), col = c("blue", "green", "red"), lwd = 2, bty = "n")
-  } else if (i == 5){
-    legend("topright", legend = c(bquote("R"^2~"="~.(round(R2[1],3))), bquote("R"^2~"="~.(round(R2[5],3))), bquote("R"^2~"="~.(round(R2[6],3)))), col = c("blue", "green", "red"), lwd = 2, bty = "n")
-  }
-}
-```
+<!-- : The insane parameters of the two best models {#tbl-modelParameters} -->
 
 # Discussion
 
-The computational architecture of binocular combination, under the two-stage contrast gain control model framework, has been carefully evaluated on psychophysical data [@Georgeson2016; @BakerMeese2007; @Meese2006], yet its ability to explain neural data has only been explored on a limited set of stimulus conditions [@Lygoetal2020; @Richardetal2018]. In this study, we investigated the effects of stimulus spatial and temporal phase on observer SSVEPs and explored the ability of the two-stage contrast gain control model - and its variants - to capture these effects. We found that presenting stimuli in temporal anti-phase reduced the magnitude of responses at the fundamental frequency (3Hz) in comparison to its temporal phase counterpart but was not abolished. This finding suggests that even under binocular vieweing purely monocular signals can be measured at the scalp with SSVEPs. 
+The computational architecture of binocular combination, under the two-stage contrast gain control model framework, has been carefully evaluated on psychophysical data [@Georgeson2016; @BakerMeese2007; @Meese2006], yet its ability to explain neural data has only been explored on a limited set of stimulus conditions [@Lygoetal2020; @Richardetal2018]. In this study, we investigated the effects of stimulus spatial and temporal phase on observer SSVEPs and explored the ability of the two-stage contrast gain control model - and its variants - to capture these effects. We found that presenting stimuli in temporal anti-phase reduced the magnitude of responses at the fundamental frequency (3Hz) in comparison to its temporal phase counterpart but was not abolished. This finding indicates that, even under binocular viewing, purely monocular signals can be measured at the scalp with SSVEPs. Additionally, we found the two-stage contrast gain control model with parallel monocular and phase-selective channels to best explain observer SSVEPs across the nine experimental conditions of this study. The addition of monocular channels was crucial to preserve monocular signals at later stages of the model and fit the monocular responses of the temporal anti-phase conditions. The effect of spatial phase on SSVEPs, however, was not found to be meaningful in our data. While spatial phase does impact binocular combination psychophysically [@BakerMeese2007; @Simmons2005; @Bacon1976], we have little evidence that it meaningfully altered SSVEPs in our observers. 
 
-We found that monocular signals remain and can be recorded and while statistically we don't see an effect of spatial phase adding it to the model does increase the fits (slightly). 
-
-The best performing model explored here was the two-stage contrast gain control model with parallel monocular and phase-selective channels. 
+#### Monocular signals 
 
 
-The current architecture of the two-stage contrast gain control model has been rigorously evaluated on psychophysical data, providing a solid foundation for our understanding of binocular combination [@Georgeson2016; @BakerMeese2007; @Meese2006]. While previous studies have utilized the two-stage contrast gain control model on neuroimaging data [@Lygoetal2020; @Richardetal2018], they only included experimental conditions where the phases of the sinusoidal gratings presented to each eye were identical. To accurately assess the current architecture of the two-stage contrast gain control model, neuroimaging data for binocular presentation of stimuli in opposite phase polarity are required. Here, we recorded SSVEPs to monocular and binocular stimuli with different spatial and temporal phase relationships to obtain the data needed to evaluate the two-stage contrast gain control model. By progressively increasing the complexity of the model, we demonstrate that many mechanisms of binocular combination, such as monocular non-linearities, interocular interactions, and parallel monocular channels, are required to explain neural responses to our set of experimental conditions. Thus, the two-stage contrast gain control model remains a powerful and flexible descriptor of the architecture of binocular combination for data collected across many experimental conditions and modalities.
+Parallel monocular channels were added to account for adaptation after-effects that suggest monocular signals may be preserved and available for perception following binocular summation [@BlakeOvertonLemaStern1981; @Moulden1980]. While the possibility of monocular channels had been considered [@Legge1984a], many assumed that only the binocularly summed signal contributed to perception.
 
+#### The modelling
 
-No differencing channels included in the model. 
+we demonstrate that many mechanisms of binocular combination, such as monocular non-linearities, interocular interactions, and parallel monocular channels, are required to explain neural responses to our set of experimental conditions. 
+
+### Channels
+
+#### Summing
+
+#### Monocular channels
+
+#### Difference channels
+
+Difference channels would be evident in the spatial phase conditions, but since their responses are weaker than summing channels, could it be that they are just not large enough to be recorded by SSVEPs? Also, what are the temporal characteristics of differencing channels? If stimuli are presented at a 3Hz flicker, is that oscillation too fast for the difference channels to respond? Finally, are they selective to temporal differences as well? One eye is on the other eye is off, will that "activate" difference channels?  
+
+# Conclusion
+
+The two-stage contrast gain control model remains a powerful and flexible descriptor of the architecture of binocular combination for data collected across many experimental conditions and modalities.
+
 
 # References
 
