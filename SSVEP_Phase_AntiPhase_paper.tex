@@ -339,21 +339,22 @@ Many studies have worked towards the development of a comprehensive
 description of the process of binocular summation in human vision using
 a variety of psychophysical and neuroimaging data (Baker et al., 2008,
 2007b; Ding et al., 2013; Ding and Sperling, 2006; Legge, 1984; Lygo et
-al., 2021; Maehara and Goryo, 2005; Richard et al., 2018). Developing
-these models is not an insignificant challenge; they must account for
-multiple components of early vision, including identifying relevant
-signals, defining how these signals might interact, what non-linearities
-are present, and most importantly, how they are combined. One such model
-that has proven very informative and capable of describing binocular
-summation under various experimental conditions is the two-stage
-contrast gain control model developed by Meese et al. (2006). The model
-captured detection and discrimination thresholds for monocular and
-binocular in addition to dichoptic (the stimuli presented to both eyes
-are not identical) stimuli, in a two-stage process. First, the input is
-rectified by an excitatory non-linearity (\(m \approx 1.3\)) and
-normalized by self and interocular suppression (see
-Equation~\ref{eq-intoMath2}). The binocular (e.g., combined) input
-undergoes a second contrast normalization before the decision stage,
+al., 2021; Maehara and Goryo, 2005; May and Zhaoping, 2016; Richard et
+al., 2018). This is not an insignificant challenge; such a description
+must account for multiple components of early vision, including
+identifying relevant signals, defining how these signals might interact,
+what non-linearities are present, and most importantly, how these
+signals are summed and/or differenced. One such model that has proven
+very informative and capable of describing binocular summation under
+various experimental conditions is the two-stage contrast gain control
+model developed by Meese et al. (2006). The model captured detection and
+discrimination thresholds for monocular and binocular in addition to
+dichoptic (the stimuli presented to both eyes are not identical)
+stimuli, in a two-stage process. First, the input is rectified by an
+excitatory non-linearity (\(m \approx 1.3\)) and normalized by self and
+interocular suppression (see Equation~\ref{eq-intoMath2}). The binocular
+(e.g., combined) input undergoes a second contrast normalization before
+the decision stage,
 \begin{equation}\phantomsection\label{eq-IntroMathSecondStage}{
 R = \frac{R_B^p}{Z + R_B^q},
 }\end{equation} where the excitatory exponent \(p\) allows for greater
@@ -362,24 +363,24 @@ non-linearity of the first stage (\(m\) in Equation~\ref{eq-intoMath2})
 alone.
 
 Subsequent iterations of the two-stage contrast gain control model added
-channels for opposite contrast polarities (Baker and Meese, 2007), and
+channels for opposite contrast polarities (Baker and Meese, 2007),
 monocular channels parallel the binocular summing channel (Georgeson et
 al., 2016). Polarity-specific channels were included to explain masking
 effects when the stimuli presented to each eye had opposing phase
 polarities (i.e., dichoptic presentation). The presentation of
 sinusoidal gratings with opposite polarities to each eye does not cancel
-them out: stimuli remain detectable and the two inputs sum, albeit
-weakly (Bacon, 1976; Baker and Meese, 2007; Simmons, 2005). Parallel
-monocular channels were added to account for adaptation after-effects
-that suggest monocular signals may be preserved and available for
-perception following binocular summation (Blake et al., 1981; Moulden,
-1980). While the possibility of monocular channels had been considered
-(Legge, 1984), many assumed that only the binocularly summed signal
-contributed to perception. In a comprehensive study of binocular
-contrast perception, Georgeson et al. (2016) developed a specific
-experimental condition to assess the involvement of monocular channels.
-They devised a discrimination task where the target interval presented a
-contrast increment to one eye (e.g., 10\% pedestal + 2\%) and a contrast
+them out: the stimuli remain detectable and the two inputs can sum
+(Bacon, 1976; Baker and Meese, 2007; Simmons, 2005). Parallel monocular
+channels were added to account for adaptation after-effects that suggest
+monocular signals may be preserved and available for perception
+following binocular summation (Blake et al., 1981; Moulden, 1980).
+
+While the possibility of monocular channels had been considered (Legge,
+1984), many assumed that only the binocularly summed signal contributed
+to perception. Georgeson et al. (2016) developed a specific experimental
+condition to assess the involvement of monocular channels. They devised
+a discrimination task where the target interval presented a contrast
+increment to one eye (e.g., 10\% pedestal + 2\%) and a contrast
 decrement to the other (e.g., 10\% pedestal - 2\%). If the only
 available signal is a binocularly summed one, the task would be nearly
 impossible to complete; the target interval would be perceptually
@@ -387,7 +388,16 @@ identical to the pedestal-only interval. However, observers were able to
 complete the task. The two-stage contrast gain control model with
 parallel monocular channels was the only model able to capture observer
 thresholds from all experimental conditions, including the binocular
-increment and decrement tasks.
+increment and decrement tasks. There has also been accruing evidence of
+an additional differencing channel that accompanies the summing channel
+commonly described in binocular combination (Chen and Li, 1998; May et
+al., 2012; May and Zhaoping, 2016). This channel, as the name implies,
+encodes the difference between stimuli presented to the left and right
+eye; early contributions to disparity processing and stereovision. While
+computational models of binocular vision do not explicitly include
+differencing channels, encoding the difference between monocular signals
+is, indirectly, included in the two-stage contrast gain control model
+defined by Georgeson et al. (2016).
 
 The current architecture of the two-stage contrast gain control model
 has been rigorously evaluated on psychophysical data, providing a solid
@@ -1033,27 +1043,34 @@ has only been explored on a limited set of stimulus conditions (Lygo et
 al., 2021; Richard et al., 2018). In this study, we investigated the
 effects of stimulus spatial and temporal phase on observer SSVEPs and
 explored the ability of the two-stage contrast gain control model - and
-its variants - to capture our neural data. No statistically significant
-difference was found between the monocular and binocular conditions
-presented either with On/Off or counterphase flicker. This is consistent
-with ocularity invariance; binocular and monocular stimuli are judged
-equal in magnitude at high contrast (Baker et al., 2018; Legge, 1984;
-Maehara and Goryo, 2005; Meese et al., 2006). Presenting stimuli in
-temporal anti-phase reduced the magnitude of responses at the
-fundamental frequency (3Hz) in comparison to its temporal phase
-counterpart, but was not abolished. This finding indicates that, even
-under binocular viewing, monocular signals can be measured at the scalp
-with SSVEPs. This was confirmed in our modelling as only the two-stage
-contrast gain control model with parallel monocular channels, which
-preserve monocular signals throughout the model architecture, was able
-to accurately capture the data in all experimental conditions. Simpler
-models failed to generate the necessary responses at the fundamental and
-odd-integer harmonics for stimuli presented in temporal anti-phase while
-a more complex model that included phase-selectivity did not improve the
-quality of fits. Overall, we find that the same general framework that
-has been used to explain psychophysical stimulus combination can be
-successfully applied to neural data collected under a variety of
-experimental conditions.
+its variants - to capture our neural data. On/Off flicker generated
+responses at the fundamental frequency (3Hz) and its harmonics (6Hz,
+9Hz, 12Hz, and 15Hz) while counterphase flicker generated responses at
+twice the fundamental frequency (6Hz) and its even integer harmonics
+(12Hz and 18Hz). No statistically significant difference was found
+between the monocular and binocular conditions presented either with
+On/Off or counterphase flicker. This is consistent with ocularity
+invariance; binocular and monocular stimuli are judged equal in
+magnitude at high contrast (Baker et al., 2018; Legge, 1984; Maehara and
+Goryo, 2005; Meese et al., 2006). We additionally found no statistically
+significant differences in SSVEPs for all stimulus conditions under
+counterphase flicker.
+
+Presenting stimuli in temporal anti-phase reduced the magnitude of
+responses at the fundamental frequency (3Hz) in comparison to its
+temporal phase counterpart, but was not abolished. This finding
+indicates that, even under binocular viewing, monocular signals can be
+measured at the scalp with SSVEPs. This was confirmed in our modelling
+as only the two-stage contrast gain control model with parallel
+monocular channels, which preserve monocular signals throughout the
+model architecture, was able to accurately capture the data in all
+experimental conditions. Simpler models failed to generate the necessary
+responses at the fundamental and odd-integer harmonics for stimuli
+presented in temporal anti-phase while a more complex model that
+included phase-selectivity did not improve the quality of fits. Overall,
+we find that the same general framework that has been used to explain
+psychophysical stimulus combination can be successfully applied to
+neural data collected under a variety of experimental conditions.
 
 \paragraph{Monocular signals}\label{monocular-signals}
 
@@ -1107,37 +1124,49 @@ sensitivity to the stimuli. It is therefore odd to find little to no
 influence of spatial phase on the SSVEPs of observers, particularly as
 SSVEP amplitude is associated with perceptual sensitivity (Bosse et al.,
 2018; Campbell and Kulikowski, 1972; Campbell and Maffei, 1970; Norcia
-et al., 2015). Phase dependent effects in SSVEPs have been recorded with
-motion stimuli (Cottereau et al., 2014; Kohler et al., 2018). The
-dichoptic presentation of moving bars, whereby they either move in-phase
-(lateral motion) or in anti-phase (motion-in-depth) impacts the
-amplitude of SSVEPs. In-phase motion generates SSVEP amplitudes that are
-twice those of motion in anti-phase (Cottereau et al., 2014). Why we do
-not observe phase-dependent effects in our study may reflect a
-limitation of the SSVEP technique: SSVEPs recorded at the scalp are a
-spatial aggregation of the stimuli presented to observers (Wade and
-Baker, 2025). Spatially aggregated responses will be identical
-regardless of stimulus phase and thus generate phase-insensitive
-responses.
+et al., 2015). The absence of a clear spatial phase effect also
+complicates our ability to describe the contributions of a differencing
+channel in our study (Chen and Li, 1998; May et al., 2012; May and
+Zhaoping, 2016).
 
-\paragraph{Difference channels}\label{difference-channels}
+Spatial phase-dependent effects in SSVEPs have been recorded with motion
+stimuli (Cottereau et al., 2014; Kohler et al., 2018). The dichoptic
+presentation of moving bars, whereby they either move in-phase (lateral
+motion) or in anti-phase (motion-in-depth), impacts the amplitude of
+SSVEPs. In-phase motion generates SSVEP amplitudes that are twice those
+of motion in anti-phase (Cottereau et al., 2014). A difference response
+can also be recorded for dichoptic stimuli when they are frequency
+tagged (Katyal et al., 2018; Sutoyo and Srinivasan, 2009) where the
+``conflict'' response is represented at the intermodulation frequencies.
+All stimuli in this study were presented at 3Hz, we did not frequency
+tag stimuli presented to the left and right eye. Thus, the responses we
+recorded at the scalp are a spatial aggregation of the stimuli presented
+to observers (Wade and Baker, 2025). Spatially aggregated responses will
+be identical regardless of stimulus phase and thus generate
+phase-insensitive responses.
 
-An aspect that we do not explore in this study is the potential
-contribution of differencing channels to observer data. Visual inputs
-are summed and their difference is taken.
+\section{Conclusion}\label{conclusion}
 
-Henriksen and Read (2016) May and Zhaoping (2016)
+We investigated the effects of stimulus spatial and temporal phase on
+observer SSVEPs and explored the necessary computational components to
+explain our data. We worked under the framework of the two-stage
+contrast gain control model of binocular vision (Meese et al., 2006) and
+explored the impact of interocular interactions, parallel monocular
+channels, and phase-selective channels on the fits of the model to our
+data. The largest effect to capture was the presence of odd-integer
+harmonics in the temporal anti-phase conditions, which represents the
+monocular response to stimuli and was well-explained by the addition of
+parallel monocular channels to the model. The two-stage contrast gain
+control model of binocular combination remains a powerful descriptor of
+binocular vision as it can explain a large variety experimental
+conditions and modalities (psychophysics and neuroimaging).
 
-Difference channels would be evident in the spatial phase conditions,
-but since their responses are weaker than summing channels, could it be
-that they are just not large enough to be recorded by SSVEPs? Also, what
-are the temporal characteristics of differencing channels? If stimuli
-are presented at a 3Hz flicker, is that oscillation too fast for the
-difference channels to respond? Finally, are they selective to temporal
-differences as well? One eye is on the other eye is off, will that
-``activate'' difference channels?
+\section{Data and Code Availability}\label{data-and-code-availability}
 
-\subsection{Conclusion}\label{conclusion}
+We provide the raw (.cnt) and processed (.RData) observer SSVEPs and all
+code used in this study have been made available on the Open Science
+Framework and can be accessed using the following project link:
+https://osf.io/cn894/.
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
@@ -1224,6 +1253,12 @@ system for topographic studies of spontaneous and evoked EEG activities.
 American Journal of EEG Technology 25, 83--92.
 \url{https://doi.org/10.1080/00029238.1985.11080163}
 
+\bibitem[\citeproctext]{ref-Chen1998}
+Chen, D., Li, Z., 1998. A psychophysical experiment to test the
+efficient stereo coding theory, in: Wong, K.-Y.M., King, I., Yeung, D.Y.
+(Eds.), Theoretical Aspects of Neural Computation: A Multidisciplinary
+Perspective. Springer Verlag, New York, pp. 225--235.
+
 \bibitem[\citeproctext]{ref-Cottereau2014}
 Cottereau, B.R., McKee, S.P., Norcia, A.M., 2014. Dynamics and cortical
 distribution of neural responses to 2D and 3D motion in human. Journal
@@ -1263,10 +1298,11 @@ Heeger, D.J., 1992. Normalization of cell responses in cat striate
 cortex. Vis Neurosci 9, 181--97.
 \url{https://doi.org/10.1017/s0952523800009640}
 
-\bibitem[\citeproctext]{ref-Henriksen2016}
-Henriksen, S., Read, J.C.A., 2016. Visual perception: A novel difference
-channel in binocular vision. Curr Biol 26, R500--R503.
-\url{https://doi.org/10.1016/j.cub.2016.04.049}
+\bibitem[\citeproctext]{ref-Katyal2018}
+Katyal, S., Vergeer, M., He, S., He, B., Engel, S.A., 2018.
+Conflict-sensitive neurons gate interocular suppression in human visual
+cortex. Scientific Reports 8, 1239.
+\url{https://doi.org/10.1038/s41598-018-19809-w}
 
 \bibitem[\citeproctext]{ref-Kohler2018}
 Kohler, P.J., Meredith, W.J., Norcia, A.M., 2018. Revisiting the
@@ -1294,6 +1330,11 @@ masking. Optical Review 12, 76--82.
 May, K.A., Zhaoping, L., 2016. Efficient coding theory predicts a tilt
 aftereffect from viewing untilted patterns. Curr Biol 26, 1571--1576.
 \url{https://doi.org/10.1016/j.cub.2016.04.037}
+
+\bibitem[\citeproctext]{ref-May2012}
+May, K.A., Zhaoping, L., Hibbard, P.B., 2012. Perceived direction of
+motion determined by adaptation to static binocular images. Curr Biol
+22, 28--32. \url{https://doi.org/10.1016/j.cub.2011.11.025}
 
 \bibitem[\citeproctext]{ref-MeeseBaker2011}
 Meese, T.S., Baker, D.H., 2011. Contrast summation across eyes and space
@@ -1338,6 +1379,13 @@ Perception 34, 1035--1042. \url{https://doi.org/10.1068/p5279}
 Simmons, D.R., Kingdom, F.A.A., 1998. On the binocular summation of
 chromatic contrast. Vision Research 38, 1063--1071.
 \url{https://doi.org/10.1016/S0042-6989(97)00272-1}
+
+\bibitem[\citeproctext]{ref-Sutoyo2009}
+Sutoyo, D., Srinivasan, R., 2009. Nonlinear SSVEP responses are
+sensitive to the perceptual binding of visual hemifields during
+conventional {``eye''} rivalry and interocular {``percept''} rivalry.
+Brain Research 1251, 245--255.
+https://doi.org/\url{https://doi.org/10.1016/j.brainres.2008.09.086}
 
 \bibitem[\citeproctext]{ref-TadmorTolhurst1994}
 Tadmor, Y., Tolhurst, D.J., 1994. Discrimination of changes in the
