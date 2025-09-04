@@ -585,24 +585,24 @@ experimental conditions generated peaks at the fundamental frequency
 (3Hz) and its harmonics (integer multiples of 3Hz). Similarly,
 counterphase flicker produced responses at twice the flicker frequency
 (6 Hz) and its harmonics. We assessed differences in SNR magnitude
-across experimental conditions via a permutation test. A permutation
-test allows for a non-parametric comparison of a statistic between two
-experimental conditions. We first take the median difference between two
-experimental conditions (i.e., the observed difference). A null
-distribution is then constructed by combining SNR values from both
-experimental conditions, and randomly sampled without replacement to
-create two groups of sizes identical to their original, but with values
-that are not associated with a particular experimental condition. The
-median difference of the randomly sampled SNRs is then taken. This
+across experimental conditions via a permutation test, which allows for
+a non-parametric comparison of a statistic between two conditions. To
+conduct the permutation tests, we first take the median difference
+between two experimental conditions (i.e., the observed difference). A
+null distribution is then constructed by combining SNR values from both
+experimental conditions, and randomly sampling them without replacement
+to create two groups of sizes identical to their original, but with
+values that are not associated with a particular experimental condition.
+The median difference of the randomly sampled SNRs is then taken. This
 process is repeated multiple times (e.g., \(N = 2000\)) to build a
 distribution of median differences with no association of experimental
 condition (i.e., a null-hypothesis distribution). The observed median
-difference is then compared to this distribution, and the proportion of
-scores greater (or less) than the observed difference represents the
-\(p\) value associated with the test. When comparing SNRs at the
-fundamental frequency (3Hz) for On/Off flicker, we find no statistically
-significant difference in median SNR magnitude between experimental
-conditions where stimuli were presented in temporal phase (see
+difference is then compared to this distribution. The proportion of
+scores greater than the observed difference represents the \(p\) value
+associated with the test. When comparing SNRs at the fundamental
+frequency (3Hz) for On/Off flicker, we find no statistically significant
+difference in median SNR magnitude between experimental conditions where
+stimuli were presented in temporal phase (see
 Figure~\ref{fig-SNRComparison}). Monocular and binocular presentation
 for stimuli presented in temporal phase resulted in a similar response
 pattern under both On/Off and counterphase flicker modulations. This is
@@ -759,10 +759,10 @@ Equation~\ref{eq-stimInput3L}, Equation~\ref{eq-stimInput3R}) and not
 the model architecture.
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.5000}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1667}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1667}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1667}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Model
@@ -1033,7 +1033,12 @@ has only been explored on a limited set of stimulus conditions (Lygo et
 al., 2021; Richard et al., 2018). In this study, we investigated the
 effects of stimulus spatial and temporal phase on observer SSVEPs and
 explored the ability of the two-stage contrast gain control model - and
-its variants - to capture our neural data. Presenting stimuli in
+its variants - to capture our neural data. No statistically significant
+difference was found between the monocular and binocular conditions
+presented either with On/Off or counterphase flicker. This is consistent
+with ocularity invariance; binocular and monocular stimuli are judged
+equal in magnitude at high contrast (Baker et al., 2018; Legge, 1984;
+Maehara and Goryo, 2005; Meese et al., 2006). Presenting stimuli in
 temporal anti-phase reduced the magnitude of responses at the
 fundamental frequency (3Hz) in comparison to its temporal phase
 counterpart, but was not abolished. This finding indicates that, even
@@ -1047,7 +1052,7 @@ odd-integer harmonics for stimuli presented in temporal anti-phase while
 a more complex model that included phase-selectivity did not improve the
 quality of fits. Overall, we find that the same general framework that
 has been used to explain psychophysical stimulus combination can be
-successfully applied to neural data collected under a large variety of
+successfully applied to neural data collected under a variety of
 experimental conditions.
 
 \paragraph{Monocular signals}\label{monocular-signals}
@@ -1076,38 +1081,52 @@ conditions to the temporal anti-phase can thus be explained as the
 transition from a binocular to a, inadvertently weaker, monocular
 response.
 
-Computationally, we found that parallel monocular channels were required
-to explain the SNR spectra of our observers in the two-temporal
-anti-phase conditions under On/Off flicker. Without the addition of
-monocular channels, the models could not generate a response at the
-fundamental (3Hz) or its odd integer harmonics. While an important
-inclusion in our study, the addition of monocular channels did not
-meaningfully improve the ability of the two-stage contrast gain control
-model to capture the SNR spectra of the other experimental conditions.
+Computationally, we demonstrated that many mechanisms of binocular
+combination, including monocular non-linearities, interocular
+interactions, and parallel monocular channels were required to explain
+the SNR spectra of our observers. Parallel monocular channels were
+particularly important in capturing observer data in the two temporal
+anti-phase conditions presented with On/Off flicker. Without the
+addition of these channels, the models could not generate a response at
+the fundamental (3Hz) or its odd integer harmonics. While an important
+inclusion to our study, the addition of monocular channels did not
+meaningfully alter the ability of the two-stage contrast gain control
+model to capture observer SNRs in the other experimental conditions.
+Monocular contributions to the model output are largest when the
+stimulus contrast between the two eyes differ (Georgeson et al., 2016),
+experimental scenarios that we did not explore here.
 
 \paragraph{Spatial Phase}\label{spatial-phase}
 
-While spatial phase does impact binocular combination psychophysically
-(Bacon, 1976; Baker and Meese, 2007; Simmons, 2005), we have little
-evidence that it meaningfully altered SSVEPs in our observers. \#
-Conclusion
-
-The two-stage contrast gain control model remains a powerful and
-flexible descriptor of the architecture of binocular combination for
-data collected across many experimental conditions and modalities.
-
-\paragraph{The modelling}\label{the-modelling}
-
-we demonstrate that many mechanisms of binocular combination, such as
-monocular non-linearities, interocular interactions, and parallel
-monocular channels, are required to explain neural responses to our set
-of experimental conditions.
-
-\subsubsection{Channels}\label{channels}
-
-\paragraph{Summing}\label{summing}
+Our results did not suggest a impact of stimulus spatial phase on
+observer SSVEPs. It is well-known that spatial phase affects binocular
+combination when measured psychophysically (Bacon, 1976; Baker and
+Meese, 2007; Simmons, 2005). The binocular combination of two opposite
+polarity stimuli does not cancel; it sums, and thus influences
+sensitivity to the stimuli. It is therefore odd to find little to no
+influence of spatial phase on the SSVEPs of observers, particularly as
+SSVEP amplitude is associated with perceptual sensitivity (Bosse et al.,
+2018; Campbell and Kulikowski, 1972; Campbell and Maffei, 1970; Norcia
+et al., 2015). Phase dependent effects in SSVEPs have been recorded with
+motion stimuli (Cottereau et al., 2014; Kohler et al., 2018). The
+dichoptic presentation of moving bars, whereby they either move in-phase
+(lateral motion) or in anti-phase (motion-in-depth) impacts the
+amplitude of SSVEPs. In-phase motion generates SSVEP amplitudes that are
+twice those of motion in anti-phase (Cottereau et al., 2014). Why we do
+not observe phase-dependent effects in our study may reflect a
+limitation of the SSVEP technique: SSVEPs recorded at the scalp are a
+spatial aggregation of the stimuli presented to observers (Wade and
+Baker, 2025). Spatially aggregated responses will be identical
+regardless of stimulus phase and thus generate phase-insensitive
+responses.
 
 \paragraph{Difference channels}\label{difference-channels}
+
+An aspect that we do not explore in this study is the potential
+contribution of differencing channels to observer data. Visual inputs
+are summed and their difference is taken.
+
+Henriksen and Read (2016) May and Zhaoping (2016)
 
 Difference channels would be evident in the spatial phase conditions,
 but since their responses are weaker than summing channels, could it be
@@ -1117,6 +1136,8 @@ are presented at a 3Hz flicker, is that oscillation too fast for the
 difference channels to respond? Finally, are they selective to temporal
 differences as well? One eye is on the other eye is off, will that
 ``activate'' difference channels?
+
+\subsection{Conclusion}\label{conclusion}
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
@@ -1174,15 +1195,40 @@ visual aftereffects. J Exp Psychol Hum Percept Perform 7, 367--81.
 Blake, R., Wilson, H., 2011. Binocular vision. Vision Research 51,
 754--770. \url{https://doi.org/10.1016/j.visres.2010.10.009}
 
+\bibitem[\citeproctext]{ref-Bosse2018}
+Bosse, S., Acqualagna, L., Samek, W., Porbadnigk, A.K., Curio, G.,
+Blankertz, B., Müller, K.-R., Wiegand, T., 2018. Assessing perceived
+image quality using steady-state visual evoked potentials and
+spatio-spectral decomposition. IEEE Transactions on Circuits and Systems
+for Video Technology 28, 1694--1706.
+\url{https://doi.org/10.1109/TCSVT.2017.2694807}
+
 \bibitem[\citeproctext]{ref-CampbellGreen1965}
 Campbell, F.W., Green, D.G., 1965. Monocular versus binocular visual
 acuity. Nature 208, 191--2. \url{https://doi.org/10.1038/208191a0}
+
+\bibitem[\citeproctext]{ref-Campbell1972}
+Campbell, F.W., Kulikowski, J.J., 1972. The visual evoked potential as a
+function of contrast of a grating pattern. J Physiol 222, 345--56.
+\url{https://doi.org/10.1113/jphysiol.1972.sp009801}
+
+\bibitem[\citeproctext]{ref-Campbell1970}
+Campbell, F.W., Maffei, L., 1970. Electrophysiological evidence for the
+existence of orientation and size detectors in the human visual system.
+J Physiol 207, 635--52.
+\url{https://doi.org/10.1113/jphysiol.1970.sp009085}
 
 \bibitem[\citeproctext]{ref-Chatrian1985}
 Chatrian, G.E., Lettich, E., Nelson, P.L., 1985. Ten percent electrode
 system for topographic studies of spontaneous and evoked EEG activities.
 American Journal of EEG Technology 25, 83--92.
 \url{https://doi.org/10.1080/00029238.1985.11080163}
+
+\bibitem[\citeproctext]{ref-Cottereau2014}
+Cottereau, B.R., McKee, S.P., Norcia, A.M., 2014. Dynamics and cortical
+distribution of neural responses to 2D and 3D motion in human. Journal
+of Neurophysiology 111, 533--543.
+\url{https://doi.org/10.1152/jn.00549.2013}
 
 \bibitem[\citeproctext]{ref-Delorme2004}
 Delorme, A., Makeig, S., 2004. EEGLAB: An open source toolbox for
@@ -1217,6 +1263,17 @@ Heeger, D.J., 1992. Normalization of cell responses in cat striate
 cortex. Vis Neurosci 9, 181--97.
 \url{https://doi.org/10.1017/s0952523800009640}
 
+\bibitem[\citeproctext]{ref-Henriksen2016}
+Henriksen, S., Read, J.C.A., 2016. Visual perception: A novel difference
+channel in binocular vision. Curr Biol 26, R500--R503.
+\url{https://doi.org/10.1016/j.cub.2016.04.049}
+
+\bibitem[\citeproctext]{ref-Kohler2018}
+Kohler, P.J., Meredith, W.J., Norcia, A.M., 2018. Revisiting the
+functional significance of binocular cues for perceiving
+motion-in-depth. Nature Communications 9, 3511.
+\url{https://doi.org/10.1038/s41467-018-05918-7}
+
 \bibitem[\citeproctext]{ref-Legge1984a}
 Legge, G.E., 1984. Binocular contrast summation--i. Detection and
 discrimination. Vision Res 24, 373--83.
@@ -1232,6 +1289,11 @@ Maehara, G., Goryo, K., 2005. Binocular, monocular and dichoptic pattern
 masking. Optical Review 12, 76--82.
 \href{https://doi.org/DOI\%2010.1007/s10043-004-0076-5}{https://doi.org/DOI
 10.1007/s10043-004-0076-5}
+
+\bibitem[\citeproctext]{ref-May2016}
+May, K.A., Zhaoping, L., 2016. Efficient coding theory predicts a tilt
+aftereffect from viewing untilted patterns. Curr Biol 26, 1571--1576.
+\url{https://doi.org/10.1016/j.cub.2016.04.037}
 
 \bibitem[\citeproctext]{ref-MeeseBaker2011}
 Meese, T.S., Baker, D.H., 2011. Contrast summation across eyes and space
@@ -1252,6 +1314,11 @@ human visual cortex. J Vis 9, 13 1--22.
 Moulden, B., 1980. After-effects and the integration of patterns of
 neural activity within a channel. Philos Trans R Soc Lond B Biol Sci
 290, 39--55. \url{https://doi.org/10.1098/rstb.1980.0081}
+
+\bibitem[\citeproctext]{ref-norcia2015}
+Norcia, A.M., Appelbaum, L.G., Ales, J.M., Cottereau, B.R., Rossion, B.,
+2015. The steady-state visual evoked potential in vision research: A
+review. Journal of Vision 15, 4. \url{https://doi.org/10.1167/15.6.4}
 
 \bibitem[\citeproctext]{ref-regan1988}
 Regan, M., Regan, D., 1988. A frequency domain technique for
