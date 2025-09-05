@@ -38,7 +38,7 @@ MM (participant 10) has an extra trigger in block 2 at trial 34 (35 with the fir
 XX has bad data and was removed from the bigger analysis file.
 
 ```{r}
-P <- 3
+P <- 1
 
 stimulusConditions <- matrix(NA, nrow= 39, ncol = 4)
 theEEGData <- array(NA, dim = c(64,10000,39,4))
@@ -144,8 +144,7 @@ for (condition in 1:13){
 ```{r}
 posterColours <- c("#333E47", "#6a757c", "#e31936")
 
-
-condition <- 2
+condition <- 6
 theIDX <- which(stimulusConditions == condition, arr.ind = TRUE)
 conditionEEGTemp <- matrix(NA,nrow=10000,ncol =12)
 conditionFFTTemp <- matrix(NA,nrow=10000,ncol =12)
@@ -165,8 +164,9 @@ binoc <- apply(abs(conditionFFT), 1, mean)
 binocEEG <- apply(conditionEEG, 1, mean)
 binocEEG[1:1000] <- binocEEG[1:1000] - mean(binocEEG[1:1000])
 
-png("~/Library/CloudStorage/Box-Box/Binocularity Noise/Paper_test/Figures/EEG.png", width = 6.5, height = 3.5, res = 300,units = "in", bg = "transparent")
-yLimit <- range(pretty(range(binocEEG[1:1000])))
+
+# png("~/Library/CloudStorage/Box-Box/Binocularity Noise/Paper_test/Figures/EEG.png", width = 6.5, height = 3.5, res = 300,units = "in", bg = "transparent")
+yLimit <- range(pretty(range(pretty(range(binocEEG[1:1000])))))
 plot(x = NULL, y = NULL, xlim = c(0,1000), ylim = yLimit, axes = FALSE, ann = FALSE)
 axis(1, at = pretty(c(0,1000)), tck = -.015, lwd = 2, labels = FALSE)
 axis(2, at = pretty(yLimit), tck = -.015, lwd = 2, labels = FALSE)
@@ -176,10 +176,11 @@ abline(h = 0, lwd = 2, col = "gray75")
 lines(1:1000, binocEEG[1:1000], lwd = 2, col = posterColours[1])
 mtext("Time (ms)", 1, font = 2, line = 1.5)
 mtext(bquote(bold("Electrical Potential ("*mu*"V)")), 2, font = 2, line = 2)
-dev.off()
+lines(1:1000, Real(tes[1:1000])/1000, col = "red")
+# dev.off()
 
 png("~/Library/CloudStorage/Box-Box/Binocularity Noise/Paper_test/Figures/SSVEPAmp.png", width = 8, height = 5, res = 300,units = "in", bg = "transparent")
-yLimit <- range(pretty(range(binoc[2:101])))
+yLimit <- c(0,1)
 plot(x = NULL, y = NULL, xlim = c(0,100), ylim = yLimit, axes = FALSE, ann = FALSE)
 axis(1, at = pretty(c(0,100)), tck = -.015, lwd = 2, labels = FALSE)
 axis(2, at = pretty(yLimit), tck = -.015, lwd = 2, labels = FALSE)
@@ -192,6 +193,21 @@ mtext("Frequency (Hz)", 1, font = 2, line = 1.5)
 mtext(bquote(bold("SSVEP Amplitude ("*mu*"V)")), 2, font = 2, line = 2)
 dev.off()
 ```
+
+```{r}
+binocEEG <- apply(conditionEEG, 1, mean)
+
+theFilter<- rep(0, 10000)
+theFilter[c(31,61,91,121,151,181)] <- 1
+
+fData <- fft(binocEEG)
+fData[1] <- 0
+filtered <- abs(fData) * theFilter
+tes <- fft(filtered * exp(1i*angle(fData)), inverse = TRUE)
+
+plot(Real(tes[1:1000])/1000)
+```
+
 
 ```{r}
 condition <- 5
