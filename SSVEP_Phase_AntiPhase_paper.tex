@@ -1,5 +1,4 @@
 % Options for packages loaded elsewhere
-% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
@@ -7,23 +6,21 @@
 \documentclass[
   12pt,
 ]{article}
-\usepackage{xcolor}
-\usepackage[left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry}
+
 \usepackage{amsmath,amssymb}
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math} % this also loads fontspec
+  \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\ifPDFTeX\else
-  % xetex/luatex font selection
+\ifPDFTeX\else  
+    % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -41,32 +38,23 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
+\usepackage{xcolor}
+\usepackage[left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 % Make \paragraph and \subparagraph free-standing
-\makeatletter
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}{
-    \@ifstar
-      \xxxParagraphStar
-      \xxxParagraphNoStar
-  }
-  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
-  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
   \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}{
-    \@ifstar
-      \xxxSubParagraphStar
-      \xxxSubParagraphNoStar
-  }
-  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
-  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
-\makeatother
 
 
-\usepackage{longtable,booktabs,array}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -78,21 +66,17 @@
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\newsavebox\pandoc@box
-\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
-  \sbox\pandoc@box{#1}%
-  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
-  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
-  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
-  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
-  \else\usebox{\pandoc@box}%
-  \fi%
-}
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 % Set default figure placement to htbp
+\makeatletter
 \def\fps@figure{htbp}
 \makeatother
-
-
 % definitions for citeproc citations
 \NewDocumentCommand\citeproctext{}{}
 \NewDocumentCommand\citeproc{mm}{%
@@ -126,18 +110,6 @@
 \newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
-
-
-
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
-
-
- 
-
 
 \usepackage{indentfirst}
 \setlength{\parindent}{15pt}
@@ -191,9 +163,13 @@
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
 \usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same}
+\urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
   pdftitle={Neural responses to binocular in-phase and anti-phase stimuli},
   pdfauthor={Bruno Richard; Daniel H. Baker},
@@ -203,7 +179,6 @@
   citecolor={Blue},
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
-
 
 \title{Neural responses to binocular in-phase and anti-phase stimuli}
 
@@ -240,7 +215,6 @@ framework for describing binocular combinations across various
 experimental conditions and modalities.
 \end{abstract}
 
-
 \section{Introduction}\label{introduction}
 
 The human visual system integrates input from both eyes to form a
@@ -254,10 +228,10 @@ binocularly versus monocularly (Baker et al., 2018; Blake and Wilson,
 visual system also attempts to combine inputs even when the stimuli
 presented to each eye are markedly different (i.e., incompatible). In
 such cases, observers may perceive binocular rivalry (Blake, 1989;
-Wilson, 2003), diplopia, or visual lustre (Georgeson et al., 2016).
+Wilson, 2003), diplopia, or visual lustre (Wendt and Faul, 2022).
 Despite differences in perceptual outcomes, computationally, the
 underlying processes of binocular combination for compatible and
-incompatible inputs appear similar (Baker et al., 2007a; Legge, 1984).
+incompatible inputs appear similar (Baker et al., 2007a; Legge, 1984a).
 Psychophysical responses to compatible and incompatible stimuli can be
 effectively explained by a single psychophysical model that involves
 nonlinear transduction, followed by summation across monocular and
@@ -272,7 +246,7 @@ low, binocular presentation increases sensitivity by approximately
 require roughly 1.4 times more contrast to detect a monocular stimulus
 than a binocular one. The binocular improvement in sensitivity is
 consistent with a non-linearity operating before the signals from the
-two eyes (\(C_L\) and \(C_R\)) are combined (Legge, 1984):
+two eyes (\(C_L\) and \(C_R\)) are combined (Legge, 1984a):
 \begin{equation}\phantomsection\label{eq-IntroMath1}{
 R_B = C_L^m + C_R^m.
 }\end{equation} Here, the exponent \(m\) determines the degree of
@@ -293,15 +267,15 @@ involve higher contrasts. In contrast discrimination tasks, where
 observers judge the contrast difference between otherwise identical
 stimuli, binocular presentation no longer confers a benefit in
 sensitivity: discrimination thresholds are identical whether stimuli are
-shown to one eye or both (Legge, 1984; Maehara and Goryo, 2005; Meese et
-al., 2006). However, this does not indicate that binocular summation
+shown to one eye or both (Legge, 1984a; Maehara and Goryo, 2005; Meese
+et al., 2006). However, this does not indicate that binocular summation
 does not occur at higher contrasts; the monocular signals are still
 summed (Meese et al., 2006; Meese and Baker, 2011). Instead, the
 advantage of summation is counteracted by normalization mechanisms that
 maintain consistency across viewing conditions (referred to as
-`ocularity invariance'). In contrast to gain control models of early
-vision, normalization can stem from interocular and self-suppressive
-signals (Meese et al., 2006):
+`ocularity invariance'). In gain control models of early vision,
+normalization can stem from interocular and self-suppressive signals
+(Meese et al., 2006):
 \begin{equation}\phantomsection\label{eq-intoMath2}{
 R_B = \frac{C_L^m}{S+C_L+C_R} + \frac{C_R^m}{S+C_R+C_L}.
 }\end{equation} When both eyes are stimulated, the suppressive terms on
@@ -337,45 +311,46 @@ summation.
 
 Many studies have worked towards the development of a comprehensive
 description of the process of binocular summation in human vision using
-a variety of psychophysical and neuroimaging data (Baker et al., 2008,
-2007b; Ding et al., 2013; Ding and Sperling, 2006; Legge, 1984; Lygo et
-al., 2021; Maehara and Goryo, 2005; May and Zhaoping, 2016; Richard et
-al., 2018). This is not an insignificant challenge; such a description
-must account for multiple components of early vision, including
-identifying relevant signals, defining how these signals might interact,
-what non-linearities are present, and most importantly, how these
-signals are summed and/or differenced. One model that has proven very
-informative and capable of describing binocular summation under various
-experimental conditions is the two-stage contrast gain control model
-developed by Meese et al. (2006). In a two-stage process, the model
-captured detection and discrimination thresholds for monocular and
-binocular, in addition to dichoptic (the stimuli presented to both eyes
-are not identical). First, the input is rectified by an excitatory
-non-linearity (\(m \approx 1.3\)) and normalized by self and interocular
-suppression (see Equation~\ref{eq-intoMath2}). The binocular (e.g.,
-combined) input undergoes a second contrast normalization before the
-decision stage,
+a variety of psychophysical and neuroimaging approaches (Baker et al.,
+2008, 2007b; Ding et al., 2013; Ding and Sperling, 2006; Legge, 1984a;
+Lygo et al., 2021; Maehara and Goryo, 2005; May and Zhaoping, 2016;
+Richard et al., 2018). This is not an insignificant challenge; such a
+description must account for multiple components of early vision,
+including identifying relevant signals, defining how these signals might
+interact, what non-linearities are present, and most importantly, how
+these signals are summed and/or differenced. One model that has proven
+very informative and capable of describing binocular summation under
+various experimental conditions is the two-stage contrast gain control
+model developed by Meese et al. (2006). In a two-stage process, the
+model captured detection and discrimination thresholds for monocular and
+binocular presentation, in addition to dichoptic masking (when the
+stimuli presented to both eyes are not identical). First, the input is
+rectified by an excitatory non-linearity (\(m \approx 1.3\)) and
+normalized by self and interocular suppression (see
+Equation~\ref{eq-intoMath2}). The binocular (e.g., combined) signal then
+undergoes a second contrast normalization before the decision stage,
 \begin{equation}\phantomsection\label{eq-IntroMathSecondStage}{
 R = \frac{R_B^p}{Z + R_B^q},
-}\end{equation} where the excitatory exponent \(p\) allows for greater
-sensitivity than would be seen by the excitatory non-linearity of the
-first stage (\(m\) in Equation~\ref{eq-intoMath2}) alone.
+}\end{equation} where the exponents \(p\) and \(q\) typically have quite
+large values, and determine the shape of the contrast discrimination
+(`dipper') functions.
 
 Subsequent iterations of the two-stage contrast gain control model added
 channels for opposite contrast polarities (Baker and Meese, 2007), and
-monocular channels paralleled the binocular summing channel (Georgeson
+monocular channels parallel to the binocular summing channel (Georgeson
 et al., 2016). Polarity-specific channels were included to explain
-masking effects when the stimuli presented to each eye had opposing
-phase polarities (i.e., dichoptic presentation). The presentation of
-sinusoidal gratings with opposite polarities to each eye does not cancel
-them out: the stimuli remain detectable and the two inputs can sum
-(Bacon, 1976; Baker and Meese, 2007; Simmons, 2005). Parallel monocular
-channels were added to account for adaptation after-effects that suggest
-monocular signals may be preserved and available for perception
-following binocular summation (Blake et al., 1981; Moulden, 1980).
+masking effects when the stimuli presented to each eye had opposite
+phase polarities (i.e., dichoptic presentation). Antiphase stimuli do
+not cancel each other out (as would be expected if their luminances were
+summed): the stimuli remain detectable and the two inputs can sum
+(Bacon, 1976; Baker and Meese, 2007; Simmons, 2005), at least in a
+probabilistic sense. Parallel monocular channels are consistent with
+adaptation after-effects that suggest monocular signals may be preserved
+and available for perception following binocular summation (Blake et
+al., 1981; Moulden, 1980).
 
 While the possibility of monocular channels had been considered (Legge,
-1984), many assumed that only the binocularly summed signal contributed
+1984a), many assumed that only the binocularly summed signal contributed
 to perception. Georgeson et al. (2016) developed a specific experimental
 condition to assess the involvement of monocular channels. They devised
 a discrimination task where the target interval presented a contrast
@@ -388,21 +363,22 @@ complete the task. The two-stage contrast gain control model with
 parallel monocular channels was the only model able to capture observer
 thresholds from all experimental conditions, including the binocular
 increment and decrement tasks. Evidence of an additional differencing
-channel accompanying the summing channel commonly described in binocular
-combination (Chen and Li, 1998; May et al., 2012; May and Zhaoping,
-2016) has also been accumulated. As the name implies, this channel
-encodes the difference between stimuli presented to the left and right
-eye; it is involved in early contributions to disparity processing and
-stereovision. While computational models of binocular vision do not
-explicitly include differencing channels, encoding the difference
-between monocular signals is, indirectly, included in the two-stage
-contrast gain control model defined by Georgeson et al. (2016).
+channel accompanying the summing channel commonly described in work on
+binocular combination (Chen and Li, 1998; Li and Atick, 1994; May et
+al., 2012; May and Zhaoping, 2016) has also accumulated. As the name
+implies, this channel encodes the difference between stimuli presented
+to the left and right eye; it is involved in early contributions to
+disparity processing and stereovision. While computational models of
+binocular vision do not explicitly include differencing channels,
+encoding the difference between monocular signals is, indirectly,
+included in the two-stage contrast gain control model defined by
+Georgeson et al. (2016).
 
 The current architecture of the two-stage contrast gain control model
 has been rigorously evaluated on psychophysical data, providing a solid
 foundation for our understanding of binocular combination (Baker and
 Meese, 2007; Georgeson et al., 2016; Meese et al., 2006). While previous
-studies have utilized the two-stage contrast gain control model on
+studies have applied the two-stage contrast gain control model to
 neuroimaging data (Lygo et al., 2021; Richard et al., 2018), they only
 included experimental conditions where the phases of the sinusoidal
 gratings presented to each eye were identical. To accurately assess the
@@ -412,7 +388,7 @@ phase polarity are required. Here, we recorded SSVEPs to monocular and
 binocular stimuli with different spatial and temporal phase
 relationships to obtain the data needed to evaluate the two-stage
 contrast gain control model. By progressively increasing the complexity
-of the model, we demonstrate that many mechanisms of binocular
+of the model, we demonstrate that many components of binocular
 combination, such as monocular non-linearities, interocular
 interactions, and parallel monocular channels, are required to explain
 neural responses to our set of experimental conditions. The two-stage
@@ -438,10 +414,10 @@ with minimal crosstalk was achieved by synchronizing the display's
 refresh rate with the toggling of a pair of Nvidia stereo shutter
 goggles using an infrared signal. The monitor refresh rate was set to
 120 Hz; each eye updated at 60 Hz (every 16.67 msec). The display
-resolution was set to 1920 X 1080 pixels. A single pixel subtended
-0.027\(^o\) of visual angle (1.63 arc min) when viewed from 57 cm. The
-mean luminance of the display viewed through the shutter goggles was 26
-cd/m\(^2\).
+resolution was set to \(1920 \times 1080\) pixels. A single pixel
+subtended \(0.027^\circ\) of visual angle (1.63 arc min) when viewed
+from 57 cm. The mean luminance of the display viewed through the shutter
+goggles was 26 cd/m\(^2\).
 
 EEG signals were recorded from 64 electrodes distributed across the
 scalp according to the 10/20 EEG system (Chatrian et al., 1985) in a
@@ -461,7 +437,7 @@ for subsequent offline analysis using R.
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{Figures/MethodsFigure.png}}
+\includegraphics{Figures/MethodsFigure.png}
 
 }
 
@@ -482,14 +458,14 @@ in the same manner, or in counterphase (lower plot), where as one
 stimulus increased in contrast, the other decreased in contrast (or
 increased in opposite polarity). \textbf{C}. Example SSVEPs generated
 under binocular spatial and temporal in-phase viewing of stimuli for one
-observer, with an average of four electrodes (\emph{Oz}, \emph{POz},
+observer, averaged across four electrodes (\emph{Oz}, \emph{POz},
 \emph{O1}, \emph{O2}) and 12 repetitions.}
 
 \end{figure}%
 
 Observer SSVEPs were measured with a single horizontal sinusoidal
-grating that subtended 15\(^o\) of visual angle on the retina with a
-spatial frequency of 3 cycles/\(^o\) of visual angle
+grating that subtended \(15^\circ\) of visual angle on the retina with a
+spatial frequency of 3 cycles/\(^\circ\) of visual angle
 (Figure~\ref{fig-methodFigures}A). Our experimental conditions modulated
 the interocular spatial phase of stimuli
 (Figure~\ref{fig-methodFigures}A). Under binocular viewing, the
@@ -563,9 +539,9 @@ retaining the phase information) across four occipital electrodes
 signal-to-noise ratios (SNRs) by dividing the absolute amplitude in the
 signal bin (e.g., 3 Hz) by the mean of the absolute value of the ten
 adjacent bins (\(\pm 0.5\) Hz in steps of 0.1 Hz). Given that
-distributions of SNRs are inherently skewed, the median SNR was taken
-across all participants; the median is a more robust descriptor of
-central tendency in skewed distributions.
+distributions of ratios (including SNRs) are inherently skewed, the
+median SNR was taken across all participants; the median is a more
+robust descriptor of central tendency in skewed distributions.
 
 \section{Results}\label{results}
 
@@ -573,14 +549,14 @@ central tendency in skewed distributions.
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRData-1.pdf}}
+\includegraphics{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRData-1.pdf}
 
 }
 
 \caption{\label{fig-SNRData}Cross-participant median SNRs for
 frequencies up to 20Hz. SNRs generated by On/Off flicker are shown in
 the top row (A), while those generated by counterphase flicker are shown
-in the bottom row (B). The light gray area represents 95\% bootstrap
+in the bottom row (B). The light gray area represents bootstrapped 95\%
 confidence intervals that were calculated by resampling (with
 replacement) participant SNRs 2000 times.}
 
@@ -601,27 +577,27 @@ experimental conditions, and randomly sampling them without replacement
 to create two groups of sizes identical to their original, but with
 values not associated with a particular experimental condition. The
 median difference of the randomly sampled SNRs is then taken. This
-process is repeated multiple times (e.g., \(N = 2000\)) to build a
-distribution of median differences with no association of experimental
-condition (i.e., a null-hypothesis distribution). The observed median
-difference is then compared to this distribution. The proportion of
-scores greater than the observed difference represents the \(p\) value
-associated with the test. When comparing SNRs at the fundamental
-frequency (3Hz) for On/Off flicker, we find no statistically significant
-difference in median SNR magnitude between experimental conditions where
-stimuli were presented in temporal phase (see
+process is repeated multiple times (e.g., \(N =\) 2000 iterations) to
+build a distribution of median differences with no association of
+experimental condition (i.e., a null-hypothesis distribution). The
+observed median difference is then compared to this distribution. The
+proportion of scores greater than the observed difference represents the
+\(p\) value associated with the test. When comparing SNRs at the
+fundamental frequency (3Hz) for On/Off flicker, we find no statistically
+significant difference in median SNR magnitude between experimental
+conditions where stimuli were presented in temporal phase (see
 Figure~\ref{fig-SNRComparison}). Monocular and binocular presentation
 for stimuli presented in temporal phase resulted in a similar response
 pattern under both On/Off and counterphase flicker modulations. This is
 consistent with ocularity invariance; binocular and monocular stimuli
-are judged equal in magnitude at high contrast (Baker et al., 2018;
-Legge, 1984; Maehara and Goryo, 2005; Meese et al., 2006).
+appear equal in magnitude at high contrast (Baker et al., 2007a; Meese
+et al., 2006).
 
 \begin{figure}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRComparison-1.pdf}}
+\includegraphics{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRComparison-1.pdf}
 
 }
 
@@ -646,10 +622,10 @@ some interesting impacts on the fundamental frequency
 (Figure~\ref{fig-SNRComparison}A). Stimuli presented in spatial phase
 and temporal anti-phase generated smaller SNRs (median\(_{\text{SNR}}\)
 = 2.25) than stimuli presented in spatial anti-phase and temporal phase
-(median\(_\text{SNR}\) = 3.40, \(p\) = .047). The reduction in the
+(median\(_\text{SNR}\) = 3.4, \(p\) = .047). The reduction in the
 amplitude relative to stimuli in spatial anti-phase and temporal phase
 was also observed for stimuli in temporal and spatial anti-phase
-(median\(_\text{SNR}\) = 1.70; \(p\) = .023). No other statistically
+(median\(_\text{SNR}\) = 1.7; \(p\) = .023). No other statistically
 significant difference in median SNRs were observed for all counterphase
 flicker conditions or the other harmonics for On/Off flicker (all \(p\)
 values were greater than .05). While the median SNRs under On/Off
@@ -666,7 +642,7 @@ Georgeson et al., 2016; Moulden, 1980).
 
 \subsection{Modelling}\label{modelling}
 
-The perception of stimulus contrast across eyes is well-explained by
+The perception of binocular stimulus contrast is well-explained by
 psychophysical models that process input contrast in two sequential
 contrast gain control stages interposed by binocular summation (Baker et
 al., 2008, 2007a, 2007b; Baker and Meese, 2007; Meese et al., 2006).
@@ -677,18 +653,18 @@ binocular and dichoptic stimuli (Baker and Wade, 2017; Lygo et al.,
 of binocular combination for stimuli presented at high contrast (i.e.,
 ocularity invariance) but also intriguing effects that are likely
 explainable by the most recent extension of the two-stage contrast gain
-control model, as defined in Georgeson et al. (2016). To explore the
+control model, as defined by Georgeson et al. (2016). To explore the
 architecture required to describe our effects adequately, we
 progressively increase the complexity of binocular combination,
-beginning with a wrong model (i.e., linear combination) and building up
-to a multi-channel model with monocular, binocular, and phase-selective
-pathways (Figure~\ref{fig-modelDiagram}).
+beginning with a deliberately wrong model (i.e., linear combination) and
+building up to a multi-channel model with monocular, binocular, and
+phase-selective pathways (Figure~\ref{fig-modelDiagram}).
 
 \begin{figure}
 
 \centering{
 
-\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{Figures/FullModel.png}
+\includegraphics[width=0.8\textwidth,height=\textheight]{Figures/FullModel.png}
 
 }
 
@@ -701,8 +677,8 @@ boxes. Unlike the model defined by Georgeson et al. (2016), responses
 from the parallel monocular channels are added to those of the binocular
 channels before signal selection for phase-selective channels. This
 change accounts for methodological differences when fitting neuroimaging
-data. To fit the a pink noise spectrum was added to allow for a
-comparable calculation of model SNRs as is done with human data.}
+data. A pink noise spectrum was added to allow for a comparable
+calculation of model SNRs as is done with human data.}
 
 \end{figure}%
 
@@ -720,10 +696,10 @@ c_L = A * (\cos(2 \pi ft)+1)/2,
 c_R = A * (-\cos(2 \pi ft)+1)/2.
 }\end{equation} \(A\) represents stimulus contrast (amplitude), \(f\)
 the temporal flicker frequency (i.e., 3 Hz), and \(t\) time in
-milliseconds. The input to the other eye (\(c_R\)) is phase shifted by
-180\(^o\), which can be accomplished using the negative cosine function
-(\(-cos\)). Finally, sine waves are rectified to range between 0 and 1
-to represent the relative contrast presented to observers. The same
+milliseconds. The input to the right eye (\(c_R\)) is phase shifted by
+180\(^o\), which is accomplished using the negative cosine function
+(\(-cos\)). Finally, sine waves are rectified to the range between 0 and
+1 to represent the relative contrast presented to observers. The same
 experimental condition with counterphase flicker has the following
 sinusoidal profile for the left eye,
 \begin{equation}\phantomsection\label{eq-stimInput3L}{
@@ -735,8 +711,9 @@ c_R = A * [-\cos(2 \pi ft)]_+.
 the sine waves are half-wave rectified to represent the counterphase
 oscillation. To fit model outputs (rectified sine waves) to observer
 data, the final response of the models was Fast Fourier Transformed, and
-a pink noise spectrum was added to the Fourier amplitude,
-\(|FFT(R_\text{model})|+1/f\), before calculating model SNRs. All models
+a pink noise spectrum was added to the Fourier amplitudes,
+\(|FFT(R_\text{model})|+1/f\) to simulate neural noise (see e.g.
+Donoghue et al., 2020), before calculating model SNRs. All models
 developed in this study were fit by minimizing the sum of squared errors
 between the model output and the observer median SNRs for the first 6
 SSVEP components (3Hz, 6Hz, 9Hz, 12Hz, 15Hz, and 18Hz).
@@ -744,9 +721,10 @@ SSVEP components (3Hz, 6Hz, 9Hz, 12Hz, 15Hz, and 18Hz).
 \subsubsection{Evidently wrong models}\label{evidently-wrong-models}
 
 As a first step in defining the necessary architecture to capture our
-results, we built wrong models with no monocular stage or phase
-selectivity. The first is a purely linear summation model of binocular
-combination; \begin{equation}\phantomsection\label{eq-linearSumModel}{
+results, we built baseline models with no monocular stage or phase
+selectivity that we do not expect to explain all of our effects. The
+first is a purely linear summation model of binocular combination;
+\begin{equation}\phantomsection\label{eq-linearSumModel}{
 R_B = c_L+c_R,
 }\end{equation} the binocular response (\(R_B\)) is the sum of the
 monocular inputs. The fits of the linear summation model are shown in
@@ -766,10 +744,10 @@ Equation~\ref{eq-stimInput3L}, Equation~\ref{eq-stimInput3R}) and not
 the model architecture.
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.5000}}
-  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1667}}
-  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1667}}
-  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1667}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.5000}}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1667}}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1667}}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1667}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Model
@@ -795,11 +773,6 @@ AIC
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
-\tabularnewline
-\caption{Goodness-of-fit metrics for all models compared in this study.
-Errors in predictions for the linear sum model were too large to
-calculate \(R^2\). RMSE is the Root Mean Square error and AIC is the
-Aikaike Information Criterion.}\label{tbl-R2Table}\tabularnewline
 \endlastfoot
 Linear sum & - & 3.234 & 281.99 \\
 Linear sum, with Rectification & 0.575 & 1.405 & 197.95 \\
@@ -808,29 +781,33 @@ Two-Stage, with interocular interactions & 0.81 & 0.94 & 158.62 \\
 Two-Stage with parallel monocular channels & 0.877 & 0.756 & 135.1 \\
 Two-Stage with phase-selective channels \& monocular channels & 0.876 &
 0.759 & 135.39 \\
+\caption{Goodness-of-fit metrics for all models compared in this study.
+Errors in predictions for the linear sum model were too large to
+calculate \(R^2\). RMSE is the Root Mean Square error and AIC is the
+Aikaike Information Criterion.}\label{tbl-R2Table}\tabularnewline
 \end{longtable}
 
 Responses of neurons to contrast in the visual system are well-modeled
 by a saturating non-linearity: as contrast increases, the magnitude of
 responses saturates (the rise in response per unit contrast decreases at
-higher contrast values; Heeger (1992)). The saturating non-linearity can
+higher contrast values (Heeger, 1992)). The saturating non-linearity can
 be modeled in different ways, but generally contains a divisive
 suppression and an exponentiation of the excitatory and inhibitory
 inputs. Including suppression can aid the model in better capturing the
 magnitude of responses in our observers, while exponents introduce the
 non-linearities required to generate responses at the harmonic
-frequencies. Thus, the next increment in our model complexity defines
-the binocular response as the contrast gain control equation
-\begin{equation}\phantomsection\label{eq-firstBinocSum}{
+frequencies. Thus, the next increment of model complexity defines the
+binocular response as the contrast gain control equation (after Legge,
+1984b): \begin{equation}\phantomsection\label{eq-firstBinocSum}{
 R_B = \frac{(c_L+c_R)^p}{Z+(c_L+c_R)^q},
 }\end{equation} where the binocular response of the model (\(R_B\)) is
 defined as the sum of monocular inputs (\(c_L\) and \(c_R\)) raised to
 the power \(p\) normalized by the sum of monocular inputs raised to the
 power \(q\) and where (\(p\) \textgreater{} \(q\)). The parameter Z
-prevents division by zero. The model can now generate responses at the
-harmonic frequencies for stimuli presented in temporal phase under
-On/Off flicker (see Figure~\ref{fig-badModels1} and
-Table~\ref{tbl-R2Table}). While this model iteration improves on the
+prevents division by zero and sets overall sensitivity. The model can
+now generate responses at the harmonic frequencies for stimuli presented
+in temporal phase under On/Off flicker (see Figure~\ref{fig-badModels1}
+and Table~\ref{tbl-R2Table}). While this model iteration improves on the
 fits, it nevertheless struggles to fit SNR values at the fundamental
 frequency (3Hz) and is, as with the linear summation model, incapable of
 generating responses to stimuli presented with On/Off flicker in
@@ -843,7 +820,7 @@ adequately.
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-badModels1-1.pdf}}
+\includegraphics{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-badModels1-1.pdf}
 
 }
 
@@ -851,7 +828,7 @@ adequately.
 rectified linear sum (brown) models. Boxplots behind model responses
 show the distribution of observer SNRs. Model SNRs were fit to the
 median SNR of observers, which is represented by the thicker line within
-the box.}
+each box.}
 
 \end{figure}%
 
@@ -862,24 +839,25 @@ The simple models described above could not accurately represent the
 observer SSVEPs we recorded. They overestimated SNRs at the fundamental
 frequency and failed to generate responses for stimuli presented in
 temporal anti-phase with On/Off flicker. A potential model refinement is
-adding a monocular transducer before binocular combination Baker et al.
-(2018). The architecture of this model now begins with a monocular stage
-\begin{equation}\phantomsection\label{eq-firstStageofTwoNoInter}{
+adding a monocular transducer before binocular combination (Meese et
+al., 2006). The architecture of this model now begins with a monocular
+stage \begin{equation}\phantomsection\label{eq-firstStageofTwoNoInter}{
 r_L = \frac{c_L^m}{S + c_L}, \qquad r_R = \frac{c_R^m}{S + c_R}
-}\end{equation} where a non-linearity (\(m\)) is applied to the
-monocular inputs (\(c_L\) and \(c_R\)) in addition to self-suppression.
-The outputs of the monocular stage are then fed into a binocular stage
-that undergoes a second contrast gain control,
+}\end{equation} where an exponent (\(m\)) is applied to the monocular
+inputs (\(c_L\) and \(c_R\)) in addition to self-suppression. The
+outputs of the monocular stage are then fed into a binocular stage that
+undergoes a second contrast gain control,
 \begin{equation}\phantomsection\label{eq-binocComb}{
 R_{B} = \frac{(r_L+r_R)^p}{Z+(r_L+r_R)^q}.
-}\end{equation} In this model variant, \(m\) is the monocular excitatory
-component and determines the extent of summation at detection threshold,
-moderated by the suppressive term. In the second stage, \(p > q\) as
+}\end{equation} In this model variant, \(m\) is the monocular exponent
+that determines the extent of summation at detection threshold, with
+moderation by the suppressive term. In the second stage, \(p > q\) as
 with Equation~\ref{eq-firstBinocSum}, which is necessary to capture the
-facilitative effects of dichoptic masking (Meese et al., 2006). We can
+mild facilitatory effects of dichoptic masking (Meese et al., 2006), and
+determines the shape of contrast discrimination functions. We can
 strengthen the normalization of the monocular input by adding
 interocular suppression and replacing
-Equation~\ref{eq-firstStageofTwoNoInter} (the first stage) with
+Equation~\ref{eq-firstStageofTwoNoInter} (the first stage) with:
 \begin{equation}\phantomsection\label{eq-firstStageofTwo}{
 r_{L} = \frac{c_L^m}{S + c_L + c_R}, \qquad r_R = \frac{c_R^m}{S + c_R + c_L}.
 }\end{equation} This model iteration is identical to the two-stage
@@ -889,7 +867,7 @@ contrast gain control model defined by Meese et al. (2006).
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-betterModels-1.pdf}}
+\includegraphics{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-betterModels-1.pdf}
 
 }
 
@@ -897,7 +875,7 @@ contrast gain control model defined by Meese et al. (2006).
 control model without (green) and with (red) interocular suppression.
 Boxplots behind model responses show the distribution of observer SNRs.
 Model SNRs were fit to the median SNR of observers, which is represented
-by the thicker line within the box.}
+by the thicker line within each box.}
 
 \end{figure}%
 
@@ -926,11 +904,12 @@ anti-phase.
 \subsubsection{Parallel Monocular and Phase-Selective
 Channels}\label{parallel-monocular-and-phase-selective-channels}
 
-Observer SNRs for stimuli presented in temporal anti-phase contain a
-binocular and monocular response to stimuli. To preserve the monocular
-response in the modelling, we add parallel monocular channels to the
-two-stage contrast gain control model, similar to Georgeson et al.
-(2016). These channels are fully monocular and do not include
+Based on the models described above, observer SSVEPs for stimuli
+presented in temporal anti-phase imply the presence of both a binocular
+and monocular response in the population response. To preserve the
+monocular response in the modelling, we add parallel monocular channels
+to the two-stage contrast gain control model, similar to Georgeson et
+al. (2016). These channels are fully monocular and do not include
 interocular suppression,
 \begin{equation}\phantomsection\label{eq-monocFirstStage}{
 \mu_L = \frac{C_L^m}{S + C_L}, \qquad  \mu_R = \frac{C_R^m}{S + C_R}.
@@ -957,7 +936,7 @@ right (\(R_R\)), and binocular (\(R_B\)). Psychophysically, cue
 selection has been implemented as a Minkowski sum with a large
 (\(\approx 30\)) exponent (Georgeson et al., 2016), approximating a MAX
 rule. This method is inappropriate when modelling neural data, as the
-recordings from the scalp represent an amalgamation of all channel cues
+recordings from the scalp represent an amalgamation of all responses
 generated by the stimuli (Wade and Baker, 2025). Our model output must
 therefore represent the combination of signals instead of the selection
 of the strongest signal. Here, it is implemented as the sum of the
@@ -966,21 +945,21 @@ preserves the amplitude responses required to generate SSVEPs and
 prevents the nullifying of responses from summing signals in anti-phase.
 
 Preserving monocular responses until the output stage with parallel
-monocular channels improved our data's fit (see Table~\ref{tbl-R2Table}
-and Figure~\ref{fig-bestModels}). The model now captures responses at
-the fundamental (3Hz) and odd-integer harmonics (9Hz and 15Hz) of the
-temporal anti-phase conditions under On/Off flicker. Monocular signals,
-while weaker than binocular signals, are preserved in the neural
-responses of observers and thus must be accounted for in their
-computational description. As defined by Georgeson et al. (2016),
-parallel monocular channels appear to be an adequate descriptor of
-monocular signals.
+monocular channels improved the fit to our data (see
+Table~\ref{tbl-R2Table} and Figure~\ref{fig-bestModels}). The model now
+captures responses at the fundamental (3Hz) and odd-integer harmonics
+(9Hz and 15Hz) of the temporal anti-phase conditions under On/Off
+flicker. Monocular signals, while weaker than binocular signals, are
+preserved in the neural responses of observers and thus must be
+accounted for in their computational description. As proposed by
+Georgeson et al. (2016), parallel monocular channels appear to be an
+adequate descriptor of monocular signals.
 
 \begin{figure}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-bestModels-1.pdf}}
+\includegraphics{SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-bestModels-1.pdf}
 
 }
 
@@ -997,7 +976,7 @@ two-stage contrast gain control often includes phase-selective channels
 to account for these effects. Our study found little evidence of any
 influence of spatial phase on observer SSVEPs, as no statistically
 significant difference in signal-to-noise ratios across spatial phase
-was found. Still, we opt it prudent to verify if adding phase-selective
+was found. Still, we felt it prudent to verify if adding phase-selective
 channels improves the fit of the model to our data. Phase-selectivity
 was added to the binocular and monocular channels by replicating the
 equations of the first and second stage, for six channels (see
@@ -1009,7 +988,7 @@ the responses of all six channels in this model.
 Model responses were generated from sine waves (in temporal phase or
 anti-phase) fed into their respective positive or negative phase
 channels. This simulated the spatial phase of stimuli presented to
-observers. We refer to this model iteration as the whole model, as it
+observers. We refer to this model iteration as the full model, as it
 includes a binocular channel with a monocular stage (with interocular
 interactions), a binocular stage, parallel monocular channels (with
 their respective stages), and phase-selectivity. This is, in essence,
@@ -1019,11 +998,11 @@ the addition of monocular channels, including phase-selectivity to the
 model means we now have six final signals to contend with: a binocular
 and two monocular channels selective for positive spatial phase, and a
 binocular and two monocular channels selective for negative spatial
-phase. We utilized the same method of combining signals as above: we
-first summed the Fourier amplitude spectra of observers across the
-positive and negative phase-selective channels and then combined the
-binocular and monocular channels. The inclusion of phase-selectivity did
-not improve the model's fit. The \(R^2\) value calculated across the six
+phase. We used the same method of combining signals as above: we first
+summed the Fourier amplitude spectra of observers across the positive
+and negative phase-selective channels and then combined the binocular
+and monocular channels. The inclusion of phase-selectivity did not
+improve the model's fit. The \(R^2\) value calculated across the six
 frequencies and nine experimental conditions was no different than that
 of the previous model (see Table~\ref{tbl-R2Table}), indicating that the
 spatial phase of stimuli does not have a meaningful impact on the SSVEP
@@ -1035,27 +1014,27 @@ The computational architecture of binocular combination, under the
 two-stage contrast gain control model framework, has been carefully
 evaluated on psychophysical data (Baker and Meese, 2007; Georgeson et
 al., 2016; Meese et al., 2006), yet its ability to explain neural data
-has only been explored on a limited set of stimulus conditions (Lygo et
-al., 2021; Richard et al., 2018). This study investigated the effects of
-stimulus spatial and temporal phase on observer SSVEPs. We explored the
-ability of the two-stage contrast gain control model - and its variants
-- to capture our neural data. On/Off flicker generated responses at the
-fundamental frequency (3Hz) and its harmonics (6Hz, 9Hz, 12Hz, and 15Hz)
-while counterphase flicker generated responses at twice the fundamental
-frequency (6Hz) and its even integer harmonics (12Hz and 18Hz). No
-statistically significant difference was found between the monocular and
-binocular conditions presented with On/Off or counterphase flicker. This
-is consistent with ocularity invariance; binocular and monocular stimuli
-are judged equal in magnitude at high contrast (Baker et al., 2018;
-Legge, 1984; Maehara and Goryo, 2005; Meese et al., 2006). We
+has only been explored on a limited set of stimulus conditions (Baker
+and Wade, 2017; Lygo et al., 2021; Richard et al., 2018). This study
+investigated the effects of stimulus spatial and temporal phase on
+observer SSVEPs. We explored the ability of the two-stage contrast gain
+control model - and its variants - to capture our neural data. On/Off
+flicker generated responses at the fundamental frequency (3Hz) and its
+harmonics (6Hz, 9Hz, 12Hz, and 15Hz) while counterphase flicker
+generated responses at twice the fundamental frequency (6Hz) and its
+even integer harmonics (12Hz and 18Hz). No statistically significant
+difference was found between the monocular and binocular conditions
+presented with On/Off or counterphase flicker. This is consistent with
+ocularity invariance; binocular and monocular stimuli appear equal in
+magnitude at high contrast (Baker et al., 2007a; Meese et al., 2006). We
 additionally found no statistically significant differences in SSVEPs
 for all stimulus conditions under counterphase flicker.
 
 Presenting stimuli in temporal anti-phase reduced the magnitude of
 responses at the fundamental frequency (3Hz) compared to its temporal
-phase counterpart, but was not abolished. This finding indicates that,
-even under binocular viewing, monocular signals can be measured at the
-scalp with SSVEPs. Our modeling confirmed this as only the two-stage
+phase counterpart, but they were not abolished. This finding indicates
+that, even under binocular viewing, monocular signals can be measured at
+the scalp with SSVEPs. Our modeling confirmed this as only the two-stage
 contrast gain control model with parallel monocular channels, which
 preserves monocular signals throughout the model architecture, could
 accurately capture the data in all experimental conditions. Simpler
@@ -1072,7 +1051,7 @@ conditions.
 It has long been assumed by most computational descriptions of binocular
 combination that only the binocular response was available to later
 stages of perception and decision (Baker and Meese, 2007; Ding et al.,
-2013; Ding and Sperling, 2006; Legge, 1984; Meese et al., 2006). The
+2013; Ding and Sperling, 2006; Legge, 1984a; Meese et al., 2006). The
 monocular pathways, which represent the early stages of the visual
 processing stream, only serve as the input to combine. However,
 psychophysical evidence from adaptation and discrimination experiments
@@ -1089,7 +1068,7 @@ found SSVEPs at 3Hz that exceeded the noise level in our data. These 3Hz
 components represent the individual oscillations for each eye and are
 therefore likely representative of a monocular response. The reduction
 in response magnitude of the 3Hz component we observed from the temporal
-in-phase conditions to the temporal anti-phase can thus be explained as
+in-phase to the temporal anti-phase conditions can thus be explained as
 the transition from a binocular to an inadvertently weaker monocular
 response.
 
@@ -1100,13 +1079,13 @@ the SNR spectra of our observers. Parallel monocular channels were
 critical in capturing observer data in the two temporal anti-phase
 conditions presented with On/Off flicker. Without adding these channels,
 the models could not generate a response at the fundamental (3Hz) or its
-odd integer harmonics. While an essential inclusion to our study, the
-addition of monocular channels did not meaningfully alter the ability of
-the two-stage contrast gain control model to capture observer SNRs in
-the other experimental conditions. Monocular contributions to the model
-output are most significant when the stimulus contrast between the two
-eyes differs (Georgeson et al., 2016), an experimental scenario we did
-not explore here.
+odd integer harmonics. While an essential inclusion to explain our data,
+the addition of monocular channels did not meaningfully alter the
+ability of the two-stage contrast gain control model to capture observer
+SNRs in the other experimental conditions. Monocular contributions to
+the model output are most significant for perception when the stimulus
+contrast between the two eyes differs (Georgeson et al., 2016), an
+experimental scenario we did not explore here.
 
 \paragraph{SSVEP responses to spatial
 phase}\label{ssvep-responses-to-spatial-phase}
@@ -1120,10 +1099,12 @@ sensitivity to the stimuli. It is therefore odd to find little to no
 influence of spatial phase on the SSVEPs of observers, particularly as
 SSVEP amplitude is associated with perceptual sensitivity (Bosse et al.,
 2018; Campbell and Kulikowski, 1972; Campbell and Maffei, 1970; Norcia
-et al., 2015). The absence of an apparent spatial phase effect also
-complicates our ability to describe the contributions of a differencing
-channel in our study (Chen and Li, 1998; May et al., 2012; May and
-Zhaoping, 2016).
+et al., 2015). However, we note that at high contrasts (as used here),
+perceived contrast is equivalent between in-phase and antiphase stimuli
+(Baker et al., 2012). The absence of an apparent spatial phase effect
+also complicates our ability to investigate any contributions of a
+differencing channel in our study (Chen and Li, 1998; May et al., 2012;
+May and Zhaoping, 2016).
 
 Spatial phase-dependent effects in SSVEPs have been recorded with motion
 stimuli (Cottereau et al., 2014; Kohler et al., 2018). The dichoptic
@@ -1145,24 +1126,25 @@ phase-insensitive responses.
 
 We investigated the effects of stimulus spatial and temporal phase on
 observer SSVEPs and explored the necessary computational components to
-explain our data. We worked under the two-stage contrast gain control
-model of binocular vision (Meese et al., 2006). We examined the impact
-of interocular interactions, parallel monocular channels, and
-phase-selective channels on the model's fit with our data. The most
-significant effect to capture was the presence of odd-integer harmonics
-in the temporal anti-phase conditions, representing the monocular
-response to stimuli. This was well-explained by adding parallel
-monocular channels to the model. The two-stage contrast gain control
-model of binocular combination remains a robust descriptor of binocular
-vision as it can explain various experimental conditions and modalities
-(psychophysics and neuroimaging).
+explain our data. We worked under the framework of the two-stage
+contrast gain control model of binocular vision (Meese et al., 2006). We
+examined the impact of interocular interactions, parallel monocular
+channels, and phase-selective channels on the model's fit with our data.
+The most significant effect to capture was the presence of odd-integer
+harmonics in the temporal anti-phase conditions, representing the
+monocular response to stimuli. This was well-explained by adding
+parallel monocular channels to the model. The two-stage contrast gain
+control model of binocular combination remains a robust descriptor of
+binocular vision as it can explain various experimental conditions and
+modalities (psychophysics and neuroimaging).
 
 \section{Data and Code Availability}\label{data-and-code-availability}
 
 We provide the raw (.cnt) and processed (.RData) observer SSVEPs and all
 code used in this study have been made available on the Open Science
 Framework and can be accessed using the following project link:
-https://osf.io/cn894/.
+https://osf.io/cn894/. A computationally reproducible version of this
+manuscript is available at the linked GitHub repository.
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
@@ -1206,6 +1188,11 @@ human vision. Neuroscience 146, 435--448.
 Baker, D.H., Wade, A.R., 2017. Evidence for an optimal algorithm
 underlying signal combination in human visual cortex. Cereb Cortex 27,
 254--264. \url{https://doi.org/10.1093/cercor/bhw395}
+
+\bibitem[\citeproctext]{ref-Baker2012}
+Baker, D.H., Wallis, S.A., Georgeson, M.A., Meese, T.S., 2012. The
+effect of interocular phase difference on perceived contrast. PLoS ONE
+7, e34696. \url{https://doi.org/10.1371/journal.pone.0034696}
 
 \bibitem[\citeproctext]{ref-Blake1989}
 Blake, R., 1989. A neural theory of binocular rivalry. Psychol Rev 96,
@@ -1277,6 +1264,13 @@ Ding, J., Sperling, G., 2006. A gain-control theory of binocular
 combination. Proc Natl Acad Sci U S A 103, 1141--6.
 \url{https://doi.org/10.1073/pnas.0509629103}
 
+\bibitem[\citeproctext]{ref-Donoghue2020}
+Donoghue, T., Haller, M., Peterson, E.J., Varma, P., Sebastian, P., Gao,
+R., Noto, T., Lara, A.H., Wallis, J.D., Knight, R.T., Shestyuk, A.,
+Voytek, B., 2020. Parameterizing neural power spectra into periodic and
+aperiodic components. Nat Neurosci 23, 1655--1665.
+\url{https://doi.org/10.1038/s41593-020-00744-x}
+
 \bibitem[\citeproctext]{ref-Georgeson2016}
 Georgeson, M.A., Wallis, S.A., Meese, T.S., Baker, D.H., 2016. Contrast
 and lustre: A model that accounts for eleven different forms of contrast
@@ -1306,12 +1300,22 @@ functional significance of binocular cues for perceiving
 motion-in-depth. Nature Communications 9, 3511.
 \url{https://doi.org/10.1038/s41467-018-05918-7}
 
+\bibitem[\citeproctext]{ref-Legge1984b}
+Legge, G.E., 1984b. Binocular contrast summation--II. Quadratic
+summation. Vision Res 24, 385--94.
+\url{https://doi.org/10.1016/0042-6989(84)90064-6}
+
 \bibitem[\citeproctext]{ref-Legge1984a}
-Legge, G.E., 1984. Binocular contrast summation--i. Detection and
+Legge, G.E., 1984a. Binocular contrast summation--i. Detection and
 discrimination. Vision Res 24, 373--83.
 \url{https://doi.org/10.1016/0042-6989(84)90063-4}
 
-\bibitem[\citeproctext]{ref-Lygoetal2020}
+\bibitem[\citeproctext]{ref-Li1994}
+Li, Z., Atick, J.J., 1994. Efficient stereo coding in the multiscale
+representation. Network: Computation in Neural Systems 5, 157â174.
+\url{https://doi.org/10.1088/0954-898x_5_2_003}
+
+\bibitem[\citeproctext]{ref-Lygo2021}
 Lygo, F.A., Richard, B., Wade, A.R., Morland, A.B., Baker, D.H., 2021.
 Neural markers of suppression in impaired binocular vision. Neuroimage
 230, 117780. \url{https://doi.org/10.1016/j.neuroimage.2021.117780}
@@ -1394,6 +1398,10 @@ visual system using the steady state visually evoked potential (SSVEP).
 Vision Research 231, 108614.
 \url{https://doi.org/10.1016/j.visres.2025.108614}
 
+\bibitem[\citeproctext]{ref-Wendt2022}
+Wendt, G., Faul, F., 2022. A simple model of binocular luster. J Vis 22,
+6. \url{https://doi.org/10.1167/jov.22.10.6}
+
 \bibitem[\citeproctext]{ref-Wilson2003}
 Wilson, H.R., 2003. Computational evidence for a rivalry hierarchy in
 vision. Proceedings of the National Academy of Sciences of the United
@@ -1401,7 +1409,6 @@ States of America 100, 14499--14503.
 \url{https://doi.org/10.1073/pnas.2333622100}
 
 \end{CSLReferences}
-
 
 
 
