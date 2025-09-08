@@ -1,0 +1,555 @@
+---
+title: "All models"
+output: html_document
+date: "2025-09-08"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Preliminaries
+
+Get packages
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+packagelist <- c('R.matlab','pracma','EnvStats')
+
+missingpackages <- packagelist[!packagelist %in% installed.packages()[,1]]
+if (length(missingpackages)>0){install.packages(missingpackages)}
+toinstall <- packagelist[which(!packagelist %in% (.packages()))]
+invisible(lapply(toinstall,library,character.only=TRUE))
+
+addalpha <- function(col, alpha=1){apply(sapply(col, col2rgb)/255, 2, function(x) rgb(x[1], x[2], x[3], alpha=alpha))}
+
+nSamples <- 2000 # change to 2000
+
+```
+
+Define Colours, Participants, Conditions
+
+```{r setupchunk, echo=FALSE}
+posterColours <- c("#333E47", "#6a757c", "#e31936")
+posterColoursRamped <- colorRampPalette(posterColours, space = "Lab", interpolate = "spline")(8)
+categoricalPalette <- c("#333E47","#3B5C62","#777079", "#4A6F74","#B94256", "#5E767B", "#955F6D", "#E31835")
+
+theParticipants <- c("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015")
+theConditions <- c("Monocular", "Spatial In-Phase\nTemporal In-Phase", "Spatial Anti-Phase\nTemporal In-Phase", "Spatial In-Phase\nTemporal Anti-Phase","Spatial Anti-Phase\nTemporal Anti-Phase","Monocular", "Spatial In-Phase\nTemporal In-Phase", "Spatial Anti-Phase\nTemporal In-Phase", "Spatial In-Phase\nTemporal Anti-Phase")
+```
+
+Get participant data
+
+```{r loadProcessedData, echo = FALSE}
+currentDirectory <- getwd()
+processedEEGdir <- paste0(currentDirectory, "/Processed Data/")
+
+theParticipantFiles <- list.files(processedEEGdir)
+allPConditionData <- array(NA, dim = c(200,13,length(theParticipantFiles)))
+
+for (P in 1:length(theParticipantFiles)){
+  load(paste0(currentDirectory, "/Processed Data/", theParticipantFiles[P]))
+  allPConditionData[,,P] <- avgSNRCondition2
+}
+
+allPConditionData[1,,] <- 1
+
+pAveragedSNRLog <- apply(allPConditionData, c(1,2), median, na.rm = TRUE)
+gratingsHumansAVG <- pAveragedSNRLog[,4:12]
+gratingsHumansIDV <- allPConditionData[, 4:12, ]
+pAveragedSNRLog <- apply(allPConditionData, c(1,2), median, na.rm = TRUE)
+
+theFs <- c(31, 61, 91, 121, 151, 181)
+theHData <- pAveragedSNRLog[theFs, 4:12]
+```
+
+## Model Starting Parameters
+
+```{r startingParameters, echo = FALSE}
+m <- 1.31
+S <-1
+
+p <- 6.42
+q <- 5.20
+Z <- .013
+scale <- 8
+```
+
+## Define the error function for data fitting
+
+```{r getModelErrorFunction, echo = FALSE}
+theErrorFunction <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus, humanData, model){
+  theFs <- c(31,61,91,121,151,181)
+  SNR <- array(NA, dim = c(length(theFs), dim(CL.Plus)[2]))
+  
+  for (i in 1:dim(CR.Minus)[2]){
+    if (model == "linearSum"){
+      modelResponse <- linearModel(params, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
+    } else if (model == "linearModelRectification"){
+      modelResponse <- linearModelRectification(params, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
+    } else if (model == "twoStageNoMonocularInteractions"){
+      modelResponse <- twoStageNoMonocularInteractions(params, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
+    } else if (model == "twoStageWithMonocularInteractions"){
+      modelResponse <- twoStageWithMonocularInteractions(params, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
+    } else if (model == "twoStageWithMonocularChannels"){
+      modelResponse <- twoStageWithMonocularChannels(params, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
+    } else if (model == "twoStageWithMonocularChannelsPhase"){
+      modelResponse <- twoStageWithMonocularChannelsPhase(params, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
+    } else if (model == "twoStagePhaseOnlyNoMonoc"){
+      modelResponse <- twoStagePhaseOnlyNoMonoc(params, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
+    }
+    
+    for (f in 1:length(theFs)){
+      IDX <- ((theFs[f]-5):(theFs[f]+5))
+      IDX <- IDX[IDX != theFs[f]]
+      SNR[f,i] <- abs(modelResponse[theFs[f]])/mean(abs(modelResponse[IDX]))
+    }
+  }
+  
+  err <- base::sum((SNR-humanData)**2)
+  return(err)
+}
+```
+
+## Define all experimental conditions for input to models
+
+```{r defineExperimentalConditions, echo = FALSE}
+timeF <- seq(0,10,.01)
+maxContrast <- 1
+
+CL.Plus <- data.frame(MonocCM = maxContrast * (-cos(2*pi*3*timeF)+1)/2, BinocCM = NA, BinocSpatialAntiCM = NA, BinocTemporalAntiCM = NA, BinocSpatialTemporalAntiCM = NA, MonocPR = maxContrast * (-cos(2*pi*6*timeF)+1)/2, BinocPR = NA, BinocSpatialAntiPR = NA, BinocTemporalAntiPR = NA)
+CL.Minus <- data.frame(MonocCM = rep(0, length(timeF)), BinocCM = NA, BinocSpatialAntiCM = NA, BinocTemporalAntiCM = NA, BinocSpatialTemporalAntiCM = NA, MonocPR = rep(0, length(timeF)), BinocPR = NA, BinocSpatialAntiPR = NA, BinocTemporalAntiPR = NA)
+CR.Plus <- data.frame(MonocCM = rep(0, length(timeF)), BinocCM = NA, BinocSpatialAntiCM = NA, BinocTemporalAntiCM = NA, BinocSpatialTemporalAntiCM = NA, MonocPR = rep(0, length(timeF)), BinocPR = NA, BinocSpatialAntiPR = NA, BinocTemporalAntiPR = NA)
+CR.Minus <- data.frame(MonocCM = rep(0, length(timeF)), BinocCM = NA, BinocSpatialAntiCM = NA, BinocTemporalAntiCM = NA, BinocSpatialTemporalAntiCM = NA, MonocPR = rep(0, length(timeF)), BinocPR = NA, BinocSpatialAntiPR = NA, BinocTemporalAntiPR = NA)
+
+CL.Plus$BinocCM <-  maxContrast * (-cos(2*pi*3*timeF)+1)/2
+CL.Minus$BinocCM <- 0 
+CR.Plus$BinocCM <-  maxContrast * (-cos(2*pi*3*timeF)+1)/2
+CR.Minus$BinocCM <- 0
+
+CL.Plus$BinocSpatialAntiCM <- maxContrast * (-cos(2*pi*3*timeF)+1)/2
+CL.Minus$BinocSpatialAntiCM <- 0
+CR.Plus$BinocSpatialAntiCM <- 0
+CR.Minus$BinocSpatialAntiCM <- maxContrast * (-cos(2*pi*3*timeF)+1)/2
+
+CL.Plus$BinocTemporalAntiCM <- maxContrast * (-cos(2*pi*3*timeF)+1)/2
+CL.Minus$BinocTemporalAntiCM <- 0 
+CR.Plus$BinocTemporalAntiCM <- maxContrast * (cos(2*pi*3*timeF)+1)/2
+CR.Minus$BinocTemporalAntiCM <- 0
+
+CL.Plus$BinocSpatialTemporalAntiCM <- maxContrast * (-cos(2*pi*3*timeF)+1)/2
+CL.Minus$BinocSpatialTemporalAntiCM <- 0 
+CR.Plus$BinocSpatialTemporalAntiCM <- 0
+CR.Minus$BinocSpatialTemporalAntiCM <- maxContrast * (cos(2*pi*3*timeF)+1)/2
+
+CL.Plus$MonocPR <- maxContrast * pmax(-cos(2*pi*3*timeF),0)
+CL.Minus$MonocPR <- maxContrast * pmax(cos(2*pi*3*timeF),0)
+CR.Plus$MonocPR <- 0
+CR.Minus$MonocPR <- 0
+
+CL.Plus$BinocPR <- maxContrast * pmax(-cos(2*pi*3*timeF),0)
+CL.Minus$BinocPR <- maxContrast * pmax(cos(2*pi*3*timeF),0)
+CR.Plus$BinocPR <- maxContrast * pmax(-cos(2*pi*3*timeF),0)
+CR.Minus$BinocPR <- maxContrast * pmax(cos(2*pi*3*timeF),0)
+
+CL.Plus$BinocSpatialAntiPR <- maxContrast * pmax(-cos(2*pi*3*timeF),0)
+CL.Minus$BinocSpatialAntiPR <- maxContrast * pmax(cos(2*pi*3*timeF),0)
+CR.Plus$BinocSpatialAntiPR <- maxContrast * pmax(cos(2*pi*3*timeF),0)
+CR.Minus$BinocSpatialAntiPR <- maxContrast * pmax(-cos(2*pi*3*timeF),0)
+
+CL.Plus$BinocTemporalAntiPR <- maxContrast * pmax(-cos(2*pi*3*timeF),0)
+CL.Minus$BinocTemporalAntiPR <- maxContrast * pmax(cos(2*pi*3*timeF),0)
+CR.Plus$BinocTemporalAntiPR <- maxContrast * pmax(cos(2*pi*3*timeF),0)
+CR.Minus$BinocTemporalAntiPR <- maxContrast * pmax(-cos(2*pi*3*timeF),0)
+```
+
+# Evidently wrong models
+
+Linear Sum and Linear Sum with rectification
+
+```{r twoBadModels, echo = FALSE}
+linearModel <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
+  scale <- params[1]
+  RB <- CL.Plus + CR.Plus + CL.Minus + CR.Minus
+  
+  RB <- RB + scale
+  CombinedF <- fft(RB)/length(RB)
+  CombinedAmp <- abs(CombinedF)
+  CombinedAmp[1] <- 0
+  
+  pinkNoise <- 1/(1:(length(RB)/2))**1
+  pinkNoise <- c(0,pinkNoise,rev(pinkNoise))
+  
+  pinkNoiseCombined <- CombinedAmp + pinkNoise
+  return(pinkNoiseCombined)
+}
+
+linearModelRectification <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
+  p <- exp(params[1])
+  q <- exp(params[2])
+  S <- exp(params[3])
+  scale <- params[4]
+  
+  RB <- (CL.Plus + CR.Plus + CL.Minus + CR.Minus)**p / (S + (CL.Plus + CR.Plus + CL.Minus + CR.Minus)**q)
+  
+  RB <- RB + scale
+  CombinedF <- fft(RB)/length(RB)
+  CombinedAmp <- abs(CombinedF)
+  CombinedAmp[1] <- 0
+  
+  pinkNoise <- 1/(1:(length(RB)/2))**1
+  pinkNoise <- c(0,pinkNoise,rev(pinkNoise))
+  
+  pinkNoiseCombined <- CombinedAmp + pinkNoise
+  return(pinkNoiseCombined)
+}
+```
+
+## Fit bad models to the data
+
+```{r fitBadModels, echo = FALSE}
+params <- scale
+linearSum.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData,model = "linearSum",  method = "Brent", lower = -10, upper = 10)
+
+params <- c(log(c(p,q,Z)), scale)
+linearRectificaton.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "linearModelRectification", control = list(maxit = 5000))
+```
+
+## Get bad model data
+
+```{r evalBadModels, echo = FALSE}
+SNRAll <- array(NA, dim = c(length(theFs), dim(CL.Plus)[2],6))
+
+R2 <- NULL
+rmsE <- NULL
+AIC <- NULL
+SSE <- NULL
+k <- NULL
+n <- NULL
+SNR <- array(NA, dim = c(length(theFs), dim(CL.Plus)[2]))
+
+modelResponse <- matrix(NA, nrow = 1001, ncol = 9)
+for (i in 1:9){
+  modelResponse[,i] <- linearModel(linearSum.params$par, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
+  
+  
+  for (f in 1:length(theFs)){
+    IDX <- ((theFs[f]-5):(theFs[f]+5))
+    IDX <- IDX[IDX != theFs[f]]
+    SNR[f,i] <- abs(modelResponse[theFs[f],i])/mean(abs(modelResponse[IDX,i]))
+  }
+}
+
+ssError <- sum((SNR - theHData)**2)
+ssTotal <- sum((theHData - mean(theHData))**2)
+
+k[1] <- length(linearSum.params$par)
+n[1] <- length(theHData)
+mse <- ssError/length(theHData)
+
+R2[1] <- 1-(ssError/ssTotal)
+rmsE[1] <- sqrt(ssError/length(SNR))
+AIC[1] <- 2*k[1] + n[1]*log(mse) + n[1]*log(2*pi) + n[1]
+SSE[1] <- ssError
+
+SNRAll[,,1] <- SNR
+
+
+SNR <- array(NA, dim = c(length(theFs), dim(CL.Plus)[2]))
+modelResponse <- matrix(NA, nrow = 1001, ncol = 9)
+for (i in 1:9){
+  modelResponse[,i] <- linearModelRectification(linearRectificaton.params$par, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
+  
+  for (f in 1:length(theFs)){
+    IDX <- ((theFs[f]-5):(theFs[f]+5))
+    IDX <- IDX[IDX != theFs[f]]
+    SNR[f,i] <- abs(modelResponse[theFs[f],i])/mean(abs(modelResponse[IDX,i]))
+  }
+}
+
+ssError <- sum((SNR - theHData)**2)
+ssTotal <- sum((theHData - mean(theHData))**2)
+
+k[2] <- length(linearRectificaton.params$par)
+n[2] <- length(theHData)
+mse <- ssError/length(theHData)
+
+R2[2] <- 1-(ssError/ssTotal)
+rmsE[2] <- sqrt(ssError/length(SNR))
+AIC[2] <- 2*k[2] + n[2]*log(mse) + n[2]*log(2*pi) + n[2]
+SSE[2] <- ssError
+
+SNRAll[,,2] <- SNR
+```
+
+# Two stage contrast gain control models
+
+```{r definebettermodels, echo = FALSE}
+twoStageNoMonocularInteractions <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
+  m <- exp(params[1])
+  p <- exp(params[2])
+  q <- exp(params[3])
+  S <- exp(params[4])
+  Z <- exp(params[5])
+  scale <- params[6]
+  
+  LeftEye <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus))
+  RightEye <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus))
+  
+  RCGCSum <- ((LeftEye + RightEye)**p / (Z + (LeftEye + RightEye)**q))+scale
+  
+  # Add Noise
+  fftSignal <- fft(RCGCSum)/length(RCGCSum)
+  fftSignal.Amp <- abs(fftSignal)
+  fftSignal.Amp[1] <- 0
+  
+  # Make Pink Noise
+  pinkNoise <- 1/(1:(length(RCGCSum)/2))**1
+  pinkNoise <- c(0,pinkNoise,rev(pinkNoise))
+  pinkAmp <- fftSignal.Amp + pinkNoise
+  return(pinkAmp)
+}
+
+twoStageWithMonocularInteractions <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
+  m <- exp(params[1])
+  p <- exp(params[2])
+  q <- exp(params[3])
+  S <- exp(params[4])
+  Z <- exp(params[5])
+  scale <- params[6]
+  
+  LeftEye <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus + CR.Plus + CR.Minus))
+  RightEye <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus + CL.Plus + CL.Minus))
+  
+  RCGCSum <- ((LeftEye + RightEye)**p / (Z + (LeftEye + RightEye)**q))+scale
+  
+  # Add Noise
+  fftSignal <- fft(RCGCSum)/length(RCGCSum)
+  fftSignal.Amp <- abs(fftSignal)
+  fftSignal.Amp[1] <- 0
+  
+  # Make Pink Noise
+  pinkNoise <- 1/(1:(length(RCGCSum)/2))**1
+  pinkNoise <- c(0,pinkNoise,rev(pinkNoise))
+  pinkAmp <- fftSignal.Amp + pinkNoise
+  return(pinkAmp)
+}
+```
+
+### Fit the two variants of the two stage contrast gain control model
+
+```{r fitbettermodels, echo = FALSE}
+params <- c(log(c(m,p,q,S,Z)), scale)
+twoStageNoMonoc.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageNoMonocularInteractions", control = list(maxit = 5000))
+
+params <- c(log(c(m,p,q,S,Z)), scale)
+twoStageWithMonoc.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageWithMonocularInteractions", control = list(maxit = 5000))
+```
+
+### Get data from the two variants of the two stage contrast gain control model
+
+```{r evalBetterModels, echo = FALSE}
+SNR <- array(NA, dim = c(length(theFs), dim(CL.Plus)[2]))
+modelResponse <- matrix(NA, nrow = 1001, ncol = 9)
+for (i in 1:9){
+  modelResponse[,i] <- twoStageNoMonocularInteractions(twoStageNoMonoc.params$par, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
+  
+  for (f in 1:length(theFs)){
+    IDX <- ((theFs[f]-5):(theFs[f]+5))
+    IDX <- IDX[IDX != theFs[f]]
+    SNR[f,i] <- abs(modelResponse[theFs[f],i])/mean(abs(modelResponse[IDX,i]))
+  }
+}
+
+ssError <- sum((SNR - theHData)**2)
+ssTotal <- sum((theHData - mean(theHData))**2)
+
+k[3] <- length(twoStageNoMonoc.params$par)
+n[3] <- length(theHData)
+mse <- ssError/length(theHData)
+
+R2[3] <- 1-(ssError/ssTotal)
+rmsE[3] <- sqrt(ssError/length(SNR))
+AIC[3] <- 2*k[3] + n[3]*log(mse) + n[3]*log(2*pi) + n[3]
+SSE[3] <- ssError
+
+SNRAll[,,3] <- SNR
+
+###################################
+
+SNR <- array(NA, dim = c(length(theFs), dim(CL.Plus)[2]))
+modelResponse <- matrix(NA, nrow = 1001, ncol = 9)
+for (i in 1:9){
+  modelResponse[,i] <- twoStageWithMonocularInteractions(twoStageWithMonoc.params$par, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
+  
+  for (f in 1:length(theFs)){
+    IDX <- ((theFs[f]-5):(theFs[f]+5))
+    IDX <- IDX[IDX != theFs[f]]
+    SNR[f,i] <- abs(modelResponse[theFs[f],i])/mean(abs(modelResponse[IDX,i]))
+  }
+}
+
+ssError <- sum((SNR - theHData)**2)
+ssTotal <- sum((theHData - mean(theHData))**2)
+
+k[4] <- length(twoStageWithMonoc.params$par)
+n[4] <- length(theHData)
+mse <- ssError/length(theHData)
+
+R2[4] <- 1-(ssError/ssTotal)
+rmsE[4] <- sqrt(ssError/length(SNR))
+AIC[4] <- 2*k[4] + n[4]*log(mse) + n[4]*log(2*pi) + n[4]
+SSE[4] <- ssError
+
+SNRAll[,,4] <- SNR
+```
+
+# Define the two stage contrast gain control model with parallel monocular channels and phase-selectivity
+
+```{r definebestmodels, echo =  FALSE}
+twoStageWithMonocularChannels <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
+  m <- exp(params[1])
+  p <- exp(params[2])
+  q <- exp(params[3])
+  S <- exp(params[4])
+  Z <- exp(params[5])
+  scale <- params[6]
+  
+  LeftEye <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus + CR.Plus + CR.Minus))
+  RightEye <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus + CL.Plus + CL.Minus))
+  RCGCSum <- ((LeftEye + RightEye)**p / (Z + (LeftEye + RightEye)**q))+scale
+  
+  LeftEyeMonoc <- (CL.Plus + CL.Minus)**m / (S+(CL.Plus + CL.Minus))
+  RightEyeMonoc <- (CR.Plus + CR.Minus)**m / (S+(CR.Plus + CR.Minus)) 
+  
+  LeftEyeStage2 <- LeftEyeMonoc**p/(Z + LeftEyeMonoc**q)
+  RightEyeStage2 <- RightEyeMonoc**p/(Z + RightEyeMonoc**q)
+  
+  ## Signal Combination
+  combinedSignal <- abs(fft(RCGCSum)/length(RCGCSum)) + abs(fft(LeftEyeStage2)/length(LeftEyeStage2)) + abs(fft(RightEyeStage2)/length(RightEyeStage2))
+  combinedSignal.scaled <- combinedSignal + scale                   
+  
+  # Add Noise
+  # fftSignal <- fft(combinedSignal)/length(combinedSignal)
+  # fftSignal.Amp <- abs(fftSignal)
+  # fftSignal.Amp[1] <- 0
+  
+  # Make Pink Noise
+  pinkNoise <- 1/(1:(length(RCGCSum)/2))**1
+  pinkNoise <- c(0,pinkNoise,rev(pinkNoise))
+  pinkAmp <- combinedSignal.scaled + pinkNoise
+  return(pinkAmp)
+}
+
+twoStageWithMonocularChannelsPhase <- function(params, CL.Plus, CL.Minus, CR.Plus, CR.Minus){
+  m <- exp(params[1])
+  p <- exp(params[2])
+  q <- exp(params[3])
+  S <- exp(params[4])
+  Z <- exp(params[5])
+  scale <- params[6]
+  
+  LeftEye.Plus <- (CL.Plus)**m / (S+(CL.Plus+ CR.Plus))
+  LeftEye.Minus <- (CL.Minus)**m / (S+(CL.Minus + CR.Minus))
+  
+  RightEye.Plus <- (CR.Plus)**m / (S+(CR.Plus + CL.Plus))
+  RightEye.Minus <- (CR.Minus)**m / (S+(CR.Minus + CL.Minus))
+  
+  RCGCSum.Plus <- ((LeftEye.Plus + RightEye.Plus)**p / (Z + (LeftEye.Plus + RightEye.Plus)**q))+scale
+  RCGCSum.Minus <- ((LeftEye.Minus + RightEye.Minus)**p / (Z + (LeftEye.Minus + RightEye.Minus)**q))+scale
+  
+  # Monoc Responses
+  LeftEyeMonoc.Plus <- CL.Plus**m / (S+CL.Plus)
+  LeftEyeMonoc.Minus <- CL.Minus**m / (S+CL.Minus)
+  
+  RightEyeMonoc.Plus <- CR.Plus**m / (S+CR.Plus)
+  RightEyeMonoc.Minus <- CR.Minus**m / (S+CR.Minus)
+  
+  LeftEyeStage2.Plus <- LeftEyeMonoc.Plus**p/(Z + LeftEyeMonoc.Plus**q)
+  LeftEyeStage2.Minus <- LeftEyeMonoc.Minus**p/(Z + LeftEyeMonoc.Minus**q)
+  
+  RightEyeStage2.Plus <- RightEyeMonoc.Plus**p/(Z + RightEyeMonoc.Plus**q)
+  RightEyeStage2.Minus <- RightEyeMonoc.Minus**p/(Z + RightEyeMonoc.Minus**q)
+  
+  ##### Signal combination
+  
+  binocChannel <- RCGCSum.Plus + RCGCSum.Minus
+  monocLChannel <- LeftEyeStage2.Plus + LeftEyeStage2.Minus
+  monocRChannel <- RightEyeStage2.Plus + RightEyeStage2.Minus
+  
+  combinedSignal <- abs(fft(binocChannel)/length(binocChannel)) + abs(fft(monocLChannel)/length(monocLChannel)) + abs(fft(monocRChannel)/length(monocRChannel))
+  combinedSignal.scaled <- combinedSignal + scale
+  
+  # Make Pink Noise
+  pinkNoise <- 1/(1:(length(RCGCSum.Plus)/2))**1
+  pinkNoise <- c(0,pinkNoise,rev(pinkNoise))
+  pinkAmp <- combinedSignal.scaled + pinkNoise
+  return(pinkAmp)
+}
+```
+
+### Fit the two final models
+
+```{r fitBestModels, echo = FALSE}
+params <- c(log(c(m,p,q,S,Z)), scale)
+twoStageWithMonocChannels.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageWithMonocularChannels", control = list(maxit = 5000))
+
+params <- c(log(c(m,p,q,S,Z)), scale)
+twoStageWithMonocChannelsPhase.params <- optim(params, theErrorFunction, CL.Plus = CL.Plus, CL.Minus = CL.Minus, CR.Plus = CR.Plus, CR.Minus = CR.Minus, humanData = theHData, model = "twoStageWithMonocularChannelsPhase", control = list(maxit = 5000))
+```
+
+## Get data for the two best models
+
+```{r evalbestModels, echo = FALSE}
+SNR <- array(NA, dim = c(length(theFs), dim(CL.Plus)[2]))
+modelResponse <- matrix(NA, nrow = 1001, ncol = 9)
+for (i in 1:9){
+  modelResponse[,i] <- twoStageWithMonocularChannels(twoStageWithMonocChannels.params$par, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
+  
+  for (f in 1:length(theFs)){
+    IDX <- ((theFs[f]-5):(theFs[f]+5))
+    IDX <- IDX[IDX != theFs[f]]
+    SNR[f,i] <- abs(modelResponse[theFs[f],i])/mean(abs(modelResponse[IDX,i]))
+  }
+}
+
+ssError <- sum((SNR - theHData)**2)
+ssTotal <- sum((theHData - mean(theHData))**2)
+
+k[5] <- length(twoStageWithMonocChannels.params$par)
+n[5] <- length(theHData)
+mse <- ssError/length(theHData)
+
+R2[5] <- 1-(ssError/ssTotal)
+rmsE[5] <- sqrt(ssError/length(SNR))
+AIC[5] <- 2*k[5] + n[5]*log(mse) + n[5]*log(2*pi) + n[5]
+SSE[5] <- ssError
+
+SNRAll[,,5] <- SNR
+
+######################
+
+SNR <- array(NA, dim = c(length(theFs), dim(CL.Plus)[2]))
+modelResponse <- matrix(NA, nrow = 1001, ncol = 9)
+for (i in 1:9){
+  modelResponse[,i] <- twoStageWithMonocularChannelsPhase(twoStageWithMonocChannelsPhase.params$par, CL.Plus[,i], CL.Minus[,i], CR.Plus[,i], CR.Minus[,i])
+  
+  for (f in 1:length(theFs)){
+    IDX <- ((theFs[f]-5):(theFs[f]+5))
+    IDX <- IDX[IDX != theFs[f]]
+    SNR[f,i] <- abs(modelResponse[theFs[f],i])/mean(abs(modelResponse[IDX,i]))
+  }
+}
+
+ssError <- sum((SNR - theHData)**2)
+ssTotal <- sum((theHData - mean(theHData))**2)
+
+k[6] <- length(twoStageWithMonocChannelsPhase.params$par)
+n[6] <- length(theHData)
+mse <- ssError/length(theHData)
+
+R2[6] <- 1-(ssError/ssTotal)
+rmsE[6] <- sqrt(ssError/length(SNR))
+AIC[6] <- 2*k[6] + n[6]*log(mse) + n[6]*log(2*pi) + n[6]
+SSE[6] <- ssError
+SNRAll[,,6] <- SNR
+```
