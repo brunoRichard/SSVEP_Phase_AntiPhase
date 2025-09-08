@@ -1,145 +1,13 @@
 ---
-title: "ProcessEEGData"
+title: "ProcessEEG Figure Code"
 output: html_document
-date: "2024-07-08"
+date: "2025-09-08"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-~/Library/CloudStorage/GoogleDrive-brichard21@gmail.com/.shortcut-targets-by-id/1mhzB6Bm-yAwNrG1a7MkMaBWWAMHzl07L/binocularitynoise/existingscripts/Analysis expt 1/R/reProcessEEG.Rmd
-
-```{r}
-library(R.matlab)
-library(pracma)
-library(addAlpha)
-library(wesanderson)
-
-colours <- wes_palette("IsleofDogs1")
-coloursT <- add.alpha(colours)
-
-is.pc <- .Platform$OS.type == "windows"
-```
-
-```{r}
-theParticipants <- c("BJ", "BR", "DHB", "FL", "GV", "JM", "KR", "LEH", "LH", "MM", "MVH", "RZ", "SO", "TNL", "XX", "YUN")
-```
-
-```{r}
-if (is.pc){
-  theBlockDirectory <- "G:/.shortcut-targets-by-id/1mhzB6Bm-yAwNrG1a7MkMaBWWAMHzl07L/binocularitynoise/Experiment1data/"
-} else {
-  theBlockDirectory <- "~/Google Drive/My Drive/YORK/binocularitynoise/Experiment1data/"
-}
-```
-
-MM (participant 10) has an extra trigger in block 2 at trial 34 (35 with the first 0 trigger) - 35 (trial 35 happened 1 sample after trial 34) - manually fixed by removing trial 34.
-XX has bad data and was removed from the bigger analysis file.
-
-```{r}
-P <- 1
-
-stimulusConditions <- matrix(NA, nrow= 39, ncol = 4)
-theEEGData <- array(NA, dim = c(64,10000,39,4))
-theFFTData <- array(NA, dim = c(64,10000,39,4))
-
-blankTime <- 4000
-duration <- 10000
-
-for (BLOCK in 1:4){
-  theFile <- readMat(paste0(theBlockDirectory, theParticipants[P], "/EEG_", theParticipants[P], "BLOCK", BLOCK, ".mat"))
-  
-  if (P == 15 | P == 16){
-    stimulusConditionsTemp <- as.numeric(unlist(theFile$EEG[,,1]$event["type",1,]))
-    stimulusConditionsTemp[1] <- 0
-    triggerTimes <- unlist(theFile$EEG[,,1]$event["latency",1,])*1000
-  } else {
-    stimulusConditionsTemp <- unlist(theFile$EEG[,,1]$triggers["type",1,])
-    triggerTimes <- unlist(theFile$EEG[,,1]$triggers["offset",1,])
-    if (P == 10 & BLOCK == 2){
-      stimulusConditionsTemp <- stimulusConditionsTemp[-35]
-      triggerTimes <- triggerTimes[-35]
-    }
-  }
-  
-  electrodes <- unlist(theFile$EEG["label",,1]$label)
-  
-  triggerTimes <- triggerTimes[!(stimulusConditionsTemp %in% c(0, 99))] 
-  stimulusConditions[, BLOCK] <- stimulusConditionsTemp[!(stimulusConditionsTemp %in% c(0, 99))]
-  for (event in 1:length(stimulusConditions[, BLOCK])){
-    for (channel in 1:(length(electrodes)-2)){
-      theEEGData[channel,,event,BLOCK] <- theFile$EEG[,,1]$data[channel, (triggerTimes[event]+blankTime):(triggerTimes[event]+duration+blankTime-1)]
-      theFFTData[channel,,event,BLOCK] <- fft(theFile$EEG[,,1]$data[channel, (triggerTimes[event]+blankTime):(triggerTimes[event]+duration+blankTime-1)])/10000
-    }
-  }
-}
-```
-
-```{r}
-theChannels <- c("Oz", "POz", "O1", "O2")
-eData <- theEEGData[electrodes[1:64] %in% theChannels,,,]
-eFFTData <- theFFTData[electrodes[1:64] %in% theChannels,,,]
-```
-
-```{r, eval = FALSE}
-
-block <- 2
-plot(1:10000,eData[1,,trial,block]-mean(eData[1,,trial,block]), type = "l")
-lines(1:10000, eData[2,,trial,block]-mean(eData[2,,trial,block]), col = "red")
-lines(1:10000, eData[3,,trial,block]-mean(eData[3,,trial,block]), col = "blue")
-lines(1:10000, eData[4,,trial,block]-mean(eData[4,,trial,block]), col = "magenta")
-
-plot(1:100, abs(eFFTData[1,2:101,trial,block]), type = "l", col = coloursT[4])
-abline(v = 30)
-lines(1:100, abs(eFFTData[2,2:101,trial,block]), col = coloursT[4])
-lines(1:100, abs(eFFTData[3,2:101,trial,block]), col = coloursT[4])
-lines(1:100, abs(eFFTData[4,2:101,trial,block]), col = coloursT[4])
-lines(1:100, abs(apply(eFFTData[,2:101,trial,block],2,mean)), col = colours[2], lwd = 2)
-
-c(electrodes[1:64] %in% theChannels)*1:64
-```
-
-```{r}
-eAvgFFTData <- apply(eFFTData,c(2,3,4),mean)
-eAvgEEGData <- apply(eData, c(2,3,4), mean)
-avgSNRCondition <- array(NA, dim = c(200,13))
-for (condition in 1:13){
-  theIDX <- which(stimulusConditions == condition, arr.ind = TRUE)
-  
-  conditionEEGTemp <- matrix(NA,nrow=10000,ncol =12)
-  conditionFFTTemp <- matrix(NA,nrow=10000,ncol =12)
-  
-  for (rep in 1:12){
-    conditionEEGTemp[,rep] <- eAvgEEGData[,theIDX[rep,1], theIDX[rep,2]]
-    conditionFFTTemp[,rep] <- eAvgFFTData[,theIDX[rep,1], theIDX[rep,2]]
-  }
-  
-  tempxy <- data.frame(Re(conditionFFTTemp[31,]),Im(conditionFFTTemp[31,]))
-  D <- sqrt(mahalanobis(tempxy,colMeans(tempxy),cov(tempxy)))
-  outIDX <- which(D < 3)
-  conditionFFT <- conditionFFTTemp[ ,outIDX]
-  conditionEEG <- conditionEEGTemp[ ,outIDX]
-  
-  SNRData <- matrix(0, nrow = 200, ncol = dim(conditionFFT)[2])
-  SNRData2 <- matrix(0, nrow = 200, ncol = dim(conditionFFT)[2])
-  
-  for (trial in 1:dim(conditionFFT)[2]){
-    for (f in 5:200){
-      SNRData[f,trial] <- abs(conditionFFT[f, trial])/mean(abs(conditionFFT[c((f-5),(f+5)), trial]))
-      
-    }
-  }
-  
-  avgSNRCondition[,condition] <- apply(SNRData, 1, mean)
-}
-
-# if (is.pc){
-#   save(avgSNRCondition, file = paste0("C:/Users/Bruno/Box/Binocularity Noise/Reprocessed/reprocessedData_P", theParticipants[P], ".RData"))
-# } else {
-#   save(avgSNRCondition, file = paste0("~/Library/CloudStorage/Box-Box/Binocularity Noise/Reprocessed/reprocessedData_P", theParticipants[P], ".RData"))
-# }
-```
 
 ```{r}
 posterColours <- c("#333E47", "#6a757c", "#e31936")
@@ -194,19 +62,6 @@ mtext(bquote(bold("SSVEP Amplitude ("*mu*"V)")), 2, font = 2, line = 2)
 dev.off()
 ```
 
-```{r}
-binocEEG <- apply(conditionEEG, 1, mean)
-
-theFilter<- rep(0, 10000)
-theFilter[c(31,61,91,121,151,181)] <- 1
-
-fData <- fft(binocEEG)
-fData[1] <- 0
-filtered <- abs(fData) * theFilter
-tes <- fft(filtered * exp(1i*angle(fData)), inverse = TRUE)
-
-plot(Real(tes[1:1000])/1000)
-```
 
 
 ```{r}
@@ -274,7 +129,6 @@ abline(v = c(31, 61, 91), lty = 2, col = colours[5])
 lines(2:100, abs(eAvgFFTData[2:100,theIDX[2,1], theIDX[2,2]]),col = colours[6], lwd = 2)
 text(c(32,62,92), 3.05, paste0(c(3,6,9), "Hz"), adj = 0, cex = .8)
 
-
 yLimit <- c(1,4)
 xLimit <- c(0,100)
 plot(x = NULL, y = NULL, xlim = xLimit, ylim = yLimit, axes = FALSE, ann = FALSE)
@@ -290,13 +144,6 @@ text(c(32,62,92), 4.05, paste0(c(3,6,9), "Hz"), adj = 0, cex = .8)
 lines(2:100, avgSNRCondition[2:100,6],col = colours[6], lwd = 2)
 # dev.off()
 ```
-
-```{r}
-
-```
-
-
-
 
 ```{r, fig.width=15}
 xLim = c(0,200)
@@ -339,6 +186,8 @@ for (II in 1:3){
   }
 }
 ```
+
+
 
 
 

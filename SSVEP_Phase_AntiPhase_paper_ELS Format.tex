@@ -4,9 +4,9 @@
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 %
-\documentclass[
+\documentclass[review,
   12pt,
-]{article}
+]{elsarticle}
 \usepackage{xcolor}
 \usepackage[left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry}
 \usepackage{amsmath,amssymb}
@@ -134,22 +134,17 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
-
-
- 
-
-
 \usepackage{indentfirst}
 \setlength{\parindent}{15pt}
 \setlength{\parskip}{10pt}
 \usepackage[font=small]{caption}  % Options: small, footnotesize, scriptsize, etc.
-\usepackage[noblocks]{authblk}
-\renewcommand*{\Authsep}{, }
-\renewcommand*{\Authand}{, }
-\renewcommand*{\Authands}{, }
-\renewcommand\Affilfont{\small}
+%\usepackage[noblocks]{authblk}
+%\renewcommand*{\Authsep}{, }
+%\renewcommand*{\Authand}{, }
+%\renewcommand*{\Authands}{, }
+%\renewcommand\Affilfont{\small}
 % Define a keywords command for inline keywords
-\newcommand{\printkeywords}[1]{\noindent\textbf{Keywords:} #1\par}
+%\newcommand{\printkeywords}[1]{\noindent\textbf{Keywords:} #1\par}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -204,19 +199,21 @@
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
+\begin{document}
+
+\begin{frontmatter}
 
 \title{Neural responses to binocular in-phase and anti-phase stimuli}
 
-  \author[1]{Bruno Richard}
-  \author[2]{Daniel H. Baker}
+\author[inst1]{Bruno Richard\corref{cor1}}
+\cortext[cor1]{Corresponding author}
+\ead{br379@newark.rutgers.edu}
 
-      \affil[1]{Department of Math and Computer Sciences, Rutgers
-University, Newark, New Jersey, USA}
-      \affil[2]{Department of Psychology, University of York, York, UK}
-  
-\date{}
-\begin{document}
-\maketitle
+\author[inst2]{Daniel H. Baker}
+
+\address[inst1]{Department of Math and Computer Sciences, Rutgers University, Newark, New Jersey, USA}
+\address[inst2]{Department of Psychology, University of York, York, UK}
+
 \begin{abstract}
 Binocular vision fuses similar inputs from the two eyes into a single
 percept, whereas incompatible inputs can produce rivalry, lustre, or
@@ -240,6 +237,22 @@ framework for describing binocular combinations across various
 experimental conditions and modalities.
 \end{abstract}
 
+\begin{keyword}
+Binocular Combination \sep SSVEP \sep Contrast Gain Control \sep Phase Selectivity \sep Monocular Channels
+\end{keyword}
+
+\end{frontmatter}
+
+
+%\title{Neural responses to binocular in-phase and anti-phase stimuli}
+
+%  \author[1]{Bruno Richard}
+%  \author[2]{Daniel H. Baker}
+
+%      \affil[1]{Department of Math and Computer Sciences, Rutgers
+%University, Newark, New Jersey, USA}
+%      \affil[2]{Department of Psychology, University of York, York, UK}
+  
 
 \section{Introduction}\label{introduction}
 

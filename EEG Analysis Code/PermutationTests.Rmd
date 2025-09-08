@@ -1,0 +1,130 @@
+---
+title: "Permutation Tests"
+output: html_document
+date: "2025-09-08"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Preliminaries
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+packagelist <- c('R.matlab','pracma','EnvStats')
+
+missingpackages <- packagelist[!packagelist %in% installed.packages()[,1]]
+if (length(missingpackages)>0){install.packages(missingpackages)}
+toinstall <- packagelist[which(!packagelist %in% (.packages()))]
+invisible(lapply(toinstall,library,character.only=TRUE))
+
+addalpha <- function(col, alpha=1){apply(sapply(col, col2rgb)/255, 2, function(x) rgb(x[1], x[2], x[3], alpha=alpha))}
+
+nSamples <- 2000 # change to 2000
+
+```
+
+```{r setupchunk, echo=FALSE}
+posterColours <- c("#333E47", "#6a757c", "#e31936")
+posterColoursRamped <- colorRampPalette(posterColours, space = "Lab", interpolate = "spline")(8)
+categoricalPalette <- c("#333E47","#3B5C62","#777079", "#4A6F74","#B94256", "#5E767B", "#955F6D", "#E31835")
+
+theParticipants <- c("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015")
+theConditions <- c("Monocular", "Spatial In-Phase\nTemporal In-Phase", "Spatial Anti-Phase\nTemporal In-Phase", "Spatial In-Phase\nTemporal Anti-Phase","Spatial Anti-Phase\nTemporal Anti-Phase","Monocular", "Spatial In-Phase\nTemporal In-Phase", "Spatial Anti-Phase\nTemporal In-Phase", "Spatial In-Phase\nTemporal Anti-Phase")
+```
+
+```{r loadProcessedData, echo = FALSE}
+currentDirectory <- getwd()
+processedEEGdir <- paste0(currentDirectory, "/Processed Data/")
+
+theParticipantFiles <- list.files(processedEEGdir)
+allPConditionData <- array(NA, dim = c(200,13,length(theParticipantFiles)))
+
+for (P in 1:length(theParticipantFiles)){
+  load(paste0(currentDirectory, "/Processed Data/", theParticipantFiles[P]))
+  allPConditionData[,,P] <- avgSNRCondition2
+}
+
+allPConditionData[1,,] <- 1
+
+pAveragedSNRLog <- apply(allPConditionData, c(1,2), median, na.rm = TRUE)
+gratingsHumansAVG <- pAveragedSNRLog[,4:12]
+gratingsHumansIDV <- allPConditionData[, 4:12, ]
+pAveragedSNRLog <- apply(allPConditionData, c(1,2), median, na.rm = TRUE)
+
+theFs <- c(31, 61, 91, 121, 151, 181)
+theHData <- pAveragedSNRLog[theFs, 4:12]
+```
+
+# Permutation test - On/Off
+
+Determine the statistical significance of median SNRs across conditions by frequency
+
+```{r, permTest for ONOFF, echo = FALSE}
+set.seed(42)
+perms <- combn(1:5, 2)
+pValue <- NULL
+mDiffReal <- NULL
+theFs <- c(31,61,91,121,151,181)
+
+theTestResults <- array(NA, dim = c(4,dim(perms)[2],length(theFs)))
+for (iii in 1:length(theFs)){
+  for (ii in 1:dim(perms)[2]){
+    theMeds <- apply(gratingsHumansIDV[theFs[iii],c(perms[1,ii],perms[2,ii]),], 1, median)
+    mDiffReal[ii] <- theMeds[1]-theMeds[2]
+    subset <- gratingsHumansIDV[theFs[iii],c(perms[1,ii],perms[2,ii]),]
+    
+    mDiff <- NULL
+    for (i in 1:nSamples){
+      IDX1 <- sample(1:length(subset), length(subset)/2, replace = FALSE)
+      IDX2 <- setdiff(1:length(subset),IDX1)
+      mDiff[i] <- median(subset[IDX1]) - median(subset[IDX2])
+    }
+    pValue[ii] <- mean(mDiff > mDiffReal[ii])
+  }
+  
+  theTestResults[,,iii] <- rbind(perms, mDiffReal, pValue)
+}
+```
+
+# Permutation test - Phase Selectivity
+
+Make sure the SNRs of the temporal anti-phase conditions are greater than 1.0
+
+```{r permtestforSNR1Cond4, echo = FALSE}
+set.seed(42)
+
+theMedian <- median(gratingsHumansIDV[31,4,])
+subset <- gratingsHumansIDV[31,4,]
+randomSignsMedian <- NULL
+
+diff <- subset - 1
+
+for (i in 1:nSamples){
+  IDX1 <- sample(c(-1,1), length(subset), replace = TRUE)
+  randomSigns <- abs(diff) * IDX1
+  randomSignsMedian[i] <- sum(randomSigns)
+}
+
+statistic <- abs(sum(diff))
+pValue <- mean(randomSignsMedian >= statistic)
+```
+
+```{r, permtestforSNR1Cond5, echo = FALSE}
+set.seed(42)
+
+theMedian <- median(gratingsHumansIDV[31,5,])
+subset <- gratingsHumansIDV[31,5,]
+randomSignsMedian <- NULL
+
+diff <- subset - 1
+
+for (i in 1:nSamples){
+  IDX1 <- sample(c(-1,1), length(subset), replace = TRUE)
+  randomSigns <- abs(diff) * IDX1
+  randomSignsMedian[i] <- sum(randomSigns)
+}
+
+statistic <- abs(sum(diff))
+pValue <- mean(randomSignsMedian >= statistic)
+```

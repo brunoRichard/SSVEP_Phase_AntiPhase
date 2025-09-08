@@ -1,0 +1,121 @@
+---
+title: "ProcessEEGData"
+output: html_document
+date: "2024-07-08"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(R.matlab)
+library(pracma)
+library(addAlpha)
+library(wesanderson)
+
+colours <- wes_palette("IsleofDogs1")
+coloursT <- add.alpha(colours)
+
+is.pc <- .Platform$OS.type == "windows"
+```
+
+```{r}
+theParticipants <- c("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015")
+```
+
+```{r}
+  theBlockDirectory <- "YOUR DIRECTORY"
+```
+
+Select the participant who's data you want to process. 
+
+```{r}
+P <- 1
+```
+
+MM (participant 10) has an extra trigger in block 2 at trial 34 (35 with the first 0 trigger) - manually fixed by removing trial 34.
+
+```{r}
+stimulusConditions <- matrix(NA, nrow= 39, ncol = 4)
+theEEGData <- array(NA, dim = c(64,10000,39,4))
+theFFTData <- array(NA, dim = c(64,10000,39,4))
+
+blankTime <- 4000
+duration <- 10000
+
+for (BLOCK in 1:4){
+  theFile <- readMat(paste0(theBlockDirectory, theParticipants[P], "/EEG_", theParticipants[P], "BLOCK", BLOCK, ".mat"))
+  
+  if (P == 15 | P == 16){
+    stimulusConditionsTemp <- as.numeric(unlist(theFile$EEG[,,1]$event["type",1,]))
+    stimulusConditionsTemp[1] <- 0
+    triggerTimes <- unlist(theFile$EEG[,,1]$event["latency",1,])*1000
+  } else {
+    stimulusConditionsTemp <- unlist(theFile$EEG[,,1]$triggers["type",1,])
+    triggerTimes <- unlist(theFile$EEG[,,1]$triggers["offset",1,])
+    if (P == 10 & BLOCK == 2){
+      stimulusConditionsTemp <- stimulusConditionsTemp[-35]
+      triggerTimes <- triggerTimes[-35]
+    }
+  }
+  
+  electrodes <- unlist(theFile$EEG["label",,1]$label)
+  
+  triggerTimes <- triggerTimes[!(stimulusConditionsTemp %in% c(0, 99))] 
+  stimulusConditions[, BLOCK] <- stimulusConditionsTemp[!(stimulusConditionsTemp %in% c(0, 99))]
+  for (event in 1:length(stimulusConditions[, BLOCK])){
+    for (channel in 1:(length(electrodes)-2)){
+      theEEGData[channel,,event,BLOCK] <- theFile$EEG[,,1]$data[channel, (triggerTimes[event]+blankTime):(triggerTimes[event]+duration+blankTime-1)]
+      theFFTData[channel,,event,BLOCK] <- fft(theFile$EEG[,,1]$data[channel, (triggerTimes[event]+blankTime):(triggerTimes[event]+duration+blankTime-1)])/10000
+    }
+  }
+}
+```
+
+```{r}
+theChannels <- c("Oz", "POz", "O1", "O2")
+eData <- theEEGData[electrodes[1:64] %in% theChannels,,,]
+eFFTData <- theFFTData[electrodes[1:64] %in% theChannels,,,]
+```
+
+```{r}
+eAvgFFTData <- apply(eFFTData,c(2,3,4),mean)
+eAvgEEGData <- apply(eData, c(2,3,4), mean)
+avgSNRCondition <- array(NA, dim = c(200,13))
+for (condition in 1:13){
+  theIDX <- which(stimulusConditions == condition, arr.ind = TRUE)
+  
+  conditionEEGTemp <- matrix(NA,nrow=10000,ncol =12)
+  conditionFFTTemp <- matrix(NA,nrow=10000,ncol =12)
+  
+  for (rep in 1:12){
+    conditionEEGTemp[,rep] <- eAvgEEGData[,theIDX[rep,1], theIDX[rep,2]]
+    conditionFFTTemp[,rep] <- eAvgFFTData[,theIDX[rep,1], theIDX[rep,2]]
+  }
+  
+  tempxy <- data.frame(Re(conditionFFTTemp[31,]),Im(conditionFFTTemp[31,]))
+  D <- sqrt(mahalanobis(tempxy,colMeans(tempxy),cov(tempxy)))
+  outIDX <- which(D < 3)
+  conditionFFT <- conditionFFTTemp[ ,outIDX]
+  conditionEEG <- conditionEEGTemp[ ,outIDX]
+  
+  SNRData <- matrix(0, nrow = 200, ncol = dim(conditionFFT)[2])
+  SNRData2 <- matrix(0, nrow = 200, ncol = dim(conditionFFT)[2])
+  
+  for (trial in 1:dim(conditionFFT)[2]){
+    for (f in 5:200){
+      SNRData[f,trial] <- abs(conditionFFT[f, trial])/mean(abs(conditionFFT[c((f-5),(f+5)), trial]))
+      
+    }
+  }
+  
+  avgSNRCondition[,condition] <- apply(SNRData, 1, mean)
+}
+
+if (saveData){
+  save(avgSNRCondition, file = paste0("YOUR SAVE DIRECTORY", theParticipants[P], ".RData"))
+} 
+```
+
+

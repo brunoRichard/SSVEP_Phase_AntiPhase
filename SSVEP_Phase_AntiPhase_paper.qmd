@@ -47,8 +47,6 @@ abstract: >
 ---
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
-
-# install R packages (removed 'addAlpha' as doesn't seem to work with R4.5.0)
 packagelist <- c('R.matlab','pracma','EnvStats')
 
 missingpackages <- packagelist[!packagelist %in% installed.packages()[,1]]
@@ -65,8 +63,6 @@ nSamples <- 2000 # change to 2000
 ```{r setupchunk, echo=FALSE}
 posterColours <- c("#333E47", "#6a757c", "#e31936")
 posterColoursRamped <- colorRampPalette(posterColours, space = "Lab", interpolate = "spline")(8)
-# categoricalPalette <- c("#333E47", "#4B565D", "#6A757C", "#9BA2A7", "#E31936", "#B2172C", "#F6536C", "#7C333E") 
-
 categoricalPalette <- c("#333E47","#3B5C62","#777079", "#4A6F74","#B94256", "#5E767B", "#955F6D", "#E31835")
 
 theParticipants <- c("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015")
@@ -97,7 +93,6 @@ theHData <- pAveragedSNRLog[theFs, 4:12]
 ```
 
 ```{r sampleCI, echo = FALSE}
-
 sampleMedians <- array(NA, dim = c(200,13,nSamples))
 
 for (i in 1:nSamples){
