@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  document:
+    build:
+      dockerfile: docker/Dockerfile
+      context: .
+    container_name: brunorichard/ssvep_phase_antiphase:knit
+    image: brunorichard/ssvep_phase_antiphase:knit
+    volumes:
+      - .:/home/rstudio
+    environment:
+      DISABLE_AUTH: 'true'
+    working_dir: /home/rstudio
+    command: make document-docker
