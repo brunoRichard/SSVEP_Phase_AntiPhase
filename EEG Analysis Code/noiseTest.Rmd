@@ -1,0 +1,145 @@
+---
+title: "Noise Analysis"
+output: html_document
+date: "2025-12-13"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Verify that the noise across observers/conditions is not different. 
+
+```{r}
+library(R.matlab)
+library(pracma)
+```
+
+```{r}
+theParticipants <- c("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015")
+```
+
+```{r}
+theBlockDirectory <- "~/Library/CloudStorage/Box-Box/Binocularity Noise/Matlab Block Data/"
+```
+
+```{r}
+theNoisePs <- matrix(NA, ncol = 13, nrow = length(theParticipants))
+for (P in 1:length(theParticipants)){
+  
+  stimulusConditions <- matrix(NA, nrow= 39, ncol = 4)
+  theFFTData <- array(NA, dim = c(64,10000,39,4))
+  
+  blankTime <- 4000
+  duration <- 10000
+  
+  for (BLOCK in 1:4){
+    theFile <- readMat(paste0(theBlockDirectory, theParticipants[P], "/EEG_", theParticipants[P], "BLOCK", BLOCK, ".mat"))
+    
+    if (P == 15){
+      stimulusConditionsTemp <- as.numeric(unlist(theFile$EEG[,,1]$event["type",1,]))
+      stimulusConditionsTemp[1] <- 0
+      triggerTimes <- unlist(theFile$EEG[,,1]$event["latency",1,])*1000
+    } else {
+      stimulusConditionsTemp <- unlist(theFile$EEG[,,1]$triggers["type",1,])
+      triggerTimes <- unlist(theFile$EEG[,,1]$triggers["offset",1,])
+      if (P == 10 & BLOCK == 2){
+        stimulusConditionsTemp <- stimulusConditionsTemp[-35]
+        triggerTimes <- triggerTimes[-35]
+      }
+    }
+    
+    electrodes <- unlist(theFile$EEG["label",,1]$label)
+    
+    triggerTimes <- triggerTimes[!(stimulusConditionsTemp %in% c(0, 99))] 
+    stimulusConditions[, BLOCK] <- stimulusConditionsTemp[!(stimulusConditionsTemp %in% c(0, 99))]
+    for (event in 1:length(stimulusConditions[, BLOCK])){
+      for (channel in 1:(length(electrodes)-2)){
+        theFFTData[channel,,event,BLOCK] <- fft(theFile$EEG[,,1]$data[channel, (triggerTimes[event]+blankTime):(triggerTimes[event]+duration+blankTime-1)])/10000
+      }
+    }
+  }
+  
+  theChannels <- c("Oz", "POz", "O1", "O2")
+  eFFTData <- theFFTData[electrodes[1:64] %in% theChannels,,,]
+  eAvgFFTData <- apply(eFFTData,c(2,3,4),mean)
+  for (condition in 1:13){
+    theIDX <- which(stimulusConditions == condition, arr.ind = TRUE)
+    conditionFFTTemp <- matrix(NA,nrow=10000,ncol =12)
+    
+    for (rep in 1:12){
+      conditionFFTTemp[,rep] <- eAvgFFTData[,theIDX[rep,1], theIDX[rep,2]]
+    }
+    tempxy <- data.frame(Re(conditionFFTTemp[31,]),Im(conditionFFTTemp[31,]))
+    D <- sqrt(mahalanobis(tempxy,colMeans(tempxy),cov(tempxy)))
+    outIDX <- which(D < 3)
+    conditionFFT <- conditionFFTTemp[ ,outIDX]
+    
+    theFs <- c(31,61,91,121,151,181)
+    for (trial in 1:dim(conditionFFT)[2]){
+      for (f in theFs){
+        tempFs <- seq(f-5,f+5, 1)
+        theFtoinclude <- tempFs[tempFs != f]
+        theNoise <- conditionFFT[theFtoinclude, trial]
+      }
+    }
+    theNoisePs[P, condition] <- mean(abs(theNoise))
+  }
+}
+```
+
+```{r}
+save(theNoisePs, file = "~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Processed Data/noiseData.RData")
+```
+
+Run permutation tests on all conditions
+
+```{r}
+nSamples <- 1000
+theComparisons <- combn(4:12, 2)
+pValue <- NULL
+for (i in 1:dim(theComparisons)[2]){
+  realDifference <- mean(theNoisePs[,theComparisons[1,i]])-mean(theNoisePs[,theComparisons[2,i]])
+  
+  mDiff <- NULL
+  for (j in 1:nSamples){
+    Sample1 <- sample(c(theNoisePs[,theComparisons[,i]]), 15, replace = FALSE)
+    Sample2 <- setdiff(c(theNoisePs[,theComparisons[,i]]), Sample1)
+    mDiff[j] <- mean(Sample1) - mean(Sample2)
+  }
+  pValue[i] <- mean(abs(mDiff) > realDifference)
+}
+```
+
+```{r, fig.width=15}
+png("~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Figures/NoiseComp.png", width = 12, height = 8, res = 300, units = "in", bg = "transparent")
+posterColours <- c("#F2EFEF", "#EBB0B0", "#B5B0B0", "#D16D6D", "#7D7D7D", "#A83838", "#4D565E", "#611515")
+
+par(mfrow = c(6,6), mai = c(.05,.05,.05,.05), omi = c(.5,.5,.1,.1))
+for (i in 1:dim(theComparisons)[2]){
+  S1 <- density(theNoisePs[,theComparisons[1,i]])
+  S2 <- density(theNoisePs[,theComparisons[2,i]])
+  
+  S1$y <- S1$y/max(S1$y)
+  S2$y <- S2$y/max(S2$y)
+  
+  plot(x = NULL, y = NULL, xlim = c(0,.5), ylim = c(0,1), axes = FALSE, ann = FALSE)
+  axis(1, at = seq(0, .5, .1), tck = -.015, lwd =2, labels = FALSE)
+  axis(2, at = seq(0, 1, .2), tck = -.015, lwd =2, labels = FALSE)
+  if (i == 1 | i== 7 | i == 13 | i == 19 | i == 25 | i == 31){
+    mtext(seq(0, 1, .2), 2, at = seq(0, 1, .2), line = .4, las = 1)
+    mtext("Proportion", 2, font = 2, line = 2.5)
+  }
+  if (i > 30){
+    mtext(seq(0, .5, .1), 1, at = seq(0, .5, .1), line = .4)
+    mtext("Amplitude", 1, font = 2, line = 2)
+  }
+  
+  lines(S1$x, S1$y, lwd = 3, col = posterColours[2])
+  lines(S2$x, S2$y, lwd = 3, col = posterColours[3])
+  
+  legend("topright", legend = c(theComparisons[1,i], theComparisons[2,i]), bty = "n", lwd = 2, col = posterColours[2:3])
+}
+dev.off()
+```
+

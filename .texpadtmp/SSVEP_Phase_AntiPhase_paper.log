@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.7.9)  8 SEP 2025 17:16
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.7.9)  14 DEC 2025 14:29
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -510,73 +510,60 @@ Package: footnotehyper 2021/08/13 v1.1e hyperref aware footnote.sty (JFB)
 \csllabelwidth=\skip69
  (/usr/local/texlive/2025/texmf-dist/tex/latex/tools/indentfirst.sty
 Package: indentfirst 2023/07/02 v1.03 Indent first paragraph (DPC)
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/lineno/lineno.sty
+Package: lineno 2025/05/13 line numbers on paragraphs v5.5
+\linenopenalty=\count333
+\output=\toks31
+\linenoprevgraf=\count334
+\linenumbersep=\dimen196
+\linenumberwidth=\dimen197
+\c@linenumber=\count335
+\c@pagewiselinenumber=\count336
+\c@LN@truepage=\count337
+\c@internallinenumber=\count338
+\c@internallinenumbers=\count339
+\quotelinenumbersep=\dimen198
+\bframerule=\dimen199
+\bframesep=\dimen256
+\bframebox=\box71
+\@LN@amsmath@ams@eqpen=\count340
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/caption/caption.sty
 Package: caption 2023/08/05 v3.6o Customizing captions (AR)
  (/usr/local/texlive/2025/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
-\caption@tempdima=\dimen196
-\captionmargin=\dimen197
-\caption@leftmargin=\dimen198
-\caption@rightmargin=\dimen199
-\caption@width=\dimen256
-\caption@indent=\dimen257
-\caption@parindent=\dimen258
-\caption@hangindent=\dimen259
+\caption@tempdima=\dimen257
+\captionmargin=\dimen258
+\caption@leftmargin=\dimen259
+\caption@rightmargin=\dimen260
+\caption@width=\dimen261
+\caption@indent=\dimen262
+\caption@parindent=\dimen263
+\caption@hangindent=\dimen264
 Package caption Info: elsarticle document class detected.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/caption/caption-elsarticle.sto
 File: caption-elsarticle.sto 2020/08/22 v2.0 Adaption of the caption package to the elsarticle document class (AR)
 ))
-\c@caption@flags=\count333
-\c@continuedfloat=\count334
+\c@caption@flags=\count341
+\c@continuedfloat=\count342
 Package caption Info: longtable package is loaded.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/caption/ltcaption.sty
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
-)) (/usr/local/texlive/2025/texmf-dist/tex/latex/preprint/authblk.sty
-Package: authblk 2001/02/27 1.3 (PWD)
-\affilsep=\skip70
-\@affilsep=\skip71
-\c@Maxaffil=\count335
-\c@authors=\count336
-\c@affil=\count337
-
-/usr/local/texlive/2025/texmf-dist/tex/latex/preprint/authblk.sty:113: Argument of \@author has an extra }.
-<inserted text> 
-                \par 
-l.113 ...f\AB@author{\noexpand\AB@blk@and\@author}
-                                                  
-I've run across a `}' that doesn't seem to match anything.
-For example, `\def\a#1{...}' and `\a}' would produce
-this error. If you simply proceed now, the `\par' that
-I've just inserted will cause me to report a runaway
-argument that might be the root of the problem. But if
-your `}' was spurious, just type `2' and it will go away.
-
-Runaway argument?
-/usr/local/texlive/2025/texmf-dist/tex/latex/preprint/authblk.sty:113: Paragraph ended before \@author was complete.
-<to be read again> 
-                   \par 
-l.113 ...f\AB@author{\noexpand\AB@blk@and\@author}
-                                                  
-I suspect you've forgotten a `}', causing me to apply this
-control sequence to too much text. How can we recover?
-My plan is to forget the whole thing and hope for the best.
-
-) (/usr/local/texlive/2025/texmf-dist/tex/latex/float/float.sty
+)) (/usr/local/texlive/2025/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count338
-\float@exts=\toks31
-\float@box=\box71
-\@float@everytoks=\toks32
-\@floatcapt=\box72
+\c@float@type=\count343
+\float@exts=\toks32
+\float@box=\box72
+\@float@everytoks=\toks33
+\@floatcapt=\box73
 )
-\@float@every@codelisting=\toks33
-\c@codelisting=\count339
+\@float@every@codelisting=\toks34
+\c@codelisting=\count344
  (/usr/local/texlive/2025/texmf-dist/tex/latex/caption/subcaption.sty
 Package: subcaption 2023/07/28 v1.6b Sub-captions (AR)
 Package caption Info: New subtype `subfigure' on input line 238.
-\c@subfigure=\count340
+\c@subfigure=\count345
 Package caption Info: New subtype `subtable' on input line 238.
-\c@subtable=\count341
+\c@subtable=\count346
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/bookmark/bookmark.sty
 Package: bookmark 2023-12-10 v1.31 PDF bookmarks (HO)
  (/usr/local/texlive/2025/texmf-dist/tex/latex/hyperref/hyperref.sty
@@ -602,19 +589,19 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count342
+\c@section@level=\count347
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/stringenc/stringenc.sty
 Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO)
 )
-\@linkdim=\dimen260
-\Hy@linkcounter=\count343
-\Hy@pagecounter=\count344
+\@linkdim=\dimen265
+\Hy@linkcounter=\count348
+\Hy@pagecounter=\count349
  (/usr/local/texlive/2025/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2025-06-21 v7.01n Hyperref: PDFDocEncoding definition (HO)
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/intcalc/intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-\Hy@SavedSpaceFactor=\count345
+\Hy@SavedSpaceFactor=\count350
  (/usr/local/texlive/2025/texmf-dist/tex/latex/hyperref/puenc.def
 File: puenc.def 2025-06-21 v7.01n Hyperref: PDF Unicode definition (HO)
 )
@@ -626,21 +613,21 @@ Package hyperref Info: Plain pages OFF on input line 4196.
 Package hyperref Info: Backreferencing OFF on input line 4201.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4448.
-\c@Hy@tempcnt=\count346
+\c@Hy@tempcnt=\count351
  (/usr/local/texlive/2025/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip19
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 4787.
-\XeTeXLinkMargin=\dimen261
+\XeTeXLinkMargin=\dimen266
  (/usr/local/texlive/2025/texmf-dist/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
  (/usr/local/texlive/2025/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO)
 ))
-\Fld@menulength=\count347
-\Field@Width=\dimen262
-\Fld@charsize=\dimen263
+\Fld@menulength=\count352
+\Field@Width=\dimen267
+\Fld@charsize=\dimen268
 Package hyperref Info: Hyper figures OFF on input line 6066.
 Package hyperref Info: Link nesting OFF on input line 6071.
 Package hyperref Info: Hyper index ON on input line 6074.
@@ -648,56 +635,57 @@ Package hyperref Info: backreferencing OFF on input line 6081.
 Package hyperref Info: Link coloring OFF on input line 6086.
 Package hyperref Info: Link coloring with OCG OFF on input line 6091.
 Package hyperref Info: PDF/A mode OFF on input line 6096.
-\Hy@abspage=\count348
-\c@Item=\count349
-\c@Hfootnote=\count350
+\Hy@abspage=\count353
+\c@Item=\count354
+\c@Hfootnote=\count355
 )
 Package hyperref Info: Driver (autodetected): hxetex.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/hyperref/hxetex.def
 File: hxetex.def 2025-06-21 v7.01n Hyperref driver for XeTeX
-\pdfm@box=\box73
-\c@Hy@AnnotLevel=\count351
-\HyField@AnnotCount=\count352
-\Fld@listcount=\count353
-\c@bookmark@seq@number=\count354
+\pdfm@box=\box74
+\c@Hy@AnnotLevel=\count356
+\HyField@AnnotCount=\count357
+\Fld@listcount=\count358
+\c@bookmark@seq@number=\count359
  (/usr/local/texlive/2025/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2025-06-21 v1.11 Rerun checks for auxiliary files (HO)
- (/usr/local/texlive/2025/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+
+(/usr/local/texlive/2025/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
 Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 )
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 284.
 )
-\Hy@SectionHShift=\skip72
+\Hy@SectionHShift=\skip70
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/bookmark/bkm-dvipdfm.def
 File: bkm-dvipdfm.def 2023-12-10 v1.31 bookmark driver for dvipdfm (HO)
-\BKM@id=\count355
+\BKM@id=\count360
 )) (/usr/local/texlive/2025/texmf-dist/tex/latex/xurl/xurl.sty
 Package: xurl 2022/01/09 v 0.10 modify URL breaks
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 200.
+Package hyperref Info: Option `colorlinks' set `true' on input line 201.
  (/Users/brunorichard/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/.texpadtmp/SSVEP_Phase_AntiPhase_paper.aux)
 \openout1 = `SSVEP_Phase_AntiPhase_paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 202.
-LaTeX Font Info:    ... okay on input line 202.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 202.
-LaTeX Font Info:    ... okay on input line 202.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 202.
-LaTeX Font Info:    ... okay on input line 202.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 202.
-LaTeX Font Info:    ... okay on input line 202.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 202.
-LaTeX Font Info:    ... okay on input line 202.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 202.
-LaTeX Font Info:    ... okay on input line 202.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 202.
-LaTeX Font Info:    ... okay on input line 202.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 202.
-LaTeX Font Info:    ... okay on input line 202.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 202.
-LaTeX Font Info:    ... okay on input line 202.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 202.
-LaTeX Font Info:    ... okay on input line 202.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 204.
+LaTeX Font Info:    ... okay on input line 204.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 204.
+LaTeX Font Info:    ... okay on input line 204.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 204.
+LaTeX Font Info:    ... okay on input line 204.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 204.
+LaTeX Font Info:    ... okay on input line 204.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 204.
+LaTeX Font Info:    ... okay on input line 204.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 204.
+LaTeX Font Info:    ... okay on input line 204.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 204.
+LaTeX Font Info:    ... okay on input line 204.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 204.
+LaTeX Font Info:    ... okay on input line 204.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 204.
+LaTeX Font Info:    ... okay on input line 204.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 204.
+LaTeX Font Info:    ... okay on input line 204.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
@@ -734,19 +722,19 @@ LaTeX Font Info:    ... okay on input line 202.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
-(Font)                  OT1/lmr/m/n --> TU/lmr/m/n on input line 202.
+(Font)                  OT1/lmr/m/n --> TU/lmr/m/n on input line 204.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/lmr/m/it --> TU/lmr/m/it on input line 202.
+(Font)                  OT1/lmr/m/it --> TU/lmr/m/it on input line 204.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/lmr/bx/n --> TU/lmr/bx/n on input line 202.
+(Font)                  OT1/lmr/bx/n --> TU/lmr/bx/n on input line 204.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/lmss/m/n --> TU/lmss/m/n on input line 202.
+(Font)                  OT1/lmss/m/n --> TU/lmss/m/n on input line 204.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/lmss/bx/n --> TU/lmss/bx/n on input line 202.
+(Font)                  OT1/lmss/bx/n --> TU/lmss/bx/n on input line 204.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/lmtt/m/n --> TU/lmtt/m/n on input line 202.
+(Font)                  OT1/lmtt/m/n --> TU/lmtt/m/n on input line 204.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/lmtt/m/n --> TU/lmtt/bx/n on input line 202.
+(Font)                  OT1/lmtt/m/n --> TU/lmtt/bx/n on input line 204.
 
 Package fontspec Info: 
 (fontspec)             latinmodern-math scale = 0.9999970497384594.
@@ -774,7 +762,7 @@ Package fontspec Info:
 (fontspec)             <->s*[0.9999970497384594]"[latinmodern-math.otf]/OT:script=math;language=dflt;"
 
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(0)/m/n' will be
-(Font)              scaled to size 12.0pt on input line 202.
+(Font)              scaled to size 12.0pt on input line 204.
 
 Package fontspec Info: 
 (fontspec)             latinmodern-math scale = 0.9999970497384594.
@@ -810,15 +798,15 @@ Package fontspec Info:
 (fontspec)             <->s*[0.9999970497384594]"[latinmodern-math.otf]/OT:script=math;language=dflt;"
 
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 12.0pt on input line 202.
+(Font)              scaled to size 12.0pt on input line 204.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `normal' on input line 202.
+(Font)              `operators' in the math version `normal' on input line 204.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/lmr/m/n --> TU/latinmodern-math.otf(1)/m/n on input line 202.
+(Font)                  OT1/lmr/m/n --> TU/latinmodern-math.otf(1)/m/n on input line 204.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `bold' on input line 202.
+(Font)              `operators' in the math version `bold' on input line 204.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/lmr/bx/n --> TU/latinmodern-math.otf(1)/b/n on input line 202.
+(Font)                  OT1/lmr/bx/n --> TU/latinmodern-math.otf(1)/b/n on input line 204.
 
 Package fontspec Info: 
 (fontspec)             latinmodern-math scale = 0.9999970497384594.
@@ -884,13 +872,13 @@ Package fontspec Info:
 (fontspec)             <->s*[1.000097049443433]"[latinmodern-math.otf]/OT:script=math;language=dflt;"
 
 LaTeX Font Info:    Encoding `OMS' has changed to `TU' for symbol font
-(Font)              `symbols' in the math version `normal' on input line 202.
+(Font)              `symbols' in the math version `normal' on input line 204.
 LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
-(Font)                  OMS/lmsy/m/n --> TU/latinmodern-math.otf(2)/m/n on input line 202.
+(Font)                  OMS/lmsy/m/n --> TU/latinmodern-math.otf(2)/m/n on input line 204.
 LaTeX Font Info:    Encoding `OMS' has changed to `TU' for symbol font
-(Font)              `symbols' in the math version `bold' on input line 202.
+(Font)              `symbols' in the math version `bold' on input line 204.
 LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
-(Font)                  OMS/lmsy/b/n --> TU/latinmodern-math.otf(2)/b/n on input line 202.
+(Font)                  OMS/lmsy/b/n --> TU/latinmodern-math.otf(2)/b/n on input line 204.
 
 Package fontspec Info: 
 (fontspec)             latinmodern-math scale = 0.9999970497384594.
@@ -950,20 +938,20 @@ Package fontspec Info:
 (fontspec)             <->s*[0.9998970500334856]"[latinmodern-math.otf]/OT:script=math;language=dflt;"
 
 LaTeX Font Info:    Encoding `OMX' has changed to `TU' for symbol font
-(Font)              `largesymbols' in the math version `normal' on input line 202.
+(Font)              `largesymbols' in the math version `normal' on input line 204.
 LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
-(Font)                  OMX/lmex/m/n --> TU/latinmodern-math.otf(3)/m/n on input line 202.
+(Font)                  OMX/lmex/m/n --> TU/latinmodern-math.otf(3)/m/n on input line 204.
 LaTeX Font Info:    Encoding `OMX' has changed to `TU' for symbol font
-(Font)              `largesymbols' in the math version `bold' on input line 202.
+(Font)              `largesymbols' in the math version `bold' on input line 204.
 LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
-(Font)                  OMX/lmex/m/n --> TU/latinmodern-math.otf(3)/b/n on input line 202.
-LaTeX Info: Redefining \microtypecontext on input line 202.
-Package microtype Info: Applying patch `item' on input line 202.
-Package microtype Info: Applying patch `toc' on input line 202.
-Package microtype Info: Applying patch `eqnum' on input line 202.
-Package microtype Info: Applying patch `footnote' on input line 202.
-Package microtype Info: Applying patch `verbatim' on input line 202.
-LaTeX Info: Redefining \microtypesetup on input line 202.
+(Font)                  OMX/lmex/m/n --> TU/latinmodern-math.otf(3)/b/n on input line 204.
+LaTeX Info: Redefining \microtypecontext on input line 204.
+Package microtype Info: Applying patch `item' on input line 204.
+Package microtype Info: Applying patch `toc' on input line 204.
+Package microtype Info: Applying patch `eqnum' on input line 204.
+Package microtype Info: Applying patch `footnote' on input line 204.
+Package microtype Info: Applying patch `verbatim' on input line 204.
+LaTeX Info: Redefining \microtypesetup on input line 204.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
 Package microtype Info: No adjustment of tracking.
@@ -976,160 +964,70 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 202.
-
-./SSVEP_Phase_AntiPhase_paper.tex:208: Undefined control sequence.
-\corref #1->\edef \cnotenum 
-                            {\elsRef {#1}}\edef \@corref {\ifcase \cnotenum ...
-l.208 \author[inst1]{Bruno Richard\corref{cor1}}
-                                                
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./SSVEP_Phase_AntiPhase_paper.tex:208: Undefined control sequence.
-\corref ...{#1}}\edef \@corref {\ifcase \cnotenum 
-                                                  \or $\ast $\or $\ast \ast ...
-l.208 \author[inst1]{Bruno Richard\corref{cor1}}
-                                                
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./SSVEP_Phase_AntiPhase_paper.tex:208: Missing number, treated as zero.
-<to be read again> 
-                   \relax 
-l.208 \author[inst1]{Bruno Richard\corref{cor1}}
-                                                
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-./SSVEP_Phase_AntiPhase_paper.tex:208: Undefined control sequence.
-\corref #1->\edef \cnotenum 
-                            {\elsRef {#1}}\edef \@corref {\ifcase \cnotenum ...
-l.208 \author[inst1]{Bruno Richard\corref{cor1}}
-                                                
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./SSVEP_Phase_AntiPhase_paper.tex:208: Undefined control sequence.
-\corref ...{#1}}\edef \@corref {\ifcase \cnotenum 
-                                                  \or $\ast $\or $\ast \ast ...
-l.208 \author[inst1]{Bruno Richard\corref{cor1}}
-                                                
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./SSVEP_Phase_AntiPhase_paper.tex:208: Missing number, treated as zero.
-<to be read again> 
-                   \relax 
-l.208 \author[inst1]{Bruno Richard\corref{cor1}}
-                                                
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-./SSVEP_Phase_AntiPhase_paper.tex:212: Undefined control sequence.
-\corref #1->\edef \cnotenum 
-                            {\elsRef {#1}}\edef \@corref {\ifcase \cnotenum ...
-l.212 \author[inst2]{Daniel H. Baker}
-                                     
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./SSVEP_Phase_AntiPhase_paper.tex:212: Undefined control sequence.
-\corref ...{#1}}\edef \@corref {\ifcase \cnotenum 
-                                                  \or $\ast $\or $\ast \ast ...
-l.212 \author[inst2]{Daniel H. Baker}
-                                     
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./SSVEP_Phase_AntiPhase_paper.tex:212: Missing number, treated as zero.
-<to be read again> 
-                   \relax 
-l.212 \author[inst2]{Daniel H. Baker}
-                                     
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-./SSVEP_Phase_AntiPhase_paper.tex:241: Undefined control sequence.
-l.241 ...SVEP \sep Contrast Gain Control \sepPhase
-                                                   Selectivity \sep Monocula...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
+Package hyperref Info: Link coloring ON on input line 204.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 10.0pt on input line 244.
+(Font)              scaled to size 10.0pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 7.0pt on input line 244.
+(Font)              scaled to size 7.0pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 5.0pt on input line 244.
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 244.
-(/usr/local/texlive/2025/texmf-dist/tex/latex/lm/omllmm.fd
+(Font)              scaled to size 5.0pt on input line 249.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 249.
+ (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 10.00092pt on input line 244.
+(Font)              scaled to size 10.00092pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 7.00064pt on input line 244.
+(Font)              scaled to size 7.00064pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 5.00046pt on input line 244.
+(Font)              scaled to size 5.00046pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 9.99893pt on input line 244.
+(Font)              scaled to size 9.99893pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 6.99925pt on input line 244.
+(Font)              scaled to size 6.99925pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 4.99947pt on input line 244.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 244.
+(Font)              scaled to size 4.99947pt on input line 249.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 249.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 244.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 249.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 8.4pt on input line 257.
+(Font)              scaled to size 8.4pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 6.0pt on input line 257.
+(Font)              scaled to size 6.0pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 12.0011pt on input line 257.
+(Font)              scaled to size 12.0011pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 8.40076pt on input line 257.
+(Font)              scaled to size 8.40076pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 6.00055pt on input line 257.
+(Font)              scaled to size 6.00055pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 11.99872pt on input line 257.
+(Font)              scaled to size 11.99872pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 8.3991pt on input line 257.
+(Font)              scaled to size 8.3991pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 5.99936pt on input line 257.
+(Font)              scaled to size 5.99936pt on input line 249.
+LaTeX Font Info:    Calculating math sizes for size <8.4> on input line 249.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 5.87996pt on input line 249.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 4.2pt on input line 249.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 5.8805pt on input line 249.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 4.20038pt on input line 249.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 5.87932pt on input line 249.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 4.19954pt on input line 249.
 
 
 [1
@@ -1142,88 +1040,106 @@ LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 [3]
 
 [4]
-File: Figures/MethodsFigure.png Graphic file (type bmp)
-<Figures/MethodsFigure.png>
-
 
 [5]
 
 [6]
-File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRData-1.pdf Graphic file (type pdf)
-<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRData-1.pdf>
-
 
 [7]
-File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRComparison-1.pdf Graphic file (type pdf)
-<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRComparison-1.pdf>
+File: Figures/MethodsFigure.png Graphic file (type bmp)
+<Figures/MethodsFigure.png>
 
 
 [8]
-File: Figures/FullModel.png Graphic file (type bmp)
-<Figures/FullModel.png>
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 10.95pt on input line 720.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 8.0pt on input line 720.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 10.95099pt on input line 720.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 8.00073pt on input line 720.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 10.94882pt on input line 720.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 7.99915pt on input line 720.
-
 
 [9]
 
 [10]
+File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRData-1.pdf Graphic file (type pdf)
+<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRData-1.pdf>
+
 
 [11]
-File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-badModels1-1.pdf Graphic file (type pdf)
-<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-badModels1-1.pdf>
+File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRComparison-1.pdf Graphic file (type pdf)
+<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRComparison-1.pdf>
 
 
 [12]
-File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-betterModels-1.pdf Graphic file (type pdf)
-<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-betterModels-1.pdf>
+File: Figures/FullModel_Updated.png Graphic file (type bmp)
+<Figures/FullModel_Updated.png>
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 10.95pt on input line 754.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 8.0pt on input line 754.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 10.95099pt on input line 754.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 8.00073pt on input line 754.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 10.94882pt on input line 754.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 7.99915pt on input line 754.
 
 
 [13]
 
 [14]
-File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-bestModels-1.pdf Graphic file (type pdf)
-<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-bestModels-1.pdf>
-
 
 [15]
 
 [16]
+File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-badModels1-1.pdf Graphic file (type pdf)
+<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-badModels1-1.pdf>
+
 
 [17]
+File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-betterModels-1.pdf Graphic file (type pdf)
+<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-betterModels-1.pdf>
+
 
 [18]
 
 [19]
+
+[20]
+File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-bestModels-1.pdf Graphic file (type pdf)
+<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-bestModels-1.pdf>
+
+
+[21]
+
+[22]
+
+[23]
+
+[24]
+
+[25]
+
+[26]
+
+[27]
+
+[28]
 Missing character: There is no ^^80 (U+0080) in font [lmroman12-regular]:mapping=tex-text;!
 Missing character: There is no ^^93 (U+0093) in font [lmroman12-regular]:mapping=tex-text;!
 
 
-[20]
+[29]
 
-[21] (/Users/brunorichard/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/.texpadtmp/SSVEP_Phase_AntiPhase_paper.aux)
+[30] (/Users/brunorichard/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/.texpadtmp/SSVEP_Phase_AntiPhase_paper.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-06-30>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 22120 strings out of 468463
- 407548 string characters out of 5446065
- 1027120 words of memory out of 5000000
- 50232 multiletter control sequences out of 15000+600000
- 641203 words of font info for 109 fonts, out of 8000000 for 9000
+ 22354 strings out of 468463
+ 412624 string characters out of 5446065
+ 1025241 words of memory out of 5000000
+ 50458 multiletter control sequences out of 15000+600000
+ 643146 words of font info for 122 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 90i,9n,114p,1439b,577s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,9n,114p,1508b,588s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on /Users/brunorichard/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/.texpadtmp/SSVEP_Phase_AntiPhase_paper.pdf (21 pages).
+Output written on /Users/brunorichard/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/.texpadtmp/SSVEP_Phase_AntiPhase_paper.pdf (30 pages).

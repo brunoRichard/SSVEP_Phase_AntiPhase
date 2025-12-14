@@ -4,9 +4,9 @@
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 %
-\documentclass[
+\documentclass[review,
   12pt,
-]{article}
+]{elsarticle}
 \usepackage{xcolor}
 \usepackage[left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry}
 \usepackage{amsmath,amssymb}
@@ -134,22 +134,18 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
-
-
- 
-
-
 \usepackage{indentfirst}
+\usepackage{lineno}
 \setlength{\parindent}{15pt}
 \setlength{\parskip}{10pt}
 \usepackage[font=small]{caption}  % Options: small, footnotesize, scriptsize, etc.
-\usepackage[noblocks]{authblk}
-\renewcommand*{\Authsep}{, }
-\renewcommand*{\Authand}{, }
-\renewcommand*{\Authands}{, }
-\renewcommand\Affilfont{\small}
+%\usepackage[noblocks]{authblk}
+%\renewcommand*{\Authsep}{, }
+%\renewcommand*{\Authand}{, }
+%\renewcommand*{\Authands}{, }
+%\renewcommand\Affilfont{\small}
 % Define a keywords command for inline keywords
-\newcommand{\printkeywords}[1]{\noindent\textbf{Keywords:} #1\par}
+%\newcommand{\printkeywords}[1]{\noindent\textbf{Keywords:} #1\par}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -205,20 +201,24 @@
   pdfcreator={LaTeX via pandoc}}
 
 
+\begin{document}
+
+\begin{frontmatter}
+
 \title{Neural responses to binocular in-phase and anti-phase stimuli}
 
-  \author[1]{Bruno Richard}
-  \author[2]{Daniel H. Baker}
+\author[inst1]{Bruno Richard\corref{cor1}}
+\cortext[cor1]{Corresponding author}
+\ead{br379@newark.rutgers.edu}
 
-      \affil[1]{Department of Math and Computer Sciences, Rutgers
-University, Newark, New Jersey, USA}
-      \affil[2]{Department of Psychology, University of York, York, UK}
-  
-\date{}
-\begin{document}
-\maketitle
+\author[inst2]{Daniel H. Baker}
+
+\address[inst1]{Department of Math and Computer Sciences, Rutgers University, Newark, New Jersey, USA}
+\address[inst2]{Department of Psychology, University of York, York, UK}
+
 \begin{abstract}
-Binocular vision fuses compatible inputs from the two eyes into a single
+\begin{linenumbers}
+Binocular vision fuses \textcolor{red}{compatible} inputs from the two eyes into a single
 percept, whereas incompatible inputs can produce rivalry, lustre, or
 diplopia. We measured neural responses to binocular stimuli with
 different phase relationships to test predictions from contemporary
@@ -239,9 +239,16 @@ whereas phase selectivity was not essential. Overall, the two-stage
 contrast gain-control model remains a powerful and flexible framework
 for describing binocular combinations across various experimental
 conditions and modalities.
+\end{linenumbers}
 \end{abstract}
 
+\begin{keyword}
+Binocular Combination \sep SSVEP \sep Contrast Gain Control \sep Phase Selectivity \sep Monocular Channels
+\end{keyword}
 
+\end{frontmatter}
+
+\linenumbers
 \section{Introduction}\label{introduction}
 
 The human visual system integrates input from both eyes to form a
@@ -277,9 +284,9 @@ two eyes (\(c_L\) and \(c_R\)) are combined (Legge, 1984b):
 \begin{equation}\phantomsection\label{eq-IntroMath1}{
 R_B = c_L^m + c_R^m.
 }\end{equation} Here, the exponent \(m\) determines the degree of
-summation \textcolor{red}{($R_B$)}. When \(m = 1\), summation is linear,
-yielding a doubling of sensitivity. When \(m = 2\), summation is reduced
-to \(\sqrt{2}\). Several studies have reported summation ratios over
+summation \textcolor{red}{(\(R_B\))}. When \(m = 1\), summation is linear, yielding a
+doubling of sensitivity. When \(m = 2\), summation is reduced to
+\(\sqrt{2}\). Several studies have reported summation ratios over
 \(\sqrt{2}\) with some approaching 1.8 (Meese et al., 2006; Simmons,
 2005; Simmons and Kingdom, 1998). A recent meta-analysis of 65 studies
 (N = 716) found an average binocular summation ratio of 1.5 (Baker et
@@ -308,8 +315,8 @@ normalization can stem from interocular and self-suppressive signals
 R_B = \frac{c_L^m}{S+c_L+c_R} + \frac{c_R^m}{S+c_R+c_L}.
 }\end{equation} When both eyes are stimulated, the suppressive terms on
 the denominators offset the enhanced excitatory signals, nullifying the
-binocular advantage.
-\textcolor{red}{The new parameter, S, is included to prevent division by zero and sets overall sensitivity of thhe monocular response.}
+binocular advantage. \textcolor{red}{The new parameter, S, is included to prevent
+division by zero and sets overall sensitivity of the monocular response.}
 
 A similar pattern of results is observed in neural measurements of
 binocular summation. In functional Magnetic Resonance Imaging (fMRI)
@@ -362,8 +369,10 @@ undergoes a second contrast normalization before the decision stage,
 R = \frac{R_B^p}{Z + R_B^q},
 }\end{equation} where the exponents \(p\) and \(q\) typically have quite
 large values, and determine the shape of the contrast discrimination
-(`dipper') functions.
-\textcolor{red}{As with the parameter S in @eq-intoMath2, the parameter Z is included to prevent division by 0 and sets the overall sensitivity of the binocular response.}
+(`dipper') functions. \textcolor{red}{As with the parameter S in
+Equation~\ref{eq-intoMath2}, the parameter Z is included to prevent
+division by 0 and sets the overall sensitivity of the binocular
+response.}
 
 Subsequent iterations of the two-stage contrast gain control model added
 channels for opposite contrast polarities (Baker and Meese, 2007), and
@@ -404,7 +413,29 @@ encoding the difference between monocular signals is, indirectly,
 included in the two-stage contrast gain control model defined by
 Georgeson et al. (2016).
 
-\textcolor{red}{Steady-State Visually Evoked Potentials offer a unique opportunity to bridge the gap between models developed from psychophysical data and neuroimaging, as responses to stimulus contrast (i.e., SSVEP amplitude) are directly associated with behavioral sensitivity to contrast [@WadeBaker2025; @norcia2015]. Two common stimulus presentation protocols are used to generate SSVEPs: a sinusoidal On/Off flicker, where the stimulus alternates between a blank background (0\% contrast) and the peak contrast, and sinusoidal counterphase flicker, where the stimulus alternates in phase (i.e., the black regions become white, and the white regions become black). On/Off flicker activates different populations of on and off-cells independently once per cycle, generating frequency-following responses at the frequency of the sinusoidal modulation (1F). On/Off flicker can also generate SSVEPs at the odd and even integer harmonics (2F, 3F, 4F, etc.), which reflect nonlinear processing in the visual system [@regan1988]. Counterphase flicker will generate two transients per cycle, resulting in SSVEPs at the even harmonics of the flicker frequency (2F, 4F, 6F, etc.). These frequency-doubling responses are argued to provide a cleaner measure of nonlinear visual responses [@Kimetal2011; @Skottun2007]. Utilizing both stimulation protocols enables a comprehensive description of linear and nonlinear visual processes, thereby generating the data necessary to evaluate psychophysical models of visual perception.}
+\textcolor{red}{Steady-State Visually Evoked Potentials offer a unique opportunity to
+bridge the gap between models developed from psychophysical data and
+neuroimaging, as responses to stimulus contrast (i.e., SSVEP amplitude)
+are directly associated with behavioral sensitivity to contrast (Norcia
+et al., 2015; Wade and Baker, 2025). Two common stimulus presentation
+protocols are used to generate SSVEPs: a sinusoidal On/Off flicker,
+where the stimulus alternates between a blank background (0\% contrast)
+and the peak contrast, and sinusoidal counterphase flicker, where the
+stimulus alternates in phase (i.e., the black regions become white, and
+the white regions become black). On/Off flicker activates different
+populations of on and off-cells independently once per cycle, generating
+frequency-following responses at the frequency of the sinusoidal
+modulation (1F). On/Off flicker can also generate SSVEPs at the odd and
+even integer harmonics (2F, 3F, 4F, etc.), which reflect nonlinear
+processing in the visual system (Regan and Regan, 1988). Counterphase
+flicker will generate two transients per cycle, resulting in SSVEPs at
+the even harmonics of the flicker frequency (2F, 4F, 6F, etc.). These
+frequency-doubling responses are argued to provide a cleaner measure of
+nonlinear visual responses (Kim et al., 2011; Skottun and Skoyles,
+2007). Utilizing both stimulation protocols enables a comprehensive
+description of linear and nonlinear visual processes, thereby generating
+the data necessary to evaluate psychophysical models of visual
+perception.}
 
 The current architecture of the two-stage contrast gain control model
 has been rigorously evaluated on psychophysical data, providing a solid
@@ -418,15 +449,14 @@ current architecture of the two-stage contrast gain control model,
 neuroimaging data for binocular presentation of stimuli in opposite
 phase polarity are required. Here, we recorded SSVEPs to monocular and
 binocular stimuli with different spatial and temporal phase
-relationships
-\textcolor{red}{and stimulation protocols (On/Off and counterphase flicker)}
-to obtain the data needed to evaluate the two-stage contrast gain
-control model. By progressively increasing the complexity of the model,
-we demonstrate that many components of binocular combination, such as
-monocular non-linearities, interocular interactions, and parallel
-monocular channels, are required to explain neural responses to our set
-of experimental conditions. The two-stage contrast gain control model
-remains a powerful and flexible descriptor of the architecture of
+relationships and stimulation protocols (On/Off and counterphase
+flicker) to obtain the data needed to evaluate the two-stage contrast
+gain control model. By progressively increasing the complexity of the
+model, we demonstrate that many components of binocular combination,
+such as monocular non-linearities, interocular interactions, and
+parallel monocular channels, are required to explain neural responses to
+our set of experimental conditions. The two-stage contrast gain control
+model remains a powerful and flexible descriptor of the architecture of
 binocular combination for data collected across many experimental
 conditions and modalities.
 
@@ -434,10 +464,13 @@ conditions and modalities.
 
 \subsection{Participants}\label{participants}
 
-\textcolor{red}{Fifteen observers ($N_{male} = 4$; age range [19 XX]), including authors BR and DHB, participated in this study. All observers had normal or corrected-to-normal visual acuity, as verified by a Snellen chart, and normal binocular vision, as verified by a Titmus test.}
-Written informed consent was obtained from all participants, and
-experimental procedures were approved by the ethics committee of the
-Department of Psychology at the University of York.
+\textcolor{red}{Fifteen observers (\(N_{male} = 4\); age range {[}19 34{]}), including
+authors BR and DHB, participated in this study. All observers had normal
+or corrected-to-normal visual acuity, as verified by a Snellen chart,
+and normal binocular vision, as verified by a Titmus test.} Written
+informed consent was obtained from all participants, and experimental
+procedures were approved by the ethics committee of the Department of
+Psychology at the University of York.
 
 \subsection{Apparatus}\label{apparatus}
 
@@ -497,10 +530,10 @@ observer, averaged across four electrodes (\emph{Oz}, \emph{POz},
 Observer SSVEPs were measured with a single horizontal sinusoidal
 grating that subtended \(15^\circ\) of visual angle on the retina with a
 spatial frequency of 3 cycles/\(^\circ\) of visual angle
-(Figure~\ref{fig-methodFigures}A).
-\textcolor{red}{All stimuli were generated using \textit{MATLAB} (MathWorks, Natick, MA) and presented to observers using}
+(Figure~\ref{fig-methodFigures}A). \textcolor{red}{All stimuli were generated using
+\textit{MATLAB} (MathWorks, Natick, MA) and presented to observers using
 \textit{Psychtoolbox} (Brainard, 1997; Kleiner et al., 2007; Pelli,
-1997). Our experimental conditions modulated the interocular spatial
+1997).} Our experimental conditions modulated the interocular spatial
 phase of stimuli (Figure~\ref{fig-methodFigures}A). Under binocular
 viewing, the sinusoidal gratings could be presented in spatial phase or
 spatial anti-phase. When stimuli were presented in spatial phase, the
@@ -534,8 +567,8 @@ amplitude spectrum (Hansen and Hess, 2006; Tadmor and Tolhurst, 1994).
 The pink amplitude spectrum and the phase spectrum of the binary image
 were rendered in the spatial domain by taking the inverse Fourier
 transform, resulting in the pattern shown in
-Figure~\ref{fig-methodFigures}A.
-\textcolor{red}{The surrounding texture was fixed during a trial, but its phase structure was changed across trials.}
+Figure~\ref{fig-methodFigures}A. \textcolor{red}{The surrounding texture was fixed
+during a trial, but its phase structure was changed across trials.}
 
 \subsection{Procedures}\label{procedures}
 
@@ -611,7 +644,7 @@ experimental conditions, and randomly sampling them without replacement
 to create two groups of sizes identical to their original, but with
 values not associated with a particular experimental condition. The
 median difference of the randomly sampled SNRs is then taken. This
-process is repeated multiple times (e.g., \(N =\) 100 iterations) to
+process is repeated multiple times (e.g., \(N =\) 2000 iterations) to
 build a distribution of median differences with no association of
 experimental condition (i.e., a null-hypothesis distribution). The
 observed median difference is then compared to this distribution. The
@@ -635,8 +668,7 @@ et al., 2006).
 
 }
 
-\caption{\label{fig-SNRComparison}Boxplots of participant SNRs at the
-fundamental frequency for each experimental condition in our study. A)
+\caption{\label{fig-SNRComparison}\textcolor{red}{Boxplots of participant SNRs at the fundamental frequency (3Hz) under On/Off stimulation and its second harmonic for counterphase stimulation.}  A)
 Boxplots represent the distribution of participant SNRs at 3Hz. The
 median SNR is shown by the thick line within the box, with the lower and
 upper border of the box representing the first (25\%) and third (75\%)
@@ -645,7 +677,7 @@ represent 1.5 times the interquartile range (distance between the third
 and first quartile). Boxplots for the binocular conditions have labels
 for their spatial (S) and temporal (T) phase relationships. Experimental
 conditions where stimuli are presented in temporal anti-phase are shown
-in maroon B) As in A, boxplots show the distribution of participant SNRs
+in maroon. B) As in A, boxplots show the distribution of participant SNRs
 at 6Hz. In both graphs, the dashed line represents an SNR of 1.0.}
 
 \end{figure}%
@@ -661,11 +693,11 @@ was also observed for stimuli in temporal and spatial anti-phase
 (median\(_\text{SNR}\) = 1.7; \(p\) = .023). No other statistically
 significant difference in median SNRs were observed for all counterphase
 flicker conditions or the other harmonics for On/Off flicker (all \(p\)
-values were greater than .05). The median SNRs of temporal anti-phase
+values were greater than .05). \textcolor{red}{The median SNRs of temporal anti-phase
 stimuli under On/Off flicker, while smaller than those of other
 conditions, were nevertheless statistically significantly greater than
 1.0 (spatial in-phase: \(p < .001\) and spatial anti-phase:
-\(p = .004\)). The presence of a 3Hz response for binocular stimuli
+\(p = .004\)).} The presence of a 3Hz response for binocular stimuli
 presented in temporal anti-phase is a strong indication that monocular
 responses remain and contribute to the SSVEP, as these conditions
 generate two transients per cycle. A purely binocular signal would only
@@ -768,19 +800,19 @@ first is a purely linear summation model of binocular combination;
 \begin{equation}\phantomsection\label{eq-linearSumModel}{
 R_B = c_L+c_R,
 }\end{equation} the binocular response (\(R_B\)) is the sum of the
-inputs \textcolor{red}{($c_L$ and $c_R$)}. The fits of the linear
-summation model are shown in Figure~\ref{fig-badModels1} and its
-performance metrics in Table~\ref{tbl-R2Table}. For On/Off flicker, the
-linear summation model only generates responses at the fundamental
-frequency (3Hz) that grossly overestimate observer SNRs. This is
-expected as this model lacks the rectification and non-linearities
-required to generate responses at the harmonics (Regan and Regan, 1988;
-Wade and Baker, 2025). In a linear sum, stimuli presented under On/Off
-flicker in temporal anti-phase cancel each other, and thus the model
-generates no response. The model does generate responses at the
-fundamental and harmonics of the counterphase flicker condition
-(Figure~\ref{fig-badModels1}B), but this is attributable to the input's
-rectification (the half-wave rectification applied to the input;
+inputs \textcolor{red}{\(c_L\) and \(c_R\)}. The fits of the linear summation model are
+shown in Figure~\ref{fig-badModels1} and its performance metrics in
+Table~\ref{tbl-R2Table}. For On/Off flicker, the linear summation model
+only generates responses at the fundamental frequency (3Hz) that grossly
+overestimate observer SNRs. This is expected as this model lacks the
+rectification and non-linearities required to generate responses at the
+harmonics (Regan and Regan, 1988; Wade and Baker, 2025). In a linear
+sum, stimuli presented under On/Off flicker in temporal anti-phase
+cancel each other, and thus the model generates no response. The model
+does generate responses at the fundamental and harmonics of the
+counterphase flicker condition (Figure~\ref{fig-badModels1}B), but this
+is attributable to the input's rectification (the half-wave
+rectification applied to the input;
 Equation~\ref{eq-stimInput3L}, Equation~\ref{eq-stimInput3R}) and not
 the model architecture.
 
@@ -886,10 +918,11 @@ al., 2006). The architecture of this model now begins with a monocular
 stage \begin{equation}\phantomsection\label{eq-firstStageofTwoNoInter}{
 r_L = \frac{c_L^m}{S + c_L}, \qquad r_R = \frac{c_R^m}{S + c_R}
 }\end{equation} where an exponent (\(m\)) is applied to the monocular
-inputs (\(c_L\) and \(c_R\)) in addition to self-suppression.
-\textcolor{red}{The parameter $S$, as the parameter $Z$ above, prevents devision by zero}.
-The outputs of the monocular stage (\(r_L\) and \(r_R\)) are then fed
-into the binocular stage as defined in Equation~\ref{eq-firstBinocSum},
+inputs (\(c_L\) and \(c_R\)) in addition to self-suppression. \textcolor{red}{The
+parameter \(S\), as the parameter \(Z\) above, prevents devision by
+zero}. The outputs of the monocular stage (\(r_L\) and \(r_R\)) are then
+fed into the binocular stage as defined in
+Equation~\ref{eq-firstBinocSum},
 \begin{equation}\phantomsection\label{eq-binocComb}{
 R_{B} = \frac{(r_L+r_R)^p}{Z+(r_L+r_R)^q}.
 }\end{equation} In this model variant, \(m\) is the monocular exponent
@@ -1071,22 +1104,27 @@ magnitude at high contrast (Baker et al., 2007a; Meese et al., 2006). We
 additionally found no statistically significant differences in SSVEPs
 for all stimulus conditions under counterphase flicker.
 
-\textcolor{red}{Our data proved useful in selecting the best-performing model, albeit in an unexpected way. The stimulus presentation protocols (On/Off and counterphase) individually were unable to discern the best model, as all models, except the evidently wrong ones, were able to capture neural responses to counterphase stimuli. Instead, it was the spatial and temporal phase of our stimuli that proved most useful in model selection.}
-Presenting stimuli in temporal anti-phase reduced the magnitude of
-responses at the fundamental frequency (3Hz) compared to its temporal
-phase counterpart, but they were not abolished. This finding indicates
-that, even under binocular viewing, monocular signals can be measured at
-the scalp with SSVEPs. This was crucial in the selection of the best
-fitting model. Only the two-stage contrast gain control model with
-parallel monocular channels, which preserves monocular signals
-throughout the model architecture, could accurately capture the data in
-all experimental conditions. Simpler models failed to generate the
-necessary responses at the fundamental and odd-integer harmonics for
-stimuli presented in temporal anti-phase. In contrast, a more complex
-model that included phase selectivity did not improve the quality of
-fits. Overall, we find that the same general framework used to explain
-psychophysical stimulus combination can be successfully applied to
-neural data collected under various experimental conditions.
+\textcolor{red}{Our data proved useful in selecting the best-performing model, albeit in
+an unexpected way. The stimulus presentation protocols (On/Off and
+counterphase) individually were unable to discern the best model, as all
+models, except the evidently wrong ones, were able to capture neural
+responses to counterphase stimuli. Instead, it was the spatial and
+temporal phase of our stimuli that proved most useful in model
+selection.} Presenting stimuli in temporal anti-phase reduced the
+magnitude of responses at the fundamental frequency (3Hz) compared to
+its temporal phase counterpart, but they were not abolished. This
+finding indicates that, even under binocular viewing, monocular signals
+can be measured at the scalp with SSVEPs. This was crucial in the
+selection of the best fitting model. Only the two-stage contrast gain
+control model with parallel monocular channels, which preserves
+monocular signals throughout the model architecture, could accurately
+capture the data in all experimental conditions. Simpler models failed
+to generate the necessary responses at the fundamental and odd-integer
+harmonics for stimuli presented in temporal anti-phase. In contrast, a
+more complex model that included phase selectivity did not improve the
+quality of fits. Overall, we find that the same general framework used
+to explain psychophysical stimulus combination can be successfully
+applied to neural data collected under various experimental conditions.
 
 \paragraph{Monocular channels}\label{monocular-channels}
 
@@ -1341,6 +1379,12 @@ Conflict-sensitive neurons gate interocular suppression in human visual
 cortex. Scientific Reports 8, 1239.
 \url{https://doi.org/10.1038/s41598-018-19809-w}
 
+\bibitem[\citeproctext]{ref-Kimetal2011}
+Kim, Y.J., Grabowecky, M., Paller, K.A., Suzuki, S., 2011. Differential
+roles of frequency-following and frequency-doubling visual responses
+revealed by evoked neural harmonics. J Cogn Neurosci 23, 1875--86.
+\url{https://doi.org/10.1162/jocn.2010.21536}
+
 \bibitem[\citeproctext]{ref-Kleiner2007}
 Kleiner, M., Brainard, D.H., Pelli, D.G., 2007. What's new in
 psychtoolbox-3?, in: Perception.
@@ -1435,6 +1479,12 @@ Perception 34, 1035--1042. \url{https://doi.org/10.1068/p5279}
 Simmons, D.R., Kingdom, F.A.A., 1998. On the binocular summation of
 chromatic contrast. Vision Research 38, 1063--1071.
 \url{https://doi.org/10.1016/S0042-6989(97)00272-1}
+
+\bibitem[\citeproctext]{ref-Skottun2007}
+Skottun, B.C., Skoyles, J.R., 2007. Some remarks on the use of visually
+evoked potentials to measure magnocellular activity. Clinical
+Neurophysiology 118, 1903--1905.
+https://doi.org/\url{https://doi.org/10.1016/j.clinph.2007.06.007}
 
 \bibitem[\citeproctext]{ref-Sutoyo2009}
 Sutoyo, D., Srinivasan, R., 2009. Nonlinear SSVEP responses are
