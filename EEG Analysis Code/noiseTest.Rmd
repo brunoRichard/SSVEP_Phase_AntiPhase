@@ -95,7 +95,7 @@ save(theNoisePs, file = "~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP
 Run permutation tests on all conditions
 
 ```{r}
-nSamples <- 1000
+nSamples <- 2000
 theComparisons <- combn(4:12, 2)
 pValue <- NULL
 for (i in 1:dim(theComparisons)[2]){
@@ -112,8 +112,11 @@ for (i in 1:dim(theComparisons)[2]){
 ```
 
 ```{r, fig.width=15}
-png("~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Figures/NoiseComp.png", width = 12, height = 8, res = 300, units = "in", bg = "transparent")
+png("~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Figures/NoiseComp.png", width = 15, height = 10, res = 300, units = "in", bg = "transparent")
 posterColours <- c("#F2EFEF", "#EBB0B0", "#B5B0B0", "#D16D6D", "#7D7D7D", "#A83838", "#4D565E", "#611515")
+
+theConditions <- c("ON.Monocular", "ON.Spatial/Temporal In", "ON.Spatial Anti/Temporal In", "ON.Spatial In/Temporal Anti","ON.Spatial/Temporal Anti","REV.Monocular", "REV.Spatial/Temporal In", "REV.Spatial Anti/Temporal In", "REV.Spatial In/Temporal Anti")
+
 
 par(mfrow = c(6,6), mai = c(.05,.05,.05,.05), omi = c(.5,.5,.1,.1))
 for (i in 1:dim(theComparisons)[2]){
@@ -138,7 +141,8 @@ for (i in 1:dim(theComparisons)[2]){
   lines(S1$x, S1$y, lwd = 3, col = posterColours[2])
   lines(S2$x, S2$y, lwd = 3, col = posterColours[3])
   
-  legend("topright", legend = c(theComparisons[1,i], theComparisons[2,i]), bty = "n", lwd = 2, col = posterColours[2:3])
+  legend("topright", legend = c(theConditions[theComparisons[1,i]-3], theConditions[theComparisons[2,i]-3]), bty = "n", lwd = 2, col = posterColours[2:3], cex = .8)
+  text(.4, .6, paste0("p = ", pValue[i]))
 }
 dev.off()
 ```

@@ -1,10 +1,10 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.7.9)  16 DEC 2025 11:54
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.7.9)  16 DEC 2025 11:43
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**SSVEP_Phase_AntiPhase_paper.tex
-(./SSVEP_Phase_AntiPhase_paper.tex
+**SSVEP_Phase_AntiPhase_RedRevisions.tex
+(./SSVEP_Phase_AntiPhase_RedRevisions.tex
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-06-30>
 (/usr/local/texlive/2025/texmf-dist/tex/latex/elsarticle/elsarticle.cls
@@ -82,7 +82,7 @@ File: xetex.def 2022/09/22 v5.0n Graphics/color driver for xetex
 \@enLab=\toks19
 \@sep=\skip51
 \@@sep=\skip52
- (/Users/brunorichard/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/.texpadtmp/SSVEP_Phase_AntiPhase_paper.spl) (/usr/local/texlive/2025/texmf-dist/tex/latex/natbib/natbib.sty
+ (/Users/brunorichard/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/.texpadtmp/SSVEP_Phase_AntiPhase_RedRevisions.spl) (/usr/local/texlive/2025/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip53
 \bibsep=\skip54
@@ -90,7 +90,7 @@ LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count289
 )
 \splwrite=\write3
-\openout3 = `SSVEP_Phase_AntiPhase_paper.spl'.
+\openout3 = `SSVEP_Phase_AntiPhase_RedRevisions.spl'.
 
 \appnamewidth=\dimen155
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/xcolor/xcolor.sty
@@ -663,8 +663,8 @@ File: bkm-dvipdfm.def 2023-12-10 v1.31 bookmark driver for dvipdfm (HO)
 Package: xurl 2022/01/09 v 0.10 modify URL breaks
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 201.
- (/Users/brunorichard/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/.texpadtmp/SSVEP_Phase_AntiPhase_paper.aux)
-\openout1 = `SSVEP_Phase_AntiPhase_paper.aux'.
+ (/Users/brunorichard/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/.texpadtmp/SSVEP_Phase_AntiPhase_RedRevisions.aux)
+\openout1 = `SSVEP_Phase_AntiPhase_RedRevisions.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 204.
 LaTeX Font Info:    ... okay on input line 204.
@@ -966,68 +966,68 @@ Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
 Package hyperref Info: Link coloring ON on input line 204.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 10.0pt on input line 247.
+(Font)              scaled to size 10.0pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 7.0pt on input line 247.
+(Font)              scaled to size 7.0pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 5.0pt on input line 247.
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 247.
+(Font)              scaled to size 5.0pt on input line 249.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 249.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 10.00092pt on input line 247.
+(Font)              scaled to size 10.00092pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 7.00064pt on input line 247.
+(Font)              scaled to size 7.00064pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 5.00046pt on input line 247.
+(Font)              scaled to size 5.00046pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 9.99893pt on input line 247.
+(Font)              scaled to size 9.99893pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 6.99925pt on input line 247.
+(Font)              scaled to size 6.99925pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 4.99947pt on input line 247.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 247.
+(Font)              scaled to size 4.99947pt on input line 249.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 249.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 247.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 249.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 8.4pt on input line 247.
+(Font)              scaled to size 8.4pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 6.0pt on input line 247.
+(Font)              scaled to size 6.0pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 12.0011pt on input line 247.
+(Font)              scaled to size 12.0011pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 8.40076pt on input line 247.
+(Font)              scaled to size 8.40076pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 6.00055pt on input line 247.
+(Font)              scaled to size 6.00055pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 11.99872pt on input line 247.
+(Font)              scaled to size 11.99872pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 8.3991pt on input line 247.
+(Font)              scaled to size 8.3991pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 5.99936pt on input line 247.
-LaTeX Font Info:    Calculating math sizes for size <8.4> on input line 247.
+(Font)              scaled to size 5.99936pt on input line 249.
+LaTeX Font Info:    Calculating math sizes for size <8.4> on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 5.87996pt on input line 247.
+(Font)              scaled to size 5.87996pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 4.2pt on input line 247.
+(Font)              scaled to size 4.2pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 5.8805pt on input line 247.
+(Font)              scaled to size 5.8805pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 4.20038pt on input line 247.
+(Font)              scaled to size 4.20038pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 5.87932pt on input line 247.
+(Font)              scaled to size 5.87932pt on input line 249.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 4.19954pt on input line 247.
+(Font)              scaled to size 4.19954pt on input line 249.
 
 
 [1
@@ -1042,88 +1042,104 @@ LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 [4]
 
 [5]
-File: Figures/MethodsFigure.png Graphic file (type bmp)
-<Figures/MethodsFigure.png>
-
 
 [6]
 
 [7]
+File: Figures/MethodsFigure.png Graphic file (type bmp)
+<Figures/MethodsFigure.png>
+
+
+[8]
+
+[9]
+
+[10]
 File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRData-1.pdf Graphic file (type pdf)
 <use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRData-1.pdf>
 
 
-[8]
+[11]
 File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRComparison-1.pdf Graphic file (type pdf)
 <use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-SNRComparison-1.pdf>
 
 
-[9]
+[12]
 File: Figures/FullModel_Updated.png Graphic file (type bmp)
 <Figures/FullModel_Updated.png>
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 10.95pt on input line 755.
+(Font)              scaled to size 10.95pt on input line 754.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 8.0pt on input line 755.
+(Font)              scaled to size 8.0pt on input line 754.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 10.95099pt on input line 755.
+(Font)              scaled to size 10.95099pt on input line 754.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 8.00073pt on input line 755.
+(Font)              scaled to size 8.00073pt on input line 754.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 10.94882pt on input line 755.
+(Font)              scaled to size 10.94882pt on input line 754.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 7.99915pt on input line 755.
-
-
-[10]
-
-[11]
-
-[12]
-File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-badModels1-1.pdf Graphic file (type pdf)
-<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-badModels1-1.pdf>
+(Font)              scaled to size 7.99915pt on input line 754.
 
 
 [13]
-File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-betterModels-1.pdf Graphic file (type pdf)
-<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-betterModels-1.pdf>
-
 
 [14]
-File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-bestModels-1.pdf Graphic file (type pdf)
-<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-bestModels-1.pdf>
-
 
 [15]
 
 [16]
+File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-badModels1-1.pdf Graphic file (type pdf)
+<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-badModels1-1.pdf>
+
 
 [17]
+File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-betterModels-1.pdf Graphic file (type pdf)
+<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-betterModels-1.pdf>
+
 
 [18]
 
 [19]
 
 [20]
-Missing character: There is no ^^80 (U+0080) in font [lmroman12-regular]:mapping=tex-text;!
-Missing character: There is no ^^93 (U+0093) in font [lmroman12-regular]:mapping=tex-text;!
+File: SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-bestModels-1.pdf Graphic file (type pdf)
+<use SSVEP_Phase_AntiPhase_paper_files/figure-pdf/fig-bestModels-1.pdf>
 
 
 [21]
 
-[22] (/Users/brunorichard/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/.texpadtmp/SSVEP_Phase_AntiPhase_paper.aux)
+[22]
+
+[23]
+
+[24]
+
+[25]
+
+[26]
+
+[27]
+
+[28]
+Missing character: There is no ^^80 (U+0080) in font [lmroman12-regular]:mapping=tex-text;!
+Missing character: There is no ^^93 (U+0093) in font [lmroman12-regular]:mapping=tex-text;!
+
+
+[29]
+
+[30] (/Users/brunorichard/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/.texpadtmp/SSVEP_Phase_AntiPhase_RedRevisions.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-06-30>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 22346 strings out of 468463
- 412419 string characters out of 5446065
- 1031233 words of memory out of 5000000
- 50452 multiletter control sequences out of 15000+600000
- 643138 words of font info for 121 fonts, out of 8000000 for 9000
+ 22354 strings out of 468463
+ 412743 string characters out of 5446065
+ 1024276 words of memory out of 5000000
+ 50458 multiletter control sequences out of 15000+600000
+ 643146 words of font info for 122 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 90i,9n,114p,1508b,588s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,9n,114p,1515b,588s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on /Users/brunorichard/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/.texpadtmp/SSVEP_Phase_AntiPhase_paper.pdf (22 pages).
+Output written on /Users/brunorichard/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/.texpadtmp/SSVEP_Phase_AntiPhase_RedRevisions.pdf (30 pages).
