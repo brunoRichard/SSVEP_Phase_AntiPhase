@@ -1260,21 +1260,16 @@ Psychophysically, spatial phase has a meaningful impact on binocular combination
 
 Model responses were generated from sine waves (in temporal phase or anti-phase) fed into their respective positive or negative phase channels. This simulated the spatial phase of stimuli presented to observers. We refer to this model iteration as the full model, as it includes a binocular channel with a monocular stage (with interocular interactions), a binocular stage, parallel monocular channels (with their respective stages), and phase-selectivity. This is, in essence, the 6-channel 2-cue model proposed by @Georgeson2016 to explain binocular combination under multiple experimental conditions. As with the addition of monocular channels, including phase-selectivity to the model means we now have six final signals to contend with: a binocular and two monocular channels selective for positive spatial phase, and a binocular and two monocular channels selective for negative spatial phase. We used the same method of combining signals as above: we first summed the Fourier amplitude spectra of observers across the positive and negative phase-selective channels and then combined the binocular and monocular channels. The inclusion of phase-selectivity did not improve the model's fit. The $R^2$ value calculated across the six frequencies and nine experimental conditions was no different than that of the previous model (see @tbl-R2Table), indicating that the spatial phase of stimuli does not have a meaningful impact on the SSVEP amplitudes of observers.
 
-<!-- | Parameter | Monocular Channels Value | Full Model Value | -->
+```{r, echo = FALSE, eval = FALSE}
+residuals <- array(NA, dim = dim(SNRAll))
+for (i in 1:dim(SNRAll)[3]){
+  residuals[,,i] <- SNRAll[,,i] - theHData
+}
 
-<!-- |:----------|:-----:|:-----:| -->
+qqnorm(residuals[,,3])
+qqline(residuals[,,3])
+```
 
-<!-- | m         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[1]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[1]),2))` | -->
-
-<!-- | p         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[2]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[2]),2))` | -->
-
-<!-- | q         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[3]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[3]),2))` | -->
-
-<!-- | S         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[4]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[4]),2))` | -->
-
-<!-- | Z         | `r sprintf("%.2f",round(exp(twoStageWithMonocChannels.params$par[5]),2))` | `r sprintf("%.2f",round(exp(twoStageWithMonocChannelsPhase.params$par[5]),2))` | -->
-
-<!-- :   {#tbl-modelParameters} -->
 
 # Discussion
 
