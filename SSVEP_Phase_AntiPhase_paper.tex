@@ -4,9 +4,9 @@
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 %
-\documentclass[preprint,
+\documentclass[
   12pt,
-]{elsarticle}
+]{article}
 \usepackage{xcolor}
 \usepackage[left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry}
 \usepackage{amsmath,amssymb}
@@ -134,18 +134,22 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
+
+
+ 
+
+
 \usepackage{indentfirst}
-\usepackage{lineno}
 \setlength{\parindent}{15pt}
 \setlength{\parskip}{10pt}
 \usepackage[font=small]{caption}  % Options: small, footnotesize, scriptsize, etc.
-%\usepackage[noblocks]{authblk}
-%\renewcommand*{\Authsep}{, }
-%\renewcommand*{\Authand}{, }
-%\renewcommand*{\Authands}{, }
-%\renewcommand\Affilfont{\small}
+\usepackage[noblocks]{authblk}
+\renewcommand*{\Authsep}{, }
+\renewcommand*{\Authand}{, }
+\renewcommand*{\Authands}{, }
+\renewcommand\Affilfont{\small}
 % Define a keywords command for inline keywords
-%\newcommand{\printkeywords}[1]{\noindent\textbf{Keywords:} #1\par}
+\newcommand{\printkeywords}[1]{\noindent\textbf{Keywords:} #1\par}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -201,21 +205,18 @@
   pdfcreator={LaTeX via pandoc}}
 
 
-\begin{document}
-
-\begin{frontmatter}
-
 \title{Neural responses to binocular in-phase and anti-phase stimuli}
 
-\author[inst1]{Bruno Richard\corref{cor1}}
-\cortext[cor1]{Corresponding author}
-\ead{br379@newark.rutgers.edu}
+  \author[1]{Bruno Richard}
+  \author[2]{Daniel H. Baker}
 
-\author[inst2]{Daniel H. Baker}
-
-\address[inst1]{Department of Math and Computer Sciences, Rutgers University, Newark, New Jersey, USA}
-\address[inst2]{Department of Psychology, University of York, York, UK}
-
+      \affil[1]{Department of Math and Computer Sciences, Rutgers
+University, Newark, New Jersey, USA}
+      \affil[2]{Department of Psychology, University of York, York, UK}
+  
+\date{}
+\begin{document}
+\maketitle
 \begin{abstract}
 Binocular vision fuses compatible inputs from the two eyes into a single
 percept, whereas incompatible inputs can produce rivalry, lustre, or
@@ -240,11 +241,6 @@ for describing binocular combinations across various experimental
 conditions and modalities.
 \end{abstract}
 
-\begin{keyword}
-Binocular Combination \sep SSVEP \sep Contrast Gain Control \sep Phase Selectivity \sep Monocular Channels
-\end{keyword}
-
-\end{frontmatter}
 
 \section{Introduction}\label{introduction}
 
@@ -252,15 +248,15 @@ The human visual system integrates input from both eyes to form a
 unified binocular representation of the world. Combining monocular
 inputs enhances sensitivity to the presented stimuli, particularly when
 the contrast is low or near detection threshold (Baker et al., 2018;
-Campbell and Green, 1965; Meese et al., 2006). Contrast sensitivity can
-improve by a factor of \(\sqrt{2}\) or more when stimuli are presented
-binocularly versus monocularly (Baker et al., 2018; Blake and Wilson,
-2011; Campbell and Green, 1965; Richard et al., 2018). Notably, the
-visual system also attempts to combine inputs even when the stimuli
-presented to each eye are markedly different (i.e., incompatible). In
-such cases, observers may perceive binocular rivalry (Blake, 1989;
-Wilson, 2003), diplopia, or visual lustre (Wendt and Faul, 2022).
-Despite differences in perceptual outcomes, computationally, the
+Campbell and Green, 1965; Meese et al., 2006). \textbf{Contrast
+sensitivity improves by a factor of at least \(\sqrt{2}\) when stimuli
+are presented binocularly versus monocularly (Baker et al., 2018; Blake
+and Wilson, 2011; Campbell and Green, 1965; Richard et al., 2018)}.
+Notably, the visual system also attempts to combine inputs even when the
+stimuli presented to each eye are markedly different (i.e.,
+incompatible). In such cases, observers may perceive binocular rivalry
+(Blake, 1989; Wilson, 2003), diplopia, or visual lustre (Wendt and Faul,
+2022). Despite differences in perceptual outcomes, computationally, the
 underlying processes of binocular combination for compatible and
 incompatible inputs appear similar (Baker et al., 2007a; Legge, 1984a).
 Psychophysical responses to compatible and incompatible stimuli can be
@@ -275,9 +271,9 @@ across the eyes. In contrast detection tasks, where stimulus contrast is
 low, binocular presentation increases sensitivity by approximately
 \(\sqrt{2}\) (Campbell and Green, 1965). This implies that observers
 require roughly 1.4 times more contrast to detect a monocular stimulus
-than a binocular one. The binocular improvement in sensitivity is
-consistent with a non-linearity operating before the signals from the
-two eyes (\(c_L\) and \(c_R\)) are combined (Legge, 1984b):
+than a binocular one. \textbf{The binocular improvement in sensitivity
+(Legge, 1984b) is consistent with a non-linearity operating before the
+signals from the two eyes (\(c_L\) and \(c_R\)) are combined} :
 \begin{equation}\phantomsection\label{eq-IntroMath1}{
 R_B = c_L^m + c_R^m.
 }\end{equation} Here, the exponent \(m\) determines the degree of
@@ -312,8 +308,8 @@ normalization can stem from interocular and self-suppressive signals
 R_B = \frac{c_L^m}{S+c_L+c_R} + \frac{c_R^m}{S+c_R+c_L}.
 }\end{equation} When both eyes are stimulated, the suppressive terms on
 the denominators offset the enhanced excitatory signals, nullifying the
-binocular advantage. The new parameter, S, is included to prevent
-division by zero and sets overall sensitivity of the monocular response.
+binocular advantage. \textbf{The new parameter, S, is included to set
+overall sensitivity of the monocular response}.
 
 A similar pattern of results is observed in neural measurements of
 binocular summation. In functional Magnetic Resonance Imaging (fMRI)
@@ -366,10 +362,9 @@ undergoes a second contrast normalization before the decision stage,
 R = \frac{R_B^p}{Z + R_B^q},
 }\end{equation} where the exponents \(p\) and \(q\) typically have quite
 large values, and determine the shape of the contrast discrimination
-(`dipper') functions. As with the parameter S in
-Equation~\ref{eq-intoMath2}, the parameter Z is included to prevent
-division by 0 and sets the overall sensitivity of the binocular
-response.
+(`dipper') functions. \textbf{As with the parameter S in
+Equation~\ref{eq-intoMath2}, the parameter Z is included to fix the
+overall sensitivity of the binocular response}.
 
 Subsequent iterations of the two-stage contrast gain control model added
 channels for opposite contrast polarities (Baker and Meese, 2007), and
@@ -643,7 +638,7 @@ experimental conditions, and randomly sampling them without replacement
 to create two groups of sizes identical to their original, but with
 values not associated with a particular experimental condition. The
 median difference of the randomly sampled SNRs is then taken. This
-process is repeated multiple times (e.g., \(N =\) 2000 iterations) to
+process is repeated multiple times (e.g., \(N =\) 10 iterations) to
 build a distribution of median differences with no association of
 experimental condition (i.e., a null-hypothesis distribution). The
 observed median difference is then compared to this distribution. The
@@ -878,18 +873,17 @@ R_B = \frac{(c_L+c_R)^p}{Z+(c_L+c_R)^q},
 }\end{equation} where the binocular response of the model (\(R_B\)) is
 defined as the sum of monocular inputs (\(c_L\) and \(c_R\)) raised to
 the power \(p\), normalized by the sum of monocular inputs raised to
-\(q\) and where (\(p > q\)). The parameter Z prevents division by zero
-and sets overall sensitivity. The model can now generate responses at
-the harmonic frequencies for stimuli presented in temporal phase under
-On/Off flicker (see Figure~\ref{fig-badModels1} and
-Table~\ref{tbl-R2Table}). While this model iteration improves on the
-fits, it nevertheless struggles to fit SNR values at the fundamental
-frequency (3Hz) and is, as with the linear summation model, incapable of
-generating responses to stimuli presented with On/Off flicker in
-temporal anti-phase; the linear sum of stimuli presented in temporal
-anti-phase will always return zero. Therefore, the model still lacks the
-necessary architecture to define neural responses to our stimuli
-adequately.
+\(q\) and where (\(p > q\)). The parameter Z sets gain of the model. The
+model can now generate responses at the harmonic frequencies for stimuli
+presented in temporal phase under On/Off flicker (see
+Figure~\ref{fig-badModels1} and Table~\ref{tbl-R2Table}). While this
+model iteration improves on the fits, it nevertheless struggles to fit
+SNR values at the fundamental frequency (3Hz) and is, as with the linear
+summation model, incapable of generating responses to stimuli presented
+with On/Off flicker in temporal anti-phase; the linear sum of stimuli
+presented in temporal anti-phase will always return zero. Therefore, the
+model still lacks the necessary architecture to define neural responses
+to our stimuli adequately.
 
 \begin{figure}
 
@@ -920,9 +914,9 @@ stage \begin{equation}\phantomsection\label{eq-firstStageofTwoNoInter}{
 r_L = \frac{c_L^m}{S + c_L}, \qquad r_R = \frac{c_R^m}{S + c_R}
 }\end{equation} where an exponent (\(m\)) is applied to the monocular
 inputs (\(c_L\) and \(c_R\)) in addition to self-suppression. The
-parameter \(S\), as the parameter \(Z\) above, prevents devision by
-zero. The outputs of the monocular stage (\(r_L\) and \(r_R\)) are then
-fed into the binocular stage as defined in
+parameter \(S\), as the parameter \(Z\) above, sets the overall
+sensitivity of the model. The outputs of the monocular stage (\(r_L\)
+and \(r_R\)) are then fed into the binocular stage as defined in
 Equation~\ref{eq-firstBinocSum},
 \begin{equation}\phantomsection\label{eq-binocComb}{
 R_{B} = \frac{(r_L+r_R)^p}{Z+(r_L+r_R)^q}.
@@ -1074,14 +1068,14 @@ model means we now have six final signals to contend with: a binocular
 and two monocular channels selective for positive spatial phase, and a
 binocular and two monocular channels selective for negative spatial
 phase. We used the same method of combining signals as above: we first
-summed the Fourier amplitude spectra of observers across the positive
-and negative phase-selective channels and then combined the binocular
-and monocular channels. The inclusion of phase-selectivity did not
-improve the model's fit. The \(R^2\) value calculated across the six
-frequencies and nine experimental conditions was no different than that
-of the previous model (see Table~\ref{tbl-R2Table}), indicating that the
-spatial phase of stimuli does not have a meaningful impact on the SSVEP
-amplitudes of observers.
+summed the Fourier amplitude spectra across the positive and negative
+phase-selective channels and then combined the binocular and monocular
+channels. The inclusion of phase-selectivity did not improve the model's
+fit. The \(R^2\) value calculated across the six frequencies and nine
+experimental conditions was no different than that of the previous model
+(see Table~\ref{tbl-R2Table}), indicating that the spatial phase of
+stimuli does not have a meaningful impact on the SSVEP amplitudes of
+observers.
 
 \section{Discussion}\label{discussion}
 
@@ -1466,6 +1460,7 @@ Transforming numbers into movies. Spatial Vision 10, 437--442.
 Regan, M., Regan, D., 1988. A frequency domain technique for
 characterizing nonlinearities in biological systems. Journal of
 theoretical biology 133, 293--317.
+\url{https://doi.org/10.1016/S0022-5193(88)80323-0}
 
 \bibitem[\citeproctext]{ref-Richardetal2018}
 Richard, B., Chadnova, E., Baker, D.H., 2018. Binocular vision

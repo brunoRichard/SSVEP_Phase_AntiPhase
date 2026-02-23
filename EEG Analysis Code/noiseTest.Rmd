@@ -24,7 +24,9 @@ theBlockDirectory <- "~/Library/CloudStorage/Box-Box/Binocularity Noise/Matlab B
 ```
 
 ```{r}
-theNoisePs <- matrix(NA, ncol = 13, nrow = length(theParticipants))
+P <- 1
+theNoisePs <- array(NA, dim = c(10, 6,12,13,15))
+theSignalPs <- array(NA, dim = c(6,12,13,15))
 for (P in 1:length(theParticipants)){
   
   stimulusConditions <- matrix(NA, nrow= 39, ncol = 4)
@@ -77,19 +79,100 @@ for (P in 1:length(theParticipants)){
     
     theFs <- c(31,61,91,121,151,181)
     for (trial in 1:dim(conditionFFT)[2]){
+      iiiii <- 0
       for (f in theFs){
+        iiiii <- iiiii + 1
         tempFs <- seq(f-5,f+5, 1)
         theFtoinclude <- tempFs[tempFs != f]
-        theNoise <- conditionFFT[theFtoinclude, trial]
+        theSignalPs[iiiii,trial,condition, P] <- abs(conditionFFT[f, trial])
+        theNoisePs[,iiiii, trial, condition, P] <- abs(conditionFFT[theFtoinclude, trial])
       }
     }
-    theNoisePs[P, condition] <- mean(abs(theNoise))
   }
 }
 ```
 
 ```{r}
-save(theNoisePs, file = "~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Processed Data/noiseData.RData")
+save(theSignalPs, theNoisePs, file = "~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Processed Data/noiseData.RData")
+```
+
+```{r}
+theParticipants <- c("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015")
+theConditions <- c("Monocular", "Spatial In-Phase\nTemporal In-Phase", "Spatial Anti-Phase\nTemporal In-Phase", "Spatial In-Phase\nTemporal Anti-Phase","Spatial Anti-Phase\nTemporal Anti-Phase","Monocular", "Spatial In-Phase\nTemporal In-Phase", "Spatial Anti-Phase\nTemporal In-Phase", "Spatial In-Phase\nTemporal Anti-Phase")
+```
+
+```{r}
+trialAverageSignal <- apply(theSignalPs, c(1,3,4), mean, na.rm = TRUE)
+trialAverageNoise <- apply(theNoisePs, c(1,2,4,5), mean,na.rm = TRUE)
+AverageBinNoise <- apply(trialAverageNoise, c(2,3,4), mean,na.rm = TRUE)
+```
+
+```{r, fig.width=12, fig.height=6}
+png("~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Revisions Round 2/BoxplotSignalNoise.png", width = 15, height = 6, res = 300,units = "in", bg = "transparent")
+par(mfrow = c(2,5), mai = c(.6,.1,.1,.1), omi = c(.1,.5,.5,0), xpd = TRUE, lwd = 2)
+
+posterColours <- c("#F2EFEF", "#EBB0B0", "#B5B0B0", "#D16D6D", "#7D7D7D", "#A83838", "#4D565E", "#611515")
+
+thePosSignal <- c(1,3,5,7,9,11)
+thePosNoise <- thePosSignal+.5
+
+for (c in 4:12){
+  yLimit <- c(0,2)
+  
+  boxplot(trialAverageSignal[1,c,], xlim = c(1,12),ylim = yLimit, col = posterColours[1],at = thePosSignal[1], boxwex = .5, axes= FALSE, ann = FALSE, border = posterColours[4], lwd = 2)
+  boxplot(AverageBinNoise[1,c,], add=TRUE, at = thePosNoise[1],boxwex = .5,axes= FALSE, col = posterColours[1],border = posterColours[5], lwd =2)
+  
+  for (f in 2:6){
+    boxplot(trialAverageSignal[f,c,], xlim = c(1,12), col = posterColours[1],at = thePosSignal[f], boxwex = .5, axes= FALSE, ann = FALSE, add= TRUE,border = posterColours[4], lwd = 2)
+    boxplot(AverageBinNoise[f,c,], add=TRUE, at = thePosNoise[f],col = posterColours[1],boxwex = .5,axes= FALSE, border = posterColours[5], lwd = 2)
+  }
+  
+  mtext(c("3Hz", "6Hz", "9Hz", "12Hz", "15Hz", "18Hz"), 1, font = 2, line = 0, at = c(1.25, 3.25, 5.25, 7.25, 9.25, 11.25))
+  mtext(theConditions[c-3], 3, adj = 0, font = 2)
+  axis(2, at = pretty(yLimit), lwd = 2, tck = -.015, labels = FALSE)
+  if (c == 4 | c == 9){
+    mtext(pretty(yLimit), 2, at = pretty(yLimit), line = .4, las = 1)
+    mtext("SSVEP Amplitude", 2, font =2, line = 2.5)
+  }
+  if (c == 4){
+    legend("topright", legend = c("Signal", "Noise"), border =posterColours[4:5], bty = "n", fill = posterColours[1])
+  }
+}
+dev.off()
+```
+
+```{r,fig.width=12, fig.height=6}
+png("~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Revisions Round 2/BoxplotSignalNoiseLog.png", width = 15, height = 6, res = 300,units = "in", bg = "transparent")
+par(mfrow = c(2,5), mai = c(.6,.1,.1,.1), omi = c(.1,.5,.5,0), xpd = TRUE, lwd = 2)
+
+posterColours <- c("#F2EFEF", "#EBB0B0", "#B5B0B0", "#D16D6D", "#7D7D7D", "#A83838", "#4D565E", "#611515")
+
+thePosSignal <- c(1,3,5,7,9,11)
+thePosNoise <- thePosSignal+.5
+
+for (c in 4:12){
+  yLimit <- c(-3,1)
+  
+  boxplot(log(trialAverageSignal[1,c,]), xlim = c(1,12),ylim = yLimit, col = posterColours[1],at = thePosSignal[1], boxwex = .5, axes= FALSE, ann = FALSE, border = posterColours[4], lwd = 2)
+  boxplot(log(AverageBinNoise[1,c,]), add=TRUE, at = thePosNoise[1],boxwex = .5,axes= FALSE, col = posterColours[1],border = posterColours[5], lwd =2)
+  
+  for (f in 2:6){
+    boxplot(log(trialAverageSignal[f,c,]), xlim = c(1,12), col = posterColours[1],at = thePosSignal[f], boxwex = .5, axes= FALSE, ann = FALSE, add= TRUE,border = posterColours[4], lwd = 2)
+    boxplot(log(AverageBinNoise[f,c,]), add=TRUE, at = thePosNoise[f],col = posterColours[1],boxwex = .5,axes= FALSE, border = posterColours[5], lwd = 2)
+  }
+  
+  mtext(c("3Hz", "6Hz", "9Hz", "12Hz", "15Hz", "18Hz"), 1, font = 2, line = 0, at = c(1.25, 3.25, 5.25, 7.25, 9.25, 11.25))
+  mtext(theConditions[c-3], 3, adj = 0, font = 2)
+  axis(2, at = pretty(yLimit), lwd = 2, tck = -.015, labels = FALSE)
+  if (c == 4 | c == 9){
+    mtext(pretty(yLimit), 2, at = pretty(yLimit), line = .4, las = 1)
+    mtext("SSVEP Amplitude", 2, font =2, line = 2.5)
+  }
+  if (c == 4){
+    legend("topright", legend = c("Signal", "Noise"), border =posterColours[4:5], bty = "n", fill = posterColours[1])
+  }
+}
+dev.off()
 ```
 
 Run permutation tests on all conditions
@@ -110,6 +193,9 @@ for (i in 1:dim(theComparisons)[2]){
   pValue[i] <- mean(abs(mDiff) > realDifference)
 }
 ```
+
+
+
 
 ```{r, fig.width=15}
 png("~/Library/CloudStorage/Box-Box/Binocularity Noise/SSVEP_Phase_AntiPhase/Figures/NoiseComp.png", width = 15, height = 10, res = 300, units = "in", bg = "transparent")

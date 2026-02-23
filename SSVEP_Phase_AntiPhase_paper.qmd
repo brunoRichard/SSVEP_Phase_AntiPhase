@@ -56,7 +56,7 @@ invisible(lapply(toinstall,library,character.only=TRUE))
 
 addalpha <- function(col, alpha=1){apply(sapply(col, col2rgb)/255, 2, function(x) rgb(x[1], x[2], x[3], alpha=alpha))}
 
-nSamples <- 2000 # change to 2000
+nSamples <- 10 # change to 2000
 
 ```
 
@@ -108,9 +108,9 @@ CIUpper <- apply(sampleMedians, c(1,2), quantile, probs = 1-alpha/2)
 
 # Introduction
 
-The human visual system integrates input from both eyes to form a unified binocular representation of the world. Combining monocular inputs enhances sensitivity to the presented stimuli, particularly when the contrast is low or near detection threshold [@Meese2006; @Baker2018; @CampbellGreen1965]. Contrast sensitivity can improve by a factor of $\sqrt{2}$ or more when stimuli are presented binocularly versus monocularly [@CampbellGreen1965; @Baker2018; @BlakeWilson2011; @Richardetal2018]. Notably, the visual system also attempts to combine inputs even when the stimuli presented to each eye are markedly different (i.e., incompatible). In such cases, observers may perceive binocular rivalry [@Blake1989; @Wilson2003], diplopia, or visual lustre [@Wendt2022]. Despite differences in perceptual outcomes, computationally, the underlying processes of binocular combination for compatible and incompatible inputs appear similar [@Legge1984a; @BakerMeeseGeorgeson2007]. Psychophysical responses to compatible and incompatible stimuli can be effectively explained by a single psychophysical model that involves nonlinear transduction, followed by summation across monocular and binocular phase-selective channels [@BakerMeeseGeorgeson2007; @BakerMeese2007]. Here, we explore if the integrative processes defined over multiple behavioural tasks are also reflected at the neural level.
+The human visual system integrates input from both eyes to form a unified binocular representation of the world. Combining monocular inputs enhances sensitivity to the presented stimuli, particularly when the contrast is low or near detection threshold [@Meese2006; @Baker2018; @CampbellGreen1965]. **Contrast sensitivity improves by a factor of at least $\sqrt{2}$ when stimuli are presented binocularly versus monocularly  [@Baker2018; @CampbellGreen1965; @BlakeWilson2011; @Richardetal2018]**. Notably, the visual system also attempts to combine inputs even when the stimuli presented to each eye are markedly different (i.e., incompatible). In such cases, observers may perceive binocular rivalry [@Blake1989; @Wilson2003], diplopia, or visual lustre [@Wendt2022]. Despite differences in perceptual outcomes, computationally, the underlying processes of binocular combination for compatible and incompatible inputs appear similar [@Legge1984a; @BakerMeeseGeorgeson2007]. Psychophysical responses to compatible and incompatible stimuli can be effectively explained by a single psychophysical model that involves nonlinear transduction, followed by summation across monocular and binocular phase-selective channels [@BakerMeeseGeorgeson2007; @BakerMeese2007]. Here, we explore if the integrative processes defined over multiple behavioural tasks are also reflected at the neural level.
 
-It has long been known that stimuli presented binocularly are summed across the eyes. In contrast detection tasks, where stimulus contrast is low, binocular presentation increases sensitivity by approximately $\sqrt{2}$ [@CampbellGreen1965]. This implies that observers require roughly 1.4 times more contrast to detect a monocular stimulus than a binocular one. The binocular improvement in sensitivity is consistent with a non-linearity operating before the signals from the two eyes ($c_L$ and $c_R$) are combined [@Legge1984b]: 
+It has long been known that stimuli presented binocularly are summed across the eyes. In contrast detection tasks, where stimulus contrast is low, binocular presentation increases sensitivity by approximately $\sqrt{2}$ [@CampbellGreen1965]. This implies that observers require roughly 1.4 times more contrast to detect a monocular stimulus than a binocular one. **The binocular improvement in sensitivity [@Legge1984b] is consistent with a non-linearity operating before the signals from the two eyes ($c_L$ and $c_R$) are combined** : 
 $$
 R_B = c_L^m + c_R^m.
 $$ {#eq-IntroMath1} 
@@ -120,7 +120,7 @@ The contrast of stimuli is crucial in measuring binocular summation. Binocular s
 $$
 R_B = \frac{c_L^m}{S+c_L+c_R} + \frac{c_R^m}{S+c_R+c_L}.
 $$ {#eq-intoMath2} 
-When both eyes are stimulated, the suppressive terms on the denominators offset the enhanced excitatory signals, nullifying the binocular advantage. The new parameter, S, is included to prevent division by zero and sets overall sensitivity of the monocular response.
+When both eyes are stimulated, the suppressive terms on the denominators offset the enhanced excitatory signals, nullifying the binocular advantage. **The new parameter, S, is included to set overall sensitivity of the monocular response**.
 
 A similar pattern of results is observed in neural measurements of binocular summation. In functional Magnetic Resonance Imaging (fMRI) recordings, neural responses are significantly larger for binocular than monocular responses when stimulus contrast is low [@MoradiHeeger2009]. At higher contrasts, observers no longer show the binocular advantage. As with behavioural results, these findings are well-explained computationally by interocular suppression and binocular contrast normalization. The equivalency in binocular summation between psychophysics and neuroimaging findings means that both data types can constrain binocular summation models. We, for example, have demonstrated that a popular model of binocular summation could be easily adapted to capture Steady-State Visually Evoked Potentials (SSVEPs) to monocular and binocular stimuli when one eye was occluded by a neutral density filter [@Richardetal2018]. Placing a neutral density filter in front of one eye darkens its input, reducing the amplitude and altering the phase of SSVEPs to stimuli presented to the filtered eye. Steady-State response amplitudes and phases to stimuli presented through different neutral density filter strengths were well described by a model that first used a biophysically plausible temporal filter on the input stimuli, followed by self and interocular suppression, and finally, binocular contrast normalization. This model also explained psychophysically measured binocular summation in the same group of observers. A comprehensive description of the processes involved in binocular summation should be able to explain behavioural and neuroimaging findings under various experimental conditions of binocular summation.
 
@@ -128,7 +128,7 @@ Many studies have worked towards the development of a comprehensive description 
 $$
 R = \frac{R_B^p}{Z + R_B^q},
 $$ {#eq-IntroMathSecondStage}
-where the exponents $p$ and $q$ typically have quite large values, and determine the shape of the contrast discrimination ('dipper') functions. As with the parameter S in @eq-intoMath2, the parameter Z is included to prevent division by 0 and sets the overall sensitivity of the binocular response.
+where the exponents $p$ and $q$ typically have quite large values, and determine the shape of the contrast discrimination ('dipper') functions. **As with the parameter S in @eq-intoMath2, the parameter Z is included to fix the overall sensitivity of the binocular response**.
 
 Subsequent iterations of the two-stage contrast gain control model added channels for opposite contrast polarities [@BakerMeese2007], and monocular channels parallel to the binocular summing channel [@Georgeson2016]. Polarity-specific channels were included to explain masking effects when the stimuli presented to each eye had opposite phase polarities (i.e., dichoptic presentation). Antiphase stimuli do not cancel each other out (as would be expected if their luminances were linearly summed): the stimuli remain detectable and the two inputs can sum [@BakerMeese2007; @Simmons2005; @Bacon1976], at least in a probabilistic sense. Parallel monocular channels are consistent with adaptation after-effects that suggest monocular signals may be preserved and available for perception following binocular summation [@BlakeOvertonLemaStern1981; @Moulden1980].  
 
@@ -905,7 +905,7 @@ Responses of neurons to contrast in the visual system are well-modeled by a satu
 $$
 R_B = \frac{(c_L+c_R)^p}{Z+(c_L+c_R)^q},
 $$ {#eq-firstBinocSum} 
-where the binocular response of the model ($R_B$) is defined as the sum of monocular inputs ($c_L$ and $c_R$) raised to the power $p$, normalized by the sum of monocular inputs raised to $q$ and where ($p > q$). The parameter Z prevents division by zero and sets overall sensitivity. The model can now generate responses at the harmonic frequencies for stimuli presented in temporal phase under On/Off flicker (see @fig-badModels1 and @tbl-R2Table). While this model iteration improves on the fits, it nevertheless struggles to fit SNR values at the fundamental frequency (3Hz) and is, as with the linear summation model, incapable of generating responses to stimuli presented with On/Off flicker in temporal anti-phase; the linear sum of stimuli presented in temporal anti-phase will always return zero. Therefore, the model still lacks the necessary architecture to define neural responses to our stimuli adequately.
+where the binocular response of the model ($R_B$) is defined as the sum of monocular inputs ($c_L$ and $c_R$) raised to the power $p$, normalized by the sum of monocular inputs raised to $q$ and where ($p > q$). The parameter Z sets gain of the model. The model can now generate responses at the harmonic frequencies for stimuli presented in temporal phase under On/Off flicker (see @fig-badModels1 and @tbl-R2Table). While this model iteration improves on the fits, it nevertheless struggles to fit SNR values at the fundamental frequency (3Hz) and is, as with the linear summation model, incapable of generating responses to stimuli presented with On/Off flicker in temporal anti-phase; the linear sum of stimuli presented in temporal anti-phase will always return zero. Therefore, the model still lacks the necessary architecture to define neural responses to our stimuli adequately.
 
 ```{r drawtheBadModels, fig.width=12, fig.height=6, echo = FALSE}
 #| label: fig-badModels1
@@ -988,7 +988,7 @@ The simple models described above could not accurately represent the observer SS
 $$
 r_L = \frac{c_L^m}{S + c_L}, \qquad r_R = \frac{c_R^m}{S + c_R}
 $$ {#eq-firstStageofTwoNoInter} 
-where an exponent ($m$) is applied to the monocular inputs ($c_L$ and $c_R$) in addition to self-suppression. The parameter $S$, as the parameter $Z$ above, prevents devision by zero. The outputs of the monocular stage ($r_L$ and $r_R$) are then fed into the binocular stage as defined in @eq-firstBinocSum,
+where an exponent ($m$) is applied to the monocular inputs ($c_L$ and $c_R$) in addition to self-suppression. The parameter $S$, as the parameter $Z$ above, sets the overall sensitivity of the model. The outputs of the monocular stage ($r_L$ and $r_R$) are then fed into the binocular stage as defined in @eq-firstBinocSum,
 $$
 R_{B} = \frac{(r_L+r_R)^p}{Z+(r_L+r_R)^q}.
 $$ {#eq-binocComb}
@@ -1258,7 +1258,7 @@ for (i in 6:9){
 
 Psychophysically, spatial phase has a meaningful impact on binocular combination [@BakerMeese2007; @Simmons2005; @Bacon1976] and the two-stage contrast gain control often includes phase-selective channels to account for these effects. Our study found little evidence of any influence of spatial phase on observer SSVEPs, as no statistically significant difference in signal-to-noise ratios across spatial phase was found. Still, we felt it prudent to verify if adding phase-selective channels improves the fit of the model to our data. Phase-selectivity was added to the binocular and monocular channels by replicating the equations of the first and second stage, for six channels (see @fig-modelDiagram). As with the previous model, no additional model parameters were required to include phase-selectivity; the parameters $m$, $p$, $q$, $S$, and $Z$ were used to define the responses of all six channels in this model.
 
-Model responses were generated from sine waves (in temporal phase or anti-phase) fed into their respective positive or negative phase channels. This simulated the spatial phase of stimuli presented to observers. We refer to this model iteration as the full model, as it includes a binocular channel with a monocular stage (with interocular interactions), a binocular stage, parallel monocular channels (with their respective stages), and phase-selectivity. This is, in essence, the 6-channel 2-cue model proposed by @Georgeson2016 to explain binocular combination under multiple experimental conditions. As with the addition of monocular channels, including phase-selectivity to the model means we now have six final signals to contend with: a binocular and two monocular channels selective for positive spatial phase, and a binocular and two monocular channels selective for negative spatial phase. We used the same method of combining signals as above: we first summed the Fourier amplitude spectra of observers across the positive and negative phase-selective channels and then combined the binocular and monocular channels. The inclusion of phase-selectivity did not improve the model's fit. The $R^2$ value calculated across the six frequencies and nine experimental conditions was no different than that of the previous model (see @tbl-R2Table), indicating that the spatial phase of stimuli does not have a meaningful impact on the SSVEP amplitudes of observers.
+Model responses were generated from sine waves (in temporal phase or anti-phase) fed into their respective positive or negative phase channels. This simulated the spatial phase of stimuli presented to observers. We refer to this model iteration as the full model, as it includes a binocular channel with a monocular stage (with interocular interactions), a binocular stage, parallel monocular channels (with their respective stages), and phase-selectivity. This is, in essence, the 6-channel 2-cue model proposed by @Georgeson2016 to explain binocular combination under multiple experimental conditions. As with the addition of monocular channels, including phase-selectivity to the model means we now have six final signals to contend with: a binocular and two monocular channels selective for positive spatial phase, and a binocular and two monocular channels selective for negative spatial phase. We used the same method of combining signals as above: we first summed the Fourier amplitude spectra across the positive and negative phase-selective channels and then combined the binocular and monocular channels. The inclusion of phase-selectivity did not improve the model's fit. The $R^2$ value calculated across the six frequencies and nine experimental conditions was no different than that of the previous model (see @tbl-R2Table), indicating that the spatial phase of stimuli does not have a meaningful impact on the SSVEP amplitudes of observers.
 
 ```{r, echo = FALSE, eval = FALSE}
 residuals <- array(NA, dim = dim(SNRAll))
@@ -1266,8 +1266,17 @@ for (i in 1:dim(SNRAll)[3]){
   residuals[,,i] <- SNRAll[,,i] - theHData
 }
 
-qqnorm(residuals[,,3])
-qqline(residuals[,,3])
+plot(c(SNRAll), c(residuals))
+abline(h = 0)
+
+n <- length(residuals)
+sq_residuals <- residuals^2
+aux_model <- lm(c(sq_residuals) ~ c(SNRAll))
+r_sq <- summary(aux_model)$r.squared
+lm_stat <- n * r_sq
+p_val <- 1 - pchisq(lm_stat, df = 1)
+
+cor.test(abs(c(residuals)), c(SNRAll), method = "spearman")
 ```
 
 

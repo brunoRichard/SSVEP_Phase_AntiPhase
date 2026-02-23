@@ -1,4 +1,51 @@
+# ----------------------------------
+# IGNORE COMPILED LATEX FILES
+# These files are generated when building the PDF and should not be tracked
+# by Git unless absolutely necessary. The deployer will handle the final PDF.
+# ----------------------------------
+*.aux
+*.bbl
+*.blg
+*.brf
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
+*.dvi
+*.ps
+*.idx
+*.ist
+*.upa
+*.thm
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.acn
+*.acr
+*.alg
+*.loc
+*.run.xml
+*.spl
+*.nls
+*.nlo
+
+# Ignore the final PDF (if the deployer commits it separately)
+*.pdf
+
+# ----------------------------------
+# IGNORE COMMON TEMPORARY EDITOR FILES
+# These files are often created by text editors (like TeXPad) and IDEs
+# ----------------------------------
+.texpadtmp/
+*~
+.#*
+\#*
+.DS_Store
 .Rproj.user
-.Rhistory
-.RData
-.Ruserdata
