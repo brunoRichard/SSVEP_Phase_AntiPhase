@@ -341,23 +341,31 @@ summation.
 Many studies have worked towards the development of a comprehensive
 description of the process of binocular summation in human vision using
 a variety of psychophysical and neuroimaging approaches (Baker et al.,
-2008, 2007b; Ding et al., 2013; Ding and Sperling, 2006; Legge, 1984a;
-Lygo et al., 2021; Maehara and Goryo, 2005; May and Zhaoping, 2016;
-Richard et al., 2018). This is not an insignificant challenge; such a
-description must account for multiple components of early vision,
-including identifying relevant signals, defining how these signals might
-interact, what non-linearities are present, and most importantly, how
-these signals are summed and/or differenced. One model that has proven
-very informative and capable of describing binocular summation under
-various experimental conditions is the two-stage contrast gain control
-model developed by Meese et al. (2006). In a two-stage process, the
-model captured detection and discrimination thresholds for monocular and
-binocular presentation, in addition to dichoptic masking (when the
-stimuli presented to both eyes are not identical). First, the input is
-rectified by an excitatory non-linearity (\(m \approx 1.3\)) and
-normalized by self and interocular suppression (see
-Equation~\ref{eq-intoMath2}). The binocular (e.g., combined) signal then
-undergoes a second contrast normalization before the decision stage,
+2008, 2007b; Campbell and Green, 1965; Ding et al., 2013; Ding and
+Sperling, 2006; Legge, 1984a; Lygo et al., 2021; Maehara and Goryo,
+2005; May and Zhaoping, 2016; Richard et al., 2018). This is not an
+insignificant challenge; such a description must account for multiple
+components of early vision, including identifying relevant signals,
+defining how these signals might interact, what non-linearities are
+present, and most importantly, how these signals are summed and/or
+differenced. \textbf{Early approaches (Campbell and Green, 1965)
+proposed the \(\sqrt{2}\) improvement from binocular summation could be
+explained because the visual system integrates signal and uncorrelated
+noise from the monocular channels. However, it was also recognized
+(Blake et al., 1981b; Campbell and Green, 1965) that the model can only
+return \(\sqrt{2}\) improvement when the noise in one eye is ignored, or
+that the observer is able to respond selectively to the monocular
+pathway in monocular trials.} One model that has proven very informative
+and capable of describing binocular summation under various experimental
+conditions is the two-stage contrast gain control model developed by
+Meese et al. (2006). In a two-stage process, the model captured
+detection and discrimination thresholds for monocular and binocular
+presentation, in addition to dichoptic masking (when the stimuli
+presented to both eyes are not identical). First, the input is rectified
+by an excitatory non-linearity (\(m \approx 1.3\)) and normalized by
+self and interocular suppression (see Equation~\ref{eq-intoMath2}). The
+binocular (e.g., combined) signal then undergoes a second contrast
+normalization before the decision stage,
 \begin{equation}\phantomsection\label{eq-IntroMathSecondStage}{
 R = \frac{R_B^p}{Z + R_B^q},
 }\end{equation} where the exponents \(p\) and \(q\) typically have quite
@@ -378,7 +386,7 @@ sum (Bacon, 1976; Baker and Meese, 2007; Simmons, 2005), at least in a
 probabilistic sense. Parallel monocular channels are consistent with
 adaptation after-effects that suggest monocular signals may be preserved
 and available for perception following binocular summation (Blake et
-al., 1981; Moulden, 1980).
+al., 1981a; Moulden, 1980).
 
 While the possibility of monocular channels had been considered (Legge,
 1984a), many assumed that only the binocularly summed signal contributed
@@ -424,10 +432,10 @@ flicker will generate two transients per cycle, resulting in SSVEPs at
 the even harmonics of the flicker frequency (2F, 4F, 6F, etc.). These
 frequency-doubling responses are argued to provide a cleaner measure of
 nonlinear visual responses (Kim et al., 2011; Skottun and Skoyles,
-2007). Utilizing both stimulation protocols enables a comprehensive
-description of linear and nonlinear visual processes, thereby generating
-the data necessary to evaluate psychophysical models of visual
-perception.
+2007). \textbf{Using both stimulation protocols yields the data needed
+for a comprehensive description of linear and nonlinear visual
+processes, thereby enabling evaluation of psychophysical models of
+visual perception.}
 
 The current architecture of the two-stage contrast gain control model
 has been rigorously evaluated on psychophysical data, providing a solid
@@ -697,7 +705,7 @@ conditions, were nevertheless statistically significantly greater than
 presented in temporal anti-phase is a strong indication that monocular
 responses remain and contribute to the SSVEP, as these conditions
 generate two transients per cycle. A purely binocular signal would only
-generate responses at 6Hz (Blake et al., 1981; Georgeson et al., 2016;
+generate responses at 6Hz (Blake et al., 1981a; Georgeson et al., 2016;
 Moulden, 1980).
 
 \subsection{Modelling}\label{modelling}
@@ -709,16 +717,24 @@ al., 2008, 2007a, 2007b; Baker and Meese, 2007; Meese et al., 2006).
 This simple, yet powerful, family of models not only captures
 behavioural data well, but can also explain neural responses to
 binocular and dichoptic stimuli (Baker and Wade, 2017; Lygo et al.,
-2021; Richard et al., 2018). Our SSVEP results show the expected pattern
-of binocular combination for stimuli presented at high contrast (i.e.,
+2021; Richard et al., 2018). \textbf{While other computational
+descriptions of binocular combination have been proposed (Blake and
+Wilson, 2011; Campbell and Green, 1965; Ding and Sperling, 2006), the
+goal of this manuscript is to probe the architecture of the two-stage
+contrast gain control model and its subsequent variants with a rich
+SSVEP data set.} Our SSVEP results show the expected pattern of
+binocular combination for stimuli presented at high contrast (i.e.,
 ocularity invariance) but also intriguing effects that are likely
 explainable by the most recent extension of the two-stage contrast gain
-control model, as defined by Georgeson et al. (2016). To explore the
-architecture required to describe our effects adequately, we
-progressively increase the complexity of binocular combination,
-beginning with a deliberately wrong model (i.e., linear combination) and
-building up to a multi-channel model with monocular, binocular, and
-phase-selective pathways (Figure~\ref{fig-modelDiagram}).
+control model, as defined by Georgeson et al. (2016). \textbf{Our goal
+in this modelling section is not to argue for a novel description of
+binocular summation but to explore the architecture required under the
+two-stage contrast gain control framework, to describe our effects. Thus
+our approach is to progressively increase the complexity of the
+binocular combination model, beginning with a deliberately wrong model
+(i.e., linear combination) and building up to a multi-channel model
+(Georgeson et al., 2016) with monocular, binocular, and phase-selective
+pathways (Figure~\ref{fig-modelDiagram})}.
 
 \begin{figure}
 
@@ -1086,12 +1102,12 @@ al., 2016; Meese et al., 2006), yet its ability to explain neural data
 has only been explored on a limited set of stimulus conditions (Baker
 and Wade, 2017; Lygo et al., 2021; Richard et al., 2018). This study
 investigated the effects of stimulus spatial and temporal phase on
-observer SSVEPs. We explored the ability of the two-stage contrast gain
-control model - and its variants - to capture our neural data. On/Off
-flicker generated responses at the fundamental frequency (3Hz) and its
-harmonics (6Hz, 9Hz, 12Hz, and 15Hz) while counterphase flicker
-generated responses at twice the fundamental frequency (6Hz) and its
-even integer harmonics (12Hz and 18Hz). No statistically significant
+observer SSVEPs in an effort to probe the ability of the two-stage
+contrast gain control model - and its variants - to capture our neural
+data. On/Off flicker generated responses at the fundamental frequency
+(3Hz) and its harmonics (6Hz, 9Hz, 12Hz, and 15Hz) while counterphase
+flicker generated responses at twice the fundamental frequency (6Hz) and
+its even integer harmonics (12Hz and 18Hz). No statistically significant
 difference was found between the monocular and binocular conditions
 presented with On/Off or counterphase flicker. This is consistent with
 ocularity invariance; binocular and monocular stimuli appear equal in
@@ -1131,7 +1147,7 @@ monocular pathways, which represent the early stages of the visual
 processing stream, only serve as the input to combine. However,
 psychophysical evidence from adaptation and discrimination experiments
 has demonstrated that monocular signals do contribute to perception
-(Blake et al., 1981; Georgeson et al., 2016; Moulden, 1980) and that
+(Blake et al., 1981a; Georgeson et al., 2016; Moulden, 1980) and that
 monocular channels parallel to the binocular channel should be included
 in models of binocular combination. This study found that monocular
 responses to stimuli can be recorded with SSVEPs under binocular
@@ -1275,9 +1291,14 @@ Blake, R., 1989. A neural theory of binocular rivalry. Psychol Rev 96,
 145--67. \url{https://doi.org/10.1037/0033-295x.96.1.145}
 
 \bibitem[\citeproctext]{ref-BlakeOvertonLemaStern1981}
-Blake, R., Overton, R., Lema-Stern, S., 1981. Interocular transfer of
+Blake, R., Overton, R., Lema-Stern, S., 1981a. Interocular transfer of
 visual aftereffects. J Exp Psychol Hum Percept Perform 7, 367--81.
 \url{https://doi.org/10.1037//0096-1523.7.2.367}
+
+\bibitem[\citeproctext]{ref-BlakeSloaneFox1981}
+Blake, R., Sloane, M., Fox, R., 1981b. Further developments in binocular
+summation. Percept Psychophys 30, 266--76.
+\url{https://doi.org/10.3758/bf03214282}
 
 \bibitem[\citeproctext]{ref-BlakeWilson2011}
 Blake, R., Wilson, H., 2011. Binocular vision. Vision Research 51,
