@@ -4,9 +4,9 @@
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 %
-\documentclass[
+\documentclass[review,
   12pt,
-]{article}
+]{elsarticle}
 \usepackage{xcolor}
 \usepackage[left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry}
 \usepackage{amsmath,amssymb}
@@ -134,22 +134,18 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
-
-
- 
-
-
 \usepackage{indentfirst}
+\usepackage{lineno}
 \setlength{\parindent}{15pt}
 \setlength{\parskip}{10pt}
 \usepackage[font=small]{caption}  % Options: small, footnotesize, scriptsize, etc.
-\usepackage[noblocks]{authblk}
-\renewcommand*{\Authsep}{, }
-\renewcommand*{\Authand}{, }
-\renewcommand*{\Authands}{, }
-\renewcommand\Affilfont{\small}
+%\usepackage[noblocks]{authblk}
+%\renewcommand*{\Authsep}{, }
+%\renewcommand*{\Authand}{, }
+%\renewcommand*{\Authands}{, }
+%\renewcommand\Affilfont{\small}
 % Define a keywords command for inline keywords
-\newcommand{\printkeywords}[1]{\noindent\textbf{Keywords:} #1\par}
+%\newcommand{\printkeywords}[1]{\noindent\textbf{Keywords:} #1\par}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -205,19 +201,23 @@
   pdfcreator={LaTeX via pandoc}}
 
 
+\begin{document}
+
+\begin{frontmatter}
+
 \title{Neural responses to binocular in-phase and anti-phase stimuli}
 
-  \author[1]{Bruno Richard}
-  \author[2]{Daniel H. Baker}
+\author[inst1]{Bruno Richard\corref{cor1}}
+\cortext[cor1]{Corresponding author}
+\ead{br379@newark.rutgers.edu}
 
-      \affil[1]{Department of Math and Computer Sciences, Rutgers
-University, Newark, New Jersey, USA}
-      \affil[2]{Department of Psychology, University of York, York, UK}
-  
-\date{}
-\begin{document}
-\maketitle
+\author[inst2]{Daniel H. Baker}
+
+\address[inst1]{Department of Math and Computer Sciences, Rutgers University, Newark, New Jersey, USA}
+\address[inst2]{Department of Psychology, University of York, York, UK}
+
 \begin{abstract}
+\begin{linenumbers}
 Binocular vision fuses compatible inputs from the two eyes into a single
 percept, whereas incompatible inputs can produce rivalry, lustre, or
 diplopia. We measured neural responses to binocular stimuli with
@@ -239,9 +239,16 @@ whereas phase selectivity was not essential. Overall, the two-stage
 contrast gain-control model remains a powerful and flexible framework
 for describing binocular combinations across various experimental
 conditions and modalities.
+\end{linenumbers}
 \end{abstract}
 
+\begin{keyword}
+Binocular Combination \sep SSVEP \sep Contrast Gain Control \sep Phase Selectivity \sep Monocular Channels
+\end{keyword}
 
+\end{frontmatter}
+
+\linenumbers
 \section{Introduction}\label{introduction}
 
 The human visual system integrates input from both eyes to form a
@@ -354,9 +361,9 @@ explained because the visual system integrates signal and uncorrelated
 noise from the monocular channels. However, it was also recognized
 (Blake et al., 1981b; Campbell and Green, 1965) that the model can only
 return \(\sqrt{2}\) improvement when the noise in one eye is ignored, or
-that the observer is able to respond selectively to the monocular
-pathway in monocular trials.} One model that has proven very informative
-and capable of describing binocular summation under various experimental
+the observer is able to respond selectively to the monocular pathway on
+monocular trials.} One model that has proven very informative and
+capable of describing binocular summation under various experimental
 conditions is the two-stage contrast gain control model developed by
 Meese et al. (2006). In a two-stage process, the model captured
 detection and discrimination thresholds for monocular and binocular
@@ -416,7 +423,7 @@ Georgeson et al. (2016).
 Steady-State Visually Evoked Potentials offer a unique opportunity to
 bridge the gap between models developed from psychophysical data and
 neuroimaging, as responses to stimulus contrast (i.e., SSVEP amplitude)
-are directly associated with behavioral sensitivity to contrast (Norcia
+are directly associated with behavioural sensitivity to contrast (Norcia
 et al., 2015; Wade and Baker, 2025). Two common stimulus presentation
 protocols are used to generate SSVEPs: a sinusoidal On/Off flicker,
 where the stimulus alternates between a blank background (0\% contrast)
@@ -465,12 +472,15 @@ conditions and modalities.
 \subsection{Participants}\label{participants}
 
 Fifteen observers (\(N_{male} = 4\); age range {[}19 34{]}), including
-authors BR and DHB, participated in this study. All observers had normal
-or corrected-to-normal visual acuity, as verified by a Snellen chart,
-and normal binocular vision, as verified by a Titmus test. Written
-informed consent was obtained from all participants, and experimental
-procedures were approved by the ethics committee of the Department of
-Psychology at the University of York.
+authors BR and DHB, participated in this study. \textcolor{red}{The sample size
+was based on common practice in the field, and is comparable to similar
+SSVEP studies}. All observers had normal or corrected-to-normal visual
+acuity, as verified by a Snellen chart, and normal binocular vision, as
+verified by a Titmus test. Written informed consent was obtained from
+all participants, and experimental procedures were approved by the
+ethics committee of the Department of Psychology at the University of
+York. \textcolor{red}{Finally, as the experimental design was exploratory in
+nature, we did not pre-register the study design or hypotheses}.
 
 \subsection{Apparatus}\label{apparatus}
 
