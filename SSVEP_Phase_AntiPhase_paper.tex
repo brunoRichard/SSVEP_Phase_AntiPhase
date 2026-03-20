@@ -4,9 +4,9 @@
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 %
-\documentclass[preprint,
+\documentclass[
   12pt,
-]{elsarticle}
+]{article}
 \usepackage{xcolor}
 \usepackage[left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry}
 \usepackage{amsmath,amssymb}
@@ -134,18 +134,22 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
+
+
+ 
+
+
 \usepackage{indentfirst}
-\usepackage{lineno}
 \setlength{\parindent}{15pt}
 \setlength{\parskip}{10pt}
 \usepackage[font=small]{caption}  % Options: small, footnotesize, scriptsize, etc.
-%\usepackage[noblocks]{authblk}
-%\renewcommand*{\Authsep}{, }
-%\renewcommand*{\Authand}{, }
-%\renewcommand*{\Authands}{, }
-%\renewcommand\Affilfont{\small}
+\usepackage[noblocks]{authblk}
+\renewcommand*{\Authsep}{, }
+\renewcommand*{\Authand}{, }
+\renewcommand*{\Authands}{, }
+\renewcommand\Affilfont{\small}
 % Define a keywords command for inline keywords
-%\newcommand{\printkeywords}[1]{\noindent\textbf{Keywords:} #1\par}
+\newcommand{\printkeywords}[1]{\noindent\textbf{Keywords:} #1\par}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -201,21 +205,18 @@
   pdfcreator={LaTeX via pandoc}}
 
 
-\begin{document}
-
-\begin{frontmatter}
-
 \title{Neural responses to binocular in-phase and anti-phase stimuli}
 
-\author[inst1]{Bruno Richard\corref{cor1}}
-\cortext[cor1]{Corresponding author}
-\ead{br379@newark.rutgers.edu}
+  \author[1]{Bruno Richard}
+  \author[2]{Daniel H. Baker}
 
-\author[inst2]{Daniel H. Baker}
-
-\address[inst1]{Department of Math and Computer Sciences, Rutgers University, Newark, New Jersey, USA}
-\address[inst2]{Department of Psychology, University of York, York, UK}
-
+      \affil[1]{Department of Math and Computer Sciences, Rutgers
+University, Newark, New Jersey, USA}
+      \affil[2]{Department of Psychology, University of York, York, UK}
+  
+\date{}
+\begin{document}
+\maketitle
 \begin{abstract}
 Binocular vision fuses compatible inputs from the two eyes into a single
 percept, whereas incompatible inputs can produce rivalry, lustre, or
@@ -240,11 +241,6 @@ for describing binocular combinations across various experimental
 conditions and modalities.
 \end{abstract}
 
-\begin{keyword}
-Binocular Combination \sep SSVEP \sep Contrast Gain Control \sep Phase Selectivity \sep Monocular Channels
-\end{keyword}
-
-\end{frontmatter}
 
 \section{Introduction}\label{introduction}
 
@@ -252,32 +248,32 @@ The human visual system integrates input from both eyes to form a
 unified binocular representation of the world. Combining monocular
 inputs enhances sensitivity to the presented stimuli, particularly when
 the contrast is low or near detection threshold (Baker et al., 2018;
-Campbell and Green, 1965; Meese et al., 2006). Contrast
-sensitivity improves by at least \(\sqrt{2}\) when stimuli are presented
-binocularly rather than monocularly (Baker et al., 2018; Blake and
-Wilson, 2011; Campbell and Green, 1965; Richard et al., 2018). Notably,
-the visual system also attempts to combine inputs even when the stimuli
-presented to each eye are markedly different (i.e., incompatible). In
-such cases, observers may perceive binocular rivalry (Blake, 1989;
-Wilson, 2003), diplopia, or visual lustre (Wendt and Faul, 2022).
-Despite differences in perceptual outcomes, computationally, the
-underlying processes of binocular combination for compatible and
-incompatible inputs appear similar (Baker et al., 2007a; Legge, 1984a).
-Psychophysical responses to compatible and incompatible stimuli can be
-effectively explained by a single psychophysical model that involves
-nonlinear transduction, followed by summation across monocular and
-binocular phase-selective channels (Baker et al., 2007a; Baker and
-Meese, 2007). Here, we explore if the integrative processes defined over
-multiple behavioural tasks are also reflected at the neural level.
+Campbell and Green, 1965; Meese et al., 2006). Contrast sensitivity
+improves by at least \(\sqrt{2}\) when stimuli are presented binocularly
+rather than monocularly (Baker et al., 2018; Blake and Wilson, 2011;
+Campbell and Green, 1965; Richard et al., 2018). Notably, the visual
+system also attempts to combine inputs even when the stimuli presented
+to each eye are markedly different (i.e., incompatible). In such cases,
+observers may perceive binocular rivalry (Blake, 1989; Wilson, 2003),
+diplopia, or visual lustre (Wendt and Faul, 2022). Despite differences
+in perceptual outcomes, computationally, the underlying processes of
+binocular combination for compatible and incompatible inputs appear
+similar (Baker et al., 2007a; Legge, 1984a). Psychophysical responses to
+compatible and incompatible stimuli can be effectively explained by a
+single psychophysical model that involves nonlinear transduction,
+followed by summation across monocular and binocular phase-selective
+channels (Baker et al., 2007a; Baker and Meese, 2007). Here, we explore
+if the integrative processes defined over multiple behavioural tasks are
+also reflected at the neural level.
 
 It has long been known that stimuli presented binocularly are summed
 across the eyes. In contrast detection tasks, where stimulus contrast is
 low, binocular presentation increases sensitivity by approximately
 \(\sqrt{2}\) (Campbell and Green, 1965). This implies that observers
 require roughly 1.4 times more contrast to detect a monocular stimulus
-than a binocular one. The binocular improvement in sensitivity
-(Legge, 1984b) is consistent with a non-linearity operating before the
-signals from the two eyes (\(c_L\) and \(c_R\)) are combined :
+than a binocular one. The binocular improvement in sensitivity (Legge,
+1984b) is consistent with a non-linearity operating before the signals
+from the two eyes (\(c_L\) and \(c_R\)) are combined:
 \begin{equation}\phantomsection\label{eq-IntroMath1}{
 R_B = c_L^m + c_R^m.
 }\end{equation} Here, the exponent \(m\) determines the degree of
@@ -312,8 +308,8 @@ normalization can stem from interocular and self-suppressive signals
 R_B = \frac{c_L^m}{S+c_L+c_R} + \frac{c_R^m}{S+c_R+c_L}.
 }\end{equation} When both eyes are stimulated, the suppressive terms on
 the denominators offset the enhanced excitatory signals, nullifying the
-binocular advantage. The new parameter, S, is included to set
-overall sensitivity of the monocular response.
+binocular advantage. The new parameter, S, is included to set overall
+sensitivity of the monocular response.
 
 A similar pattern of results is observed in neural measurements of
 binocular summation. In functional Magnetic Resonance Imaging (fMRI)
@@ -352,24 +348,24 @@ insignificant challenge; such a description must account for multiple
 components of early vision, including identifying relevant signals,
 defining how these signals might interact, what non-linearities are
 present, and most importantly, how these signals are summed and/or
-differenced. Early approaches (Campbell and Green, 1965)
-proposed the \(\sqrt{2}\) improvement from binocular summation could be
-explained because the visual system integrates signal and uncorrelated
-noise from the monocular channels. However, it was also recognized
-(Blake et al., 1981b; Campbell and Green, 1965) that the model can only
-return \(\sqrt{2}\) improvement when the noise in one eye is ignored, or
-the observer is able to respond selectively to the monocular pathway on
-monocular trials. One model that has proven very informative and
-capable of describing binocular summation under various experimental
-conditions is the two-stage contrast gain control model developed by
-Meese et al. (2006). In a two-stage process, the model captured
-detection and discrimination thresholds for monocular and binocular
-presentation, in addition to dichoptic masking (when the stimuli
-presented to both eyes are not identical). First, the input is rectified
-by an excitatory non-linearity (\(m \approx 1.3\)) and normalized by
-self and interocular suppression (see Equation~\ref{eq-intoMath2}). The
-binocular (e.g., combined) signal then undergoes a second contrast
-normalization before the decision stage,
+differenced. Early approaches (Campbell and Green, 1965) proposed the
+\(\sqrt{2}\) improvement from binocular summation could be explained
+because the visual system integrates signal and uncorrelated noise from
+the monocular channels. However, it was also recognized (Blake et al.,
+1981b; Campbell and Green, 1965) that the model can only return
+\(\sqrt{2}\) improvement when the noise in one eye is ignored, or that
+the observer is able to respond selectively to the monocular pathway in
+monocular trials. One model that has proven very informative and capable
+of describing binocular summation under various experimental conditions
+is the two-stage contrast gain control model developed by Meese et al.
+(2006). In a two-stage process, the model captured detection and
+discrimination thresholds for monocular and binocular presentation, in
+addition to dichoptic masking (when the stimuli presented to both eyes
+are not identical). First, the input is rectified by an excitatory
+non-linearity (\(m \approx 1.3\)) and normalized by self and interocular
+suppression (see Equation~\ref{eq-intoMath2}). The binocular (e.g.,
+combined) signal then undergoes a second contrast normalization before
+the decision stage,
 \begin{equation}\phantomsection\label{eq-IntroMathSecondStage}{
 R = \frac{R_B^p}{Z + R_B^q},
 }\end{equation} where the exponents \(p\) and \(q\) typically have quite
@@ -436,10 +432,10 @@ flicker will generate two transients per cycle, resulting in SSVEPs at
 the even harmonics of the flicker frequency (2F, 4F, 6F, etc.). These
 frequency-doubling responses are argued to provide a cleaner measure of
 nonlinear visual responses (Kim et al., 2011; Skottun and Skoyles,
-2007). Using both stimulation protocols yields the data needed
-for a comprehensive description of linear and nonlinear visual
-processes, thereby enabling evaluation of psychophysical models of
-visual perception.
+2007). Using both stimulation protocols yields the data needed for a
+comprehensive description of linear and nonlinear visual processes,
+thereby enabling evaluation of psychophysical models of visual
+perception.
 
 The current architecture of the two-stage contrast gain control model
 has been rigorously evaluated on psychophysical data, providing a solid
@@ -469,15 +465,13 @@ conditions and modalities.
 \subsection{Participants}\label{participants}
 
 Fifteen observers (\(N_{male} = 4\); age range {[}19 34{]}), including
-authors BR and DHB, participated in this study. The sample size
-was based on common practice in the field, and is comparable to similar
-SSVEP studies. All observers had normal or corrected-to-normal visual
-acuity, as verified by a Snellen chart, and normal binocular vision, as
-verified by a Titmus test. Written informed consent was obtained from
-all participants, and experimental procedures were approved by the
-ethics committee of the Department of Psychology at the University of
-York. Finally, as the experimental design was exploratory in
-nature, we did not pre-register the study design or hypotheses.
+authors BR and DHB, participated in this study. All observers had normal
+or corrected-to-normal visual acuity, as verified by a Snellen chart,
+and normal binocular vision, as verified by a Titmus test.
+\textbf{Written informed consent was obtained from all participants, the
+experimental procedures followed the Declaration of Helsinki guidelines,
+and the study was approved by the ethics committee of the Department of
+Psychology at the University of York.}
 
 \subsection{Apparatus}\label{apparatus}
 
@@ -724,24 +718,24 @@ al., 2008, 2007a, 2007b; Baker and Meese, 2007; Meese et al., 2006).
 This simple, yet powerful, family of models not only captures
 behavioural data well, but can also explain neural responses to
 binocular and dichoptic stimuli (Baker and Wade, 2017; Lygo et al.,
-2021; Richard et al., 2018). While other computational
-descriptions of binocular combination have been proposed (Blake and
-Wilson, 2011; Campbell and Green, 1965; Ding and Sperling, 2006), the
-goal of this manuscript is to probe the architecture of the two-stage
-contrast gain control model and its subsequent variants with a rich
-SSVEP data set. Our SSVEP results show the expected pattern of
-binocular combination for stimuli presented at high contrast (i.e.,
-ocularity invariance) but also intriguing effects that are likely
-explainable by the most recent extension of the two-stage contrast gain
-control model, as defined by Georgeson et al. (2016). Our goal
-in this modelling section is not to argue for a novel description of
-binocular summation but to explore the architecture required under the
-two-stage contrast gain control framework, to describe our effects. Thus
-our approach is to progressively increase the complexity of the
-binocular combination model, beginning with a deliberately wrong model
-(i.e., linear combination) and building up to a multi-channel model
-(Georgeson et al., 2016) with monocular, binocular, and phase-selective
-pathways (Figure~\ref{fig-modelDiagram}).
+2021; Richard et al., 2018). While other computational descriptions of
+binocular combination have been proposed (Blake and Wilson, 2011;
+Campbell and Green, 1965; Ding and Sperling, 2006), the goal of this
+manuscript is to probe the architecture of the two-stage contrast gain
+control model and its subsequent variants with a rich SSVEP data set.
+Our SSVEP results show the expected pattern of binocular combination for
+stimuli presented at high contrast (i.e., ocularity invariance) but also
+intriguing effects that are likely explainable by the most recent
+extension of the two-stage contrast gain control model, as defined by
+Georgeson et al. (2016). Our goal in this modelling section is not to
+argue for a novel description of binocular summation but to explore the
+architecture required under the two-stage contrast gain control
+framework, to describe our effects. Thus our approach is to
+progressively increase the complexity of the binocular combination
+model, beginning with a deliberately wrong model (i.e., linear
+combination) and building up to a multi-channel model (Georgeson et al.,
+2016) with monocular, binocular, and phase-selective pathways
+(Figure~\ref{fig-modelDiagram}).
 
 \begin{figure}
 
@@ -869,7 +863,10 @@ AIC
 \caption{Goodness-of-fit metrics for all models compared in this study.
 Errors in predictions for the linear sum model were too large to
 calculate \(R^2\). RMSE is the Root Mean Square error and AIC is the
-Aikaike Information Criterion.}\label{tbl-R2Table}\tabularnewline
+Aikaike Information Criterion. \textbf{Note that, as the residuals of
+our fitting procedure are, by nature, skewed, the AIC values returned
+should be used only for relative comparisons of the models reported in
+this manuscript.}}\label{tbl-R2Table}\tabularnewline
 \endlastfoot
 Linear sum & - & 3.234 & 281.99 \\
 Linear sum, with Rectification & 0.575 & 1.405 & 197.95 \\
